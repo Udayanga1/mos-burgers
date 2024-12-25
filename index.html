@@ -41,6 +41,40 @@
       </div>
     </div>
   </nav>
+  <section class="products container-lg">
+    <button type="button" class="btn btn-success my-3" id="show-product-add-form">Add Product +</button>
+    <form action="" method="post" class="my-3 d-none" id="add-product">
+      <div class="input-group mb-3">
+        <label class="input-group-text">Product</label>
+        <input type="text" class="form-control" placeholder="Burger name" name="product">
+      </div>
+      <div class="input-group mb-3">
+        <label class="input-group-text">Price</label>
+        <input type="text" class="form-control" placeholder="0.00LKR" name="price">
+      </div>
+      <div class="input-group mb-3">
+        <label class="input-group-text">Discount</label>
+        <input type="text" class="form-control" placeholder="0%" name="discount">
+      </div>
+      <button type="button" class="btn btn-success my-3" id="add-product-btn">Add +</button>
+      <button type="button" class="btn btn-secondary my-3" id="close-product-add-form">Cancel</button>
+    </form>
+    <div class="row align-items-start">
+      <div class="col border">
+        Item Code
+      </div>
+      <div class="col border">
+        Item Name
+      </div>
+      <div class="col border">
+        Price (LKR)
+      </div>
+      <div class="col border">
+        Discount
+      </div>
+    </div>
+  </section>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="app.js"></script>
 </body>

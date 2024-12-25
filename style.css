@@ -10,3 +10,7 @@
 .navbar-brand {
   font-family: var(--russo-font);
 }
+
+form {
+  max-width: 500px;
+}
