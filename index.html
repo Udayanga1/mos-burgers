@@ -46,33 +46,34 @@
     <form action="" method="post" class="my-3 d-none" id="add-product">
       <div class="input-group mb-3">
         <label class="input-group-text">Product</label>
-        <input type="text" class="form-control" placeholder="Burger name" name="product">
+        <input type="text" class="form-control" placeholder="Burger name" id="product-name" name="product">
       </div>
       <div class="input-group mb-3">
         <label class="input-group-text">Price</label>
-        <input type="text" class="form-control" placeholder="0.00LKR" name="price">
+        <input type="text" class="form-control" placeholder="0.00LKR" name="price" id="product-price">
       </div>
       <div class="input-group mb-3">
         <label class="input-group-text">Discount</label>
-        <input type="text" class="form-control" placeholder="0%" name="discount">
+        <input type="text" class="form-control" placeholder="0%" name="discount" id="product-discount">
       </div>
-      <button type="button" class="btn btn-success my-3" id="add-product-btn">Add +</button>
-      <button type="button" class="btn btn-secondary my-3" id="close-product-add-form">Cancel</button>
+      <div class="">
+        <button type="button" class="btn btn-success mr-2" id="add-product-btn">Add +</button>
+        <button type="button" class="btn btn-secondary m-2" id="close-product-add-form">Cancel</button>
+      </div>
     </form>
-    <div class="row align-items-start">
-      <div class="col border">
-        Item Code
-      </div>
-      <div class="col border">
-        Item Name
-      </div>
-      <div class="col border">
-        Price (LKR)
-      </div>
-      <div class="col border">
-        Discount
-      </div>
-    </div>
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th scope="col border">Item Code</th>
+          <th scope="col border">Item Name</th>
+          <th scope="col border">Price (LKR)</th>
+          <th scope="col border">Discount</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider" id="table-body">
+        
+      </tbody>
+    </table>
   </section>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
