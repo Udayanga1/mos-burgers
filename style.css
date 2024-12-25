@@ -1,0 +1,12 @@
+:root {
+  --russo-font: "Russo One", serif;
+  --roboto-font: "Roboto", serif;
+}
+
+* {
+  font-family: var(--roboto-font);
+}
+
+.navbar-brand {
+  font-family: var(--russo-font);
+}
