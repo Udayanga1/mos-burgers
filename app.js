@@ -1,6 +1,7 @@
 const showFormBtn = document.getElementById("show-product-add-form");
 const addProductBtn = document.getElementById("add-product-btn");
 const closeFormBtn = document.getElementById("close-product-add-form");
+const changeProductBtn = document.getElementById("edit-product-btn");
 let productIncrement=1000;
 let productList = [];
 
@@ -8,16 +9,29 @@ showFormBtn.addEventListener("click", () => toggleShowForm("show"));
 closeFormBtn.addEventListener("click", () => toggleShowForm("close"));
 addProductBtn.addEventListener("click", () => addProduct());
 
+
 function toggleShowForm(operation) {
   const form = document.getElementById("add-product");
-  if(operation=="show"){
+  const addBtn = document.getElementById("add-product-btn");
+  const editBtn = document.getElementById("edit-product-btn");
+  if(operation=="show" || operation=="edit"){
     form.classList.remove("d-none");
     form.classList.add("d-block");
     showFormBtn.classList.add("d-none");
+    if(operation=="show"){
+      addBtn.classList.add("d-inline");
+      addBtn.classList.remove("d-none");
+      editBtn.classList.add("d-none");
+    } else {
+      editBtn.classList.add("d-inline");
+      editBtn.classList.remove("d-none");
+      addBtn.classList.add("d-none");
+    }
   } else if (operation=="close"){
     form.classList.remove("d-block");
     form.classList.add("d-none");
     showFormBtn.classList.remove("d-none");
+    clearProductForm();
   }
 }
 
@@ -40,9 +54,7 @@ function addProduct(){
 
   addProductToTable(productList, htmlEl);
   
-  productName.value="";
-  productPrice.value="";
-  productDiscount.value="";
+  clearProductForm();
   
 }
 
@@ -55,8 +67,76 @@ function addProductToTable(array, htmlEl){
       <td>${element.name}</td>
       <td>${element.price}</td>
       <td>${element.discount}</td>
+      <td width="200"><button type="button" class="btn btn-secondary" onclick="handleProductEdit('${element.id}')">Edit</button> <button type="button" class="btn btn-danger">Delete</button></td>
     </tr>
   `;
   });
   htmlEl.innerHTML = tableContent;  
+}
+
+function handleProductEdit(id){
+  console.log("handleProductEdit fired " + id);
+  toggleShowForm("edit");
+  const productID = document.getElementById("product-id");
+  const productName = document.getElementById("product-name");
+  const productPrice = document.getElementById("product-price");
+  const productDiscount = document.getElementById("product-discount");
+
+  productList.forEach(element=>{
+    if(element.id==id){
+      productID.value=element.id;
+      productName.value=element.name;
+      productPrice.value=element.price;
+      productDiscount.value=element.discount;
+    }
+  })
+
+  // const product = {
+  //   id: productID,
+  //   name: productName.value,
+  //   price: productPrice.value,
+  //   discount: productDiscount.value
+  // }
+
+  // console.log(product);
+  // productList.forEach(element=>{
+  //   if(element.id==productID){
+  //     element.name=productName;
+  //     element.price=productPrice;
+  //     element.discount=productDiscount;
+  //   }
+  // })
+  changeProductBtn.addEventListener("click", ()=>{
+    changeProduct(id);
+  });
+}
+
+function clearProductForm(){
+  const productName = document.getElementById("product-name");
+  const productPrice = document.getElementById("product-price");
+  const productDiscount = document.getElementById("product-discount");
+
+  productName.value="";
+  productPrice.value="";
+  productDiscount.value="";
+}
+
+function changeProduct(id){
+  const productID = document.getElementById("product-id");
+  const productName = document.getElementById("product-name");
+  const productPrice = document.getElementById("product-price");
+  const productDiscount = document.getElementById("product-discount");
+  let htmlEl=document.getElementById("table-body");
+
+  productList.forEach(element=>{
+    if(element.id==id){
+      element.id = productID.value;
+      element.name = productName.value;
+      element.price = productPrice.value;
+      element.discount = productDiscount.value;
+    }
+  })
+  addProductToTable(productList, htmlEl);
+  clearProductForm();
+  toggleShowForm("show");
 }

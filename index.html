@@ -44,6 +44,10 @@
   <section class="products container-lg">
     <button type="button" class="btn btn-success my-3" id="show-product-add-form">Add Product +</button>
     <form action="" method="post" class="my-3 d-none" id="add-product">
+      <div class="input-group mb-3 d-none">
+        <label class="input-group-text">ID</label>
+        <input type="text" class="form-control" id="product-id" name="product">
+      </div>
       <div class="input-group mb-3">
         <label class="input-group-text">Product</label>
         <input type="text" class="form-control" placeholder="Burger name" id="product-name" name="product">
@@ -58,6 +62,7 @@
       </div>
       <div class="">
         <button type="button" class="btn btn-success mr-2" id="add-product-btn">Add +</button>
+        <button type="button" class="btn btn-warning mr-2" id="edit-product-btn">Change</button>
         <button type="button" class="btn btn-secondary m-2" id="close-product-add-form">Cancel</button>
       </div>
     </form>
