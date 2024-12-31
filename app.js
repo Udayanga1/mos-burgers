@@ -68,15 +68,15 @@ function addProductToTable(array, htmlEl){
       <td>${element.name}</td>
       <td>${element.price}</td>
       <td>${element.discount}</td>
-      <td width="200"><button type="button" class="btn btn-secondary" onclick="handleProductEdit('${element.id}')">Edit</button> <button type="button" class="btn btn-danger">Delete</button></td>
+      <td width="200"><button type="button" class="btn btn-secondary" onclick="showProductEditForm('${element.id}')">Edit</button> <button type="button" class="btn btn-danger" onclick="deleteProduct('${element.id}')">Delete</button></td>
     </tr>
   `;
   });
   htmlEl.innerHTML = tableContent;  
 }
 
-function handleProductEdit(id){
-  console.log("handleProductEdit fired " + id);
+function showProductEditForm(id){
+  console.log("showProductEditForm fired " + id);
   toggleShowForm("edit");
   const productID = document.getElementById("product-id");
   const productName = document.getElementById("product-name");
@@ -91,9 +91,7 @@ function handleProductEdit(id){
       productDiscount.value=element.discount;
     }
   })
-  // changeProductBtn.addEventListener("click", ()=>{
-  //   changeProduct(id);
-  // });
+
 }
 
 function clearProductForm(){
@@ -124,4 +122,19 @@ function changeProduct(id){
   addProductToTable(productList, htmlEl);
   clearProductForm();
   toggleShowForm("show");
+}
+
+function deleteProduct(id){
+  console.log("Delete btn clicked : " + id);
+  const editedList = productList.filter(product => product.id !==id);
+
+  if (confirm("Do you want to delete " + id)) {
+    productList=editedList;
+    let htmlEl = document.getElementById("table-body");
+    addProductToTable(productList, htmlEl);
+    clearProductForm();
+    toggleShowForm("show");
+  } 
+
+
 }
