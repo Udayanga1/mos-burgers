@@ -2,6 +2,7 @@ const showFormBtn = document.getElementById("show-product-add-form");
 const addProductBtn = document.getElementById("add-product-btn");
 const closeFormBtn = document.getElementById("close-product-add-form");
 const changeProductBtn = document.getElementById("edit-product-btn");
+const modalContainer = document.getElementById("modal-container");
 let productIncrement=1000;
 let productList = [];
 
@@ -12,6 +13,7 @@ changeProductBtn.addEventListener("click", ()=>{
   const productID = document.getElementById("product-id").value;
   changeProduct(productID);
 });
+
 
 
 function toggleShowForm(operation) {
@@ -68,7 +70,9 @@ function addProductToTable(array, htmlEl){
       <td>${element.name}</td>
       <td>${element.price}</td>
       <td>${element.discount}</td>
-      <td width="200"><button type="button" class="btn btn-secondary" onclick="showProductEditForm('${element.id}')">Edit</button> <button type="button" class="btn btn-danger" onclick="deleteProduct('${element.id}')">Delete</button></td>
+      <td width="200">
+        <button type="button" class="btn btn-secondary" onclick="showProductEditForm('${element.id}')">Edit</button>
+        <button type="button" class="btn btn-danger" onclick="deleteProduct('${element.id}')">Delete</button></td>
     </tr>
   `;
   });
@@ -125,16 +129,48 @@ function changeProduct(id){
 }
 
 function deleteProduct(id){
-  console.log("Delete btn clicked : " + id);
-  const editedList = productList.filter(product => product.id !==id);
+  modalContainer.innerHTML=`
+  <div class="position-absolute top-50 p-2 mt-2 bg-light bg-gradient shadow-lg rounded" style="width: 18rem;">
+    <div>
+      <h5 class="text-danger">Delete Product</h5>
+      <hr>
+      <p>Do you want to delete <b>${id}</b>?</p>
+      <div class="d-flex justify-content-end gap-2">
+        <button class="btn btn-success" id="cancel-btn">No</button>
+        <button class="btn btn-danger" id="delete-btn">Yes</button>
+      </div>
+    </div>
+  </div>`;
 
-  if (confirm("Do you want to delete " + id)) {
-    productList=editedList;
+  // Delete product after confirmation
+  document.getElementById("delete-btn").addEventListener("click", ()=>{
+    productList = productList.filter(item => item.id !==id);
     let htmlEl = document.getElementById("table-body");
     addProductToTable(productList, htmlEl);
     clearProductForm();
     toggleShowForm("show");
-  } 
+    setTimeout(() => {
+      modalContainer.innerHTML = `
+        <div class="position-absolute top-50 p-2 mt-2 bg-danger text-white bg-gradient shadow-lg rounded" style="width: 18rem;">
+          <div>
+            <h5>Item ${id} Deleted successfully</h5>
+            <hr>
+          </div>
+        </div>`;
+
+      // Close the modal after a few milliseconds
+      setTimeout(() => {
+        modalContainer.innerHTML="";
+      }, 2000);  // Close the modal after 2 seconds
+    }, 100);
+    
+  });
+  
+  document.getElementById("cancel-btn").addEventListener("click", ()=>{
+    modalContainer.innerHTML="";
+  });
 
 
 }
+
+
