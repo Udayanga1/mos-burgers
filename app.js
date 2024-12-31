@@ -8,6 +8,10 @@ let productList = [];
 showFormBtn.addEventListener("click", () => toggleShowForm("show"));
 closeFormBtn.addEventListener("click", () => toggleShowForm("close"));
 addProductBtn.addEventListener("click", () => addProduct());
+changeProductBtn.addEventListener("click", ()=>{
+  const productID = document.getElementById("product-id").value;
+  changeProduct(productID);
+});
 
 
 function toggleShowForm(operation) {
@@ -49,11 +53,8 @@ function addProduct(){
     price: productPrice.value,
     discount: productDiscount.value
   }
-
   productList.push(product);
-
   addProductToTable(productList, htmlEl);
-  
   clearProductForm();
   
 }
@@ -90,25 +91,9 @@ function handleProductEdit(id){
       productDiscount.value=element.discount;
     }
   })
-
-  // const product = {
-  //   id: productID,
-  //   name: productName.value,
-  //   price: productPrice.value,
-  //   discount: productDiscount.value
-  // }
-
-  // console.log(product);
-  // productList.forEach(element=>{
-  //   if(element.id==productID){
-  //     element.name=productName;
-  //     element.price=productPrice;
-  //     element.discount=productDiscount;
-  //   }
-  // })
-  changeProductBtn.addEventListener("click", ()=>{
-    changeProduct(id);
-  });
+  // changeProductBtn.addEventListener("click", ()=>{
+  //   changeProduct(id);
+  // });
 }
 
 function clearProductForm(){
