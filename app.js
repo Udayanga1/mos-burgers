@@ -1,3 +1,9 @@
+const navMenu = document.getElementById("navbar-nav");
+const productsSection = document.getElementById("products");
+const ordersSection = document.getElementById("orders");
+const customersSection = document.getElementById("customers");
+const reportsSection = document.getElementById("reports");
+
 const showFormBtn = document.getElementById("show-product-add-form");
 const addProductBtn = document.getElementById("add-product-btn");
 const closeFormBtn = document.getElementById("close-product-add-form");
@@ -5,6 +11,55 @@ const changeProductBtn = document.getElementById("edit-product-btn");
 const modalContainer = document.getElementById("modal-container");
 let productIncrement=1000;
 let productList = [];
+
+const navMenuList = [ 
+  {item:"Products", isActive: true, relatedSection:productsSection},
+  {item:"Orders", isActive: false, relatedSection:ordersSection}, 
+  {item:"Customers", isActive: false, relatedSection:customersSection}, 
+  {item:"Reports", isActive: false, relatedSection:reportsSection}
+];
+
+// view nav menu
+function renderNavMenu() {
+  let navMenuHTML = navMenuList.map(element => {
+    return `
+      <li class="nav-item">
+        <a class="${element.isActive ? "nav-link active" : "nav-link"}" onclick="navHandler(event)">${element.item}</a>
+      </li>
+    `;
+  }).join(''); // Join the array into a single string
+  navMenu.innerHTML = navMenuHTML;
+}
+
+renderNavMenu(); // Initially render the nav menu
+
+function navHandler(event){
+  const targetValue = event.target.textContent;
+  navMenuList.forEach(element=>{
+    if(targetValue==element.item){
+      element.isActive=true;
+      element.relatedSection.classList.remove("d-none");
+      element.relatedSection.classList.add("d-block");
+    } else {
+      element.isActive=false;
+      element.relatedSection.classList.remove("d-block");
+      element.relatedSection.classList.add("d-none");
+    }
+  })
+  renderNavMenu();
+}
+{/* <li class="nav-item">
+            <a class="nav-link "  href="#">Products</a>
+          </li>
+          <li class="nav-item border rounded border-light">
+            <a class="nav-link active"  href="#">Orders</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Customers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Reports</a>
+          </li> */}
 
 showFormBtn.addEventListener("click", () => toggleShowForm("show"));
 closeFormBtn.addEventListener("click", () => toggleShowForm("close"));

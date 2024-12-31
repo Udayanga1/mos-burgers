@@ -18,19 +18,7 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarText">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Products</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Orders</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Customers</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Reports</a>
-          </li>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0" id="navbar-nav">
         </ul>
         <span class="navbar-text">
           <form class="d-flex" role="search">
@@ -44,7 +32,7 @@
   <div id="modal-container" class="position-relative d-flex justify-content-center z-1">
     
   </div>
-  <section class="products container-lg">
+  <section class="products container-lg" id="products">
     <button type="button" class="btn btn-success my-3" id="show-product-add-form">Add Product +</button>
     <form action="" method="post" class="my-3 d-none" id="add-product">
       <div class="input-group mb-3 d-none">
@@ -83,6 +71,9 @@
       </tbody>
     </table>
   </section>
+  <section class="orders container-lg d-none" id="orders"></section>
+  <section class="customers container-lg d-none" id="customers"></section>
+  <section class="reports container-lg d-none" id="reports"></section>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="app.js"></script>
