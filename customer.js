@@ -3,11 +3,13 @@ const addCustomerBtn = document.getElementById("add-customer-btn");
 const closeCustomerFormBtn = document.getElementById("close-customer-add-form");
 const changeCustomerBtn = document.getElementById("edit-customer-btn");
 
-let customerIncrement=100;
+let customerIncrement=101;
 let customerList = [];
 
 showCustomerFormBtn.addEventListener("click", () => toggleShowForm("show", showCustomerFormBtn, clearCustomerForm, "customer"));
 closeCustomerFormBtn.addEventListener("click", () => toggleShowForm("close", showCustomerFormBtn, clearCustomerForm, "customer"));
+
+addCustomerBtn.addEventListener("click", () => addCustomer());
 
 function addCustomer(){
   const customerName = document.getElementById("customer-name");
@@ -27,12 +29,10 @@ function addCustomer(){
     }
   
     customerList.push(customer);
-    addProductToTable(customerList, htmlEl);
-    clearProductForm();
+    addToTable(customerList, htmlEl, tableColumns.customers);
+    clearCustomerForm();
   }
 }
-
-
 
 function clearCustomerForm(){
   document.getElementById("customer-name").value="";

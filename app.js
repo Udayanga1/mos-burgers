@@ -9,7 +9,7 @@ const addProductBtn = document.getElementById("add-product-btn");
 const closeProductFormBtn = document.getElementById("close-product-add-form");
 const changeProductBtn = document.getElementById("edit-product-btn");
 const modalContainer = document.getElementById("modal-container");
-let productIncrement=1000;
+let productIncrement=1001;
 let productList = [];
 
 const navMenuList = [ 
@@ -20,8 +20,10 @@ const navMenuList = [
 ];
 
 const tableColumns = {
-  products: ["id", "name", "price", "discount"]
+  products: ["id", "name", "price", "discount"],
+  customers: ["id", "name", "contact"]
 }
+// "id", "name", "contact"
 
 // view nav menu
 function renderNavMenu() {
@@ -117,8 +119,9 @@ function addProduct(){
 }
 
 function addToTable(array, htmlEl, table){
-  let tableRow = '<tr>';
+  let tableRow = '';
   array.forEach(element => {
+    tableRow +='<tr>';
     table.forEach(item => {
       tableRow += `<td>${element[item]}</td>`  
     });
@@ -129,8 +132,8 @@ function addToTable(array, htmlEl, table){
         <button type="button" class="btn btn-secondary" onclick="showProductEditForm('${element.id}')">Edit</button>
         <button type="button" class="btn btn-danger" onclick="deleteProduct('${element.id}')">Delete</button></td>
   `;
-  });
   tableRow += '</tr>'
+  });
   htmlEl.innerHTML = tableRow;  
 }
 
@@ -154,13 +157,9 @@ function showProductEditForm(id){
 }
 
 function clearProductForm(){
-  const productName = document.getElementById("product-name");
-  const productPrice = document.getElementById("product-price");
-  const productDiscount = document.getElementById("product-discount");
-
-  productName.value="";
-  productPrice.value="";
-  productDiscount.value="";
+  document.getElementById("product-name").value="";
+  document.getElementById("product-price").value="";
+  document.getElementById("product-discount").value="";
 }
 
 function changeProduct(id){
@@ -179,7 +178,6 @@ function changeProduct(id){
     }
   })
   addToTable(productList, htmlEl, tableColumns.products);
-  clearProductForm();
   toggleShowForm("close", showProductFormBtn, clearProductForm);
 }
 
@@ -202,7 +200,7 @@ function deleteProduct(id){
     productList = productList.filter(item => item.id !==id);
     let htmlEl = document.getElementById("table-body");
     addToTable(productList, htmlEl, tableColumns.products);
-    clearProductForm();
+    toggleShowForm("close", showProductFormBtn, clearProductForm);
     setTimeout(() => {
       modalContainer.innerHTML = `
         <div class="position-absolute top-50 p-2 mt-2 bg-danger text-white bg-gradient shadow-lg rounded" style="width: 18rem;">
