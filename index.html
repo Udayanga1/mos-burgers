@@ -71,11 +71,48 @@
       </tbody>
     </table>
   </section>
-  <section class="orders container-lg d-none" id="orders"></section>
-  <section class="customers container-lg d-none" id="customers"></section>
+  <section class="orders container-lg d-none" id="orders">
+    
+  </section>
+  <section class="customers container-lg d-none" id="customers">
+    <button type="button" class="btn btn-success my-3" id="show-customer-add-form">Add Customer +</button>
+    <form action="" method="post" class="my-3 d-none" id="add-customer">
+      <div class="input-group mb-3 d-none">
+        <label class="input-group-text">ID</label>
+        <input type="text" class="form-control" id="customer-id" name="customer">
+      </div>
+      <div class="input-group mb-3">
+        <label class="input-group-text">Customer Name</label>
+        <input type="text" class="form-control" placeholder="Burger name" id="customer-name" name="customer">
+      </div>
+      <div class="input-group mb-3">
+        <label class="input-group-text">Contact Number</label>
+        <input type="text" class="form-control" placeholder="0.00LKR" name="price" id="customer-price">
+      </div>
+      
+      <div class="">
+        <button type="button" class="btn btn-success mr-2" id="add-customer-btn">Add +</button>
+        <button type="button" class="btn btn-warning mr-2" id="edit-customer-btn">Change</button>
+        <button type="button" class="btn btn-secondary m-2" id="close-customer-add-form">Cancel</button>
+      </div>
+    </form>
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th scope="col border">Customer Code</th>
+          <th scope="col border">Customer Name</th>
+          <th scope="col border">Contact Number</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider" id="table-body">
+        
+      </tbody>
+    </table>
+  </section>
   <section class="reports container-lg d-none" id="reports"></section>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="app.js"></script>
+  <script src="customer.js"></script>
 </body>
 </html>

@@ -4,9 +4,9 @@ const ordersSection = document.getElementById("orders");
 const customersSection = document.getElementById("customers");
 const reportsSection = document.getElementById("reports");
 
-const showFormBtn = document.getElementById("show-product-add-form");
+const showProductFormBtn = document.getElementById("show-product-add-form");
 const addProductBtn = document.getElementById("add-product-btn");
-const closeFormBtn = document.getElementById("close-product-add-form");
+const closeProductFormBtn = document.getElementById("close-product-add-form");
 const changeProductBtn = document.getElementById("edit-product-btn");
 const modalContainer = document.getElementById("modal-container");
 let productIncrement=1000;
@@ -49,8 +49,8 @@ function navHandler(event){
   renderNavMenu();
 }
 
-showFormBtn.addEventListener("click", () => toggleShowForm("show"));
-closeFormBtn.addEventListener("click", () => toggleShowForm("close"));
+showProductFormBtn.addEventListener("click", () => toggleShowForm("show", showProductFormBtn, clearProductForm));
+closeProductFormBtn.addEventListener("click", () => toggleShowForm("close", showProductFormBtn, clearProductForm));
 addProductBtn.addEventListener("click", () => addProduct());
 changeProductBtn.addEventListener("click", ()=>{
   const productID = document.getElementById("product-id").value;
@@ -59,7 +59,7 @@ changeProductBtn.addEventListener("click", ()=>{
 
 
 
-function toggleShowForm(operation) {
+function toggleShowForm(operation, showFormBtn, clearForm) {
   const form = document.getElementById("add-product");
   const addBtn = document.getElementById("add-product-btn");
   const editBtn = document.getElementById("edit-product-btn");
@@ -80,8 +80,8 @@ function toggleShowForm(operation) {
     form.classList.remove("d-block");
     form.classList.add("d-none");
     showFormBtn.classList.remove("d-none");
-    clearProductForm();
   }
+  clearForm();
 }
 
 function addProduct(){
@@ -132,7 +132,7 @@ function addProductToTable(array, htmlEl){
 
 function showProductEditForm(id){
   console.log("showProductEditForm fired " + id);
-  toggleShowForm("edit");
+  toggleShowForm("edit", showProductFormBtn, clearProductForm);
   const productID = document.getElementById("product-id");
   const productName = document.getElementById("product-name");
   const productPrice = document.getElementById("product-price");
@@ -176,7 +176,7 @@ function changeProduct(id){
   })
   addProductToTable(productList, htmlEl);
   clearProductForm();
-  toggleShowForm("close");
+  toggleShowForm("close", showProductFormBtn, clearProductForm);
 }
 
 function deleteProduct(id){
@@ -199,7 +199,6 @@ function deleteProduct(id){
     let htmlEl = document.getElementById("table-body");
     addProductToTable(productList, htmlEl);
     clearProductForm();
-    toggleShowForm("show");
     setTimeout(() => {
       modalContainer.innerHTML = `
         <div class="position-absolute top-50 p-2 mt-2 bg-danger text-white bg-gradient shadow-lg rounded" style="width: 18rem;">
@@ -220,8 +219,10 @@ function deleteProduct(id){
   document.getElementById("cancel-btn").addEventListener("click", ()=>{
     modalContainer.innerHTML="";
   });
-
-
 }
+
+
+
+
 
 
