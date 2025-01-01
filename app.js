@@ -23,7 +23,7 @@ const navMenuList = [
 function renderNavMenu() {
   let navMenuHTML = navMenuList.map(element => {
     return `
-      <li class="nav-item">
+      <li class="${element.isActive ? "nav-item rounded shadow rounded" : "nav-item"}">
         <a class="${element.isActive ? "nav-link active" : "nav-link"}" onclick="navHandler(event)">${element.item}</a>
       </li>
     `;
@@ -48,18 +48,6 @@ function navHandler(event){
   })
   renderNavMenu();
 }
-{/* <li class="nav-item">
-            <a class="nav-link "  href="#">Products</a>
-          </li>
-          <li class="nav-item border rounded border-light">
-            <a class="nav-link active"  href="#">Orders</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Customers</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Reports</a>
-          </li> */}
 
 showFormBtn.addEventListener("click", () => toggleShowForm("show"));
 closeFormBtn.addEventListener("click", () => toggleShowForm("close"));
@@ -97,22 +85,30 @@ function toggleShowForm(operation) {
 }
 
 function addProduct(){
-  productIncrement++;
   const productName = document.getElementById("product-name");
   const productPrice = document.getElementById("product-price");
   const productDiscount = document.getElementById("product-discount");
   const productID = "B" + productIncrement;
-  let htmlEl=document.getElementById("table-body");
   
-  const product = {
-    id: productID,
-    name: productName.value,
-    price: productPrice.value,
-    discount: productDiscount.value
+  // console.log(productName.value=="");
+  if(productName.value=="" || productPrice.value=="" || productDiscount.value==""){
+    alert("Please fill all the fields");
+  } else {
+    productIncrement++;
+    let htmlEl=document.getElementById("table-body");
+    
+    const product = {
+      id: productID,
+      name: productName.value,
+      price: productPrice.value,
+      discount: productDiscount.value
+    }
+  
+    productList.push(product);
+    addProductToTable(productList, htmlEl);
+    clearProductForm();
   }
-  productList.push(product);
-  addProductToTable(productList, htmlEl);
-  clearProductForm();
+  
   
 }
 
@@ -180,7 +176,7 @@ function changeProduct(id){
   })
   addProductToTable(productList, htmlEl);
   clearProductForm();
-  toggleShowForm("show");
+  toggleShowForm("close");
 }
 
 function deleteProduct(id){
