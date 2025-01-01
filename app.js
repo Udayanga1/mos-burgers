@@ -19,6 +19,10 @@ const navMenuList = [
   {item:"Reports", isActive: false, relatedSection:reportsSection}
 ];
 
+const tableColumns = {
+  products: ["id", "name", "price", "discount"]
+}
+
 // view nav menu
 function renderNavMenu() {
   let navMenuHTML = navMenuList.map(element => {
@@ -59,10 +63,10 @@ changeProductBtn.addEventListener("click", ()=>{
 
 
 
-function toggleShowForm(operation, showFormBtn, clearForm) {
-  const form = document.getElementById("add-product");
-  const addBtn = document.getElementById("add-product-btn");
-  const editBtn = document.getElementById("edit-product-btn");
+function toggleShowForm(operation, showFormBtn, clearForm, item="product") {
+  const form = document.getElementById(`add-${item}`);
+  const addBtn = document.getElementById(`add-${item}-btn`);
+  const editBtn = document.getElementById(`edit-${item}-btn`);
   if(operation=="show" || operation=="edit"){
     form.classList.remove("d-none");
     form.classList.add("d-block");
@@ -105,29 +109,29 @@ function addProduct(){
     }
   
     productList.push(product);
-    addProductToTable(productList, htmlEl);
+    addToTable(productList, htmlEl, tableColumns.products);
     clearProductForm();
   }
   
   
 }
 
-function addProductToTable(array, htmlEl){
-  let tableContent = '';
+function addToTable(array, htmlEl, table){
+  let tableRow = '<tr>';
   array.forEach(element => {
-    tableContent += `
-    <tr>
-      <td>${element.id}</td>
-      <td>${element.name}</td>
-      <td>${element.price}</td>
-      <td>${element.discount}</td>
+    table.forEach(item => {
+      tableRow += `<td>${element[item]}</td>`  
+    });
+
+    tableRow+=
+    `     
       <td width="200">
         <button type="button" class="btn btn-secondary" onclick="showProductEditForm('${element.id}')">Edit</button>
         <button type="button" class="btn btn-danger" onclick="deleteProduct('${element.id}')">Delete</button></td>
-    </tr>
   `;
   });
-  htmlEl.innerHTML = tableContent;  
+  tableRow += '</tr>'
+  htmlEl.innerHTML = tableRow;  
 }
 
 function showProductEditForm(id){
@@ -174,7 +178,7 @@ function changeProduct(id){
       element.discount = productDiscount.value;
     }
   })
-  addProductToTable(productList, htmlEl);
+  addToTable(productList, htmlEl, tableColumns.products);
   clearProductForm();
   toggleShowForm("close", showProductFormBtn, clearProductForm);
 }
@@ -197,7 +201,7 @@ function deleteProduct(id){
   document.getElementById("delete-btn").addEventListener("click", ()=>{
     productList = productList.filter(item => item.id !==id);
     let htmlEl = document.getElementById("table-body");
-    addProductToTable(productList, htmlEl);
+    addToTable(productList, htmlEl, tableColumns.products);
     clearProductForm();
     setTimeout(() => {
       modalContainer.innerHTML = `
