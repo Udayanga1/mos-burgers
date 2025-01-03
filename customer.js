@@ -29,7 +29,7 @@ function addCustomer(){
     }
   
     customerList.push(customer);
-    addToTable(customerList, htmlEl, tableColumns.customers);
+    addToTable(customerList, htmlEl, tableColumns.customer, renderCustomerTableButtons);
     clearCustomerForm();
   }
 }
@@ -37,4 +37,31 @@ function addCustomer(){
 function clearCustomerForm(){
   document.getElementById("customer-name").value="";
   document.getElementById("customer-contact").value="";
+}
+
+function renderCustomerTableButtons(element){
+  return `     
+      <td width="200">
+        <button type="button" class="btn btn-secondary" onclick="showEditForm('${element.id}', 'customer', clearCustomerForm, customerList, showCustomerFormBtn)">Edit</button>
+        <button type="button" class="btn btn-danger" onclick="deleteForm('${element.id}', 'Customer', deleteProduct)">Delete</button></td>
+  `;
+}
+
+changeCustomerBtn.addEventListener("click", ()=>{
+  const customerID = document.getElementById("customer-id").value;
+  changeCustomer(customerID);
+});
+
+function changeCustomer(id){
+  let htmlEl=document.getElementById("table-body-customer");
+
+  customerList.forEach(element=>{
+    if(element.id==id){
+      element.id = document.getElementById("customer-id").value;
+      element.name = document.getElementById("customer-name").value;
+      element.contact = document.getElementById("customer-contact").value;
+    }
+  })
+  addToTable(customerList, htmlEl, tableColumns.customer, renderCustomerTableButtons);
+  toggleShowForm("close", showCustomerFormBtn, clearCustomerForm, "customer");
 }

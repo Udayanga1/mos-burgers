@@ -137,14 +137,14 @@ function renderProductTableButtons(element){
   return `     
       <td width="200">
         <button type="button" class="btn btn-secondary" onclick="showEditForm('${element.id}', 'product', clearProductForm, productList, showProductFormBtn)">Edit</button>
-        <button type="button" class="btn btn-danger" onclick="deleteProduct('${element.id}')">Delete</button></td>
+        <button type="button" class="btn btn-danger" onclick="deleteForm('${element.id}', 'Product', deleteProduct)">Delete</button></td>
   `;
 }
 
 // clearProductForm productList showProductFormBtn
 function showEditForm(id, table, clearForm, array, showFormBtn){
   console.log("showEditForm fired " + id);
-  toggleShowForm("edit", showFormBtn, clearForm);
+  toggleShowForm("edit", showFormBtn, clearForm, table);
 
   array.forEach(element=>{
     if(element.id==id){
@@ -153,10 +153,6 @@ function showEditForm(id, table, clearForm, array, showFormBtn){
         document.getElementById(`${table}-${col}`).value=element[col];
         
       })
-      // document.getElementById(`${table}-id`).value=element.id;
-      // document.getElementById(`${table}-name`).value=element.name;
-      // document.getElementById(`${table}-price`).value=element.price;
-      // document.getElementById(`${table}-discount`).value=element.discount;
     }
   })
 
@@ -187,11 +183,11 @@ function changeProduct(id){
   toggleShowForm("close", showProductFormBtn, clearProductForm);
 }
 
-function deleteProduct(id){
+function deleteForm(id, table, deleteItem){
   modalContainer.innerHTML=`
   <div class="position-absolute top-50 p-2 mt-2 bg-light bg-gradient shadow-lg rounded" style="width: 18rem;">
     <div>
-      <h5 class="text-danger">Delete Product</h5>
+      <h5 class="text-danger">Delete ${table}</h5>
       <hr>
       <p>Do you want to delete <b>${id}</b>?</p>
       <div class="d-flex justify-content-end gap-2">
@@ -203,7 +199,16 @@ function deleteProduct(id){
 
   // Delete product after confirmation
   document.getElementById("delete-btn").addEventListener("click", ()=>{
-    productList = productList.filter(item => item.id !==id);
+    deleteItem(id);   
+  });
+  
+  document.getElementById("cancel-btn").addEventListener("click", ()=>{
+    modalContainer.innerHTML="";
+  });
+}
+
+function deleteProduct(id){
+  productList = productList.filter(item => item.id !==id);
     let htmlEl = document.getElementById("table-body");
     addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
     toggleShowForm("close", showProductFormBtn, clearProductForm);
@@ -221,12 +226,6 @@ function deleteProduct(id){
         modalContainer.innerHTML="";
       }, 2000);  // Close the modal after 2 seconds
     }, 100);
-    
-  });
-  
-  document.getElementById("cancel-btn").addEventListener("click", ()=>{
-    modalContainer.innerHTML="";
-  });
 }
 
 
