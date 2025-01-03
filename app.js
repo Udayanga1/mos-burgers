@@ -20,8 +20,8 @@ const navMenuList = [
 ];
 
 const tableColumns = {
-  products: ["id", "name", "price", "discount"],
-  customers: ["id", "name", "contact"]
+  product: ["id", "name", "price", "discount"],
+  customer: ["id", "name", "contact"]
 }
 // "id", "name", "contact"
 
@@ -111,14 +111,14 @@ function addProduct(){
     }
   
     productList.push(product);
-    addToTable(productList, htmlEl, tableColumns.products);
+    addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
     clearProductForm();
   }
   
   
 }
 
-function addToTable(array, htmlEl, table){
+function addToTable(array, htmlEl, table, renderButtons){
   let tableRow = '';
   array.forEach(element => {
     tableRow +='<tr>';
@@ -126,31 +126,37 @@ function addToTable(array, htmlEl, table){
       tableRow += `<td>${element[item]}</td>`  
     });
 
-    tableRow+=
-    `     
-      <td width="200">
-        <button type="button" class="btn btn-secondary" onclick="showProductEditForm('${element.id}')">Edit</button>
-        <button type="button" class="btn btn-danger" onclick="deleteProduct('${element.id}')">Delete</button></td>
-  `;
+    tableRow+= renderButtons(element)
+    
   tableRow += '</tr>'
   });
   htmlEl.innerHTML = tableRow;  
 }
 
-function showProductEditForm(id){
-  console.log("showProductEditForm fired " + id);
-  toggleShowForm("edit", showProductFormBtn, clearProductForm);
-  const productID = document.getElementById("product-id");
-  const productName = document.getElementById("product-name");
-  const productPrice = document.getElementById("product-price");
-  const productDiscount = document.getElementById("product-discount");
+function renderProductTableButtons(element){
+  return `     
+      <td width="200">
+        <button type="button" class="btn btn-secondary" onclick="showEditForm('${element.id}', 'product', clearProductForm, productList, showProductFormBtn)">Edit</button>
+        <button type="button" class="btn btn-danger" onclick="deleteProduct('${element.id}')">Delete</button></td>
+  `;
+}
 
-  productList.forEach(element=>{
+// clearProductForm productList showProductFormBtn
+function showEditForm(id, table, clearForm, array, showFormBtn){
+  console.log("showEditForm fired " + id);
+  toggleShowForm("edit", showFormBtn, clearForm);
+
+  array.forEach(element=>{
     if(element.id==id){
-      productID.value=element.id;
-      productName.value=element.name;
-      productPrice.value=element.price;
-      productDiscount.value=element.discount;
+      console.log("element.id outer loop : " + element.id);
+      tableColumns[table].forEach(col =>{
+        document.getElementById(`${table}-${col}`).value=element[col];
+        
+      })
+      // document.getElementById(`${table}-id`).value=element.id;
+      // document.getElementById(`${table}-name`).value=element.name;
+      // document.getElementById(`${table}-price`).value=element.price;
+      // document.getElementById(`${table}-discount`).value=element.discount;
     }
   })
 
@@ -177,7 +183,7 @@ function changeProduct(id){
       element.discount = productDiscount.value;
     }
   })
-  addToTable(productList, htmlEl, tableColumns.products);
+  addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
   toggleShowForm("close", showProductFormBtn, clearProductForm);
 }
 
@@ -199,7 +205,7 @@ function deleteProduct(id){
   document.getElementById("delete-btn").addEventListener("click", ()=>{
     productList = productList.filter(item => item.id !==id);
     let htmlEl = document.getElementById("table-body");
-    addToTable(productList, htmlEl, tableColumns.products);
+    addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
     toggleShowForm("close", showProductFormBtn, clearProductForm);
     setTimeout(() => {
       modalContainer.innerHTML = `
