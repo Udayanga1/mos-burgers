@@ -43,7 +43,7 @@ function renderCustomerTableButtons(element){
   return `     
       <td width="200">
         <button type="button" class="btn btn-secondary" onclick="showEditForm('${element.id}', 'customer', clearCustomerForm, customerList, showCustomerFormBtn)">Edit</button>
-        <button type="button" class="btn btn-danger" onclick="deleteForm('${element.id}', 'Customer', deleteProduct)">Delete</button></td>
+        <button type="button" class="btn btn-danger" onclick="deleteForm('${element.id}', 'Customer', deleteCustomer)">Delete</button></td>
   `;
 }
 
@@ -64,4 +64,25 @@ function changeCustomer(id){
   })
   addToTable(customerList, htmlEl, tableColumns.customer, renderCustomerTableButtons);
   toggleShowForm("close", showCustomerFormBtn, clearCustomerForm, "customer");
+}
+
+function deleteCustomer(id){
+  customerList = customerList.filter(item => item.id !==id);
+    let htmlEl = document.getElementById("table-body-customer");
+    addToTable(customerList, htmlEl, tableColumns.customer, renderCustomerTableButtons);
+    toggleShowForm("close", showCustomerFormBtn, clearCustomerForm, "customer");
+    setTimeout(() => {
+      modalContainer.innerHTML = `
+        <div class="position-absolute top-50 p-2 mt-2 bg-danger text-white bg-gradient shadow-lg rounded" style="width: 18rem;">
+          <div>
+            <h5>Item ${id} Deleted successfully</h5>
+            <hr>
+          </div>
+        </div>`;
+
+      // Close the modal after a few milliseconds
+      setTimeout(() => {
+        modalContainer.innerHTML="";
+      }, 2000);  // Close the modal after 2 seconds
+    }, 100);
 }
