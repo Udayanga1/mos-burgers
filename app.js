@@ -20,7 +20,7 @@ const navMenuList = [
 ];
 
 const tableColumns = {
-  product: ["id", "name", "price", "discount"],
+  product: ["id", "name", "price", "discount", "category"],
   customer: ["id", "name", "contact"]
 }
 // "id", "name", "contact"
@@ -94,6 +94,7 @@ function addProduct(){
   const productName = document.getElementById("product-name");
   const productPrice = document.getElementById("product-price");
   const productDiscount = document.getElementById("product-discount");
+  const productCategory = document.getElementById("product-category");
   const productID = "B" + productIncrement;
   
   // console.log(productName.value=="");
@@ -107,9 +108,11 @@ function addProduct(){
       id: productID,
       name: productName.value,
       price: productPrice.value,
-      discount: productDiscount.value
+      discount: productDiscount.value,
+      category: productCategory.value
     }
-  
+    console.log(product);
+    
     productList.push(product);
     addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
     clearProductForm();
@@ -162,6 +165,7 @@ function clearProductForm(){
   document.getElementById("product-name").value="";
   document.getElementById("product-price").value="";
   document.getElementById("product-discount").value="";
+  document.getElementById("product-category").value="Burgers";
 }
 
 function changeProduct(id){
@@ -169,6 +173,7 @@ function changeProduct(id){
   const productName = document.getElementById("product-name");
   const productPrice = document.getElementById("product-price");
   const productDiscount = document.getElementById("product-discount");
+  const productCategory = document.getElementById("product-category");
   let htmlEl=document.getElementById("table-body");
 
   productList.forEach(element=>{
@@ -177,6 +182,7 @@ function changeProduct(id){
       element.name = productName.value;
       element.price = productPrice.value;
       element.discount = productDiscount.value;
+      element.category = productCategory.value;
     }
   })
   addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);

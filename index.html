@@ -51,6 +51,17 @@
         <label class="input-group-text">Discount</label>
         <input type="number" class="form-control" placeholder="0%" name="discount" id="product-discount">
       </div>
+      <div class="input-group mb-3">
+        <label class="input-group-text">Category</label>
+        <select class="form-select" id="product-category" aria-label="Example select with button addon">
+          <option selected value="Burgers">Burgers</option>
+          <option value="Submarines">Submarines</option>
+          <option value="Fries">Fries</option>
+          <option value="Pasta">Pasta</option>
+          <option value="Chicken">Chicken</option>
+          <option value="Beverages">Beverages</option>
+        </select>
+      </div>
       <div class="">
         <button type="button" class="btn btn-success mr-2" id="add-product-btn">Add +</button>
         <button type="button" class="btn btn-warning mr-2" id="edit-product-btn">Change</button>
@@ -64,6 +75,7 @@
           <th scope="col border">Item Name</th>
           <th scope="col border">Price (LKR)</th>
           <th scope="col border">Discount</th>
+          <th scope="col border">Category</th>
         </tr>
       </thead>
       <tbody class="table-group-divider" id="table-body">
