@@ -84,7 +84,52 @@
     </table>
   </section>
   <section class="orders container-lg d-none" id="orders">
-    
+    <button type="button" class="btn btn-success my-3" id="show-order-add-form">Add Order +</button>
+    <form action="" method="post" class="my-3 d-none" id="add-order">
+      <div class="input-group mb-3 d-none">
+        <label class="input-group-text">ID</label>
+        <input type="text" class="form-control" id="order-id" name="order">
+      </div>
+      <div class="input-group mb-3">
+        <label class="input-group-text">Customer Code</label>
+        <input type="text" class="form-control" placeholder="Customer Code" id="order-customer-code" name="order-customer-code">
+      </div>
+      <div id="order-product-code-qty">
+        <div class="input-group mb-1">
+          <label class="input-group-text">Product Code</label>
+          <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code">
+          <label class="input-group-text">Qty</label>
+          <input type="number" class="form-control order-product-qty" placeholder="Qty" id="order-product-qty" name="order-product-qty">
+        </div>
+        
+      </div>
+      <button class="btn btn-warning text-white py-1 px-2 my-3" id="add-product-to-order" type="button">Add product</button>
+      <div class="input-group mb-3">
+        <label class="input-group-text">Order Date</label>
+        <input type="date" class="form-control" placeholder="Order date" id="order-date" name="order-date">
+      </div>
+      
+      
+      <div class="">
+        <button type="button" class="btn btn-success mr-2" id="add-order-btn">Add +</button>
+        <button type="button" class="btn btn-warning mr-2" id="edit-order-btn">Change</button>
+        <button type="button" class="btn btn-secondary m-2" id="close-order-add-form">Cancel</button>
+      </div>
+    </form>
+    <table class="table table-striped table-bordered">
+      <thead>
+        <tr>
+          <th scope="col border">Order Code</th>
+          <th scope="col border">Customer Name</th>
+          <th scope="col border">Order Total</th>
+          <th scope="col border">Discount</th>
+          <th scope="col border">Net Total</th>
+        </tr>
+      </thead>
+      <tbody class="table-group-divider" id="table-body-order">
+        
+      </tbody>
+    </table>
   </section>
   <section class="customers container-lg d-none" id="customers">
     <button type="button" class="btn btn-success my-3" id="show-customer-add-form">Add Customer +</button>
@@ -126,5 +171,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script src="app.js"></script>
   <script src="customer.js"></script>
+  <script src="order.js"></script>
 </body>
 </html>
