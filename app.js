@@ -90,6 +90,32 @@ function toggleShowForm(operation, showFormBtn, clearForm, item="product") {
   clearForm();
 }
 
+// load products from products.json
+fetch('products.json')
+  .then(response => response.json())
+  .then(data => {
+    // console.log(data[0]);
+    data.forEach(item=>{
+      const product = {
+        id: item.itemCode,
+        name: item.itemName,
+        price: item.priceLKR,
+        discount: item.discount,
+        category: item.category 
+      }
+      productIncrement++;
+      productList.push(product);
+    });
+    addToTable(productList, document.getElementById("table-body"), tableColumns.product, renderProductTableButtons);
+  })
+  .catch(error => console.error('Error loading the data:', error));
+
+  // id: productID,
+  // name: productName.value,
+  // price: productPrice.value,
+  // discount: productDiscount.value,
+  // category: productCategory.value
+
 function addProduct(){
   const productName = document.getElementById("product-name");
   const productPrice = document.getElementById("product-price");
@@ -117,22 +143,19 @@ function addProduct(){
     addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
     clearProductForm();
   }
-  
-  
 }
 
 function addToTable(array, htmlEl, table, renderButtons){
   let tableRow = '';
-  array.forEach(element => {
+  for (let index = array.length-1; index >= 0; index--) {
     tableRow +='<tr>';
     table.forEach(item => {
-      tableRow += `<td>${element[item]}</td>`  
+      tableRow += `<td>${array[index][item]}</td>`  
     });
-
-    tableRow+= renderButtons(element)
+    tableRow+= renderButtons(array[index])
     
-  tableRow += '</tr>'
-  });
+    tableRow += '</tr>'
+  }
   htmlEl.innerHTML = tableRow;  
 }
 

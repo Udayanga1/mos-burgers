@@ -52,21 +52,40 @@ addProductToOrderBtn.addEventListener("click", () => {
   // document.querySelectorAll('.order-product-code').forEach(element => console.log(element.value));
 })
 
+function getOrderTotal(){
+  const productCodes = document.querySelectorAll('.order-product-code');
+  const productQtys = document.querySelectorAll('.order-product-qty');
+  let index=0;
+  let total=0;
+  productCodes.forEach(productCode=>{
+    const productQty = +productQtys[index].value // +is for convert to number
+    if (productCode.value.length>0 && productQty>0) { 
+      total+=productQty;
+    } else {
+      console.log(productCode.value.length + " code or qty not available");
+      console.log(typeof(+productQtys[index].value));
+      
+    }
+    index++;
+  })
+  return total;
+
+}
+
 function addOrder(){
   const customerCode = document.getElementById("order-customer-code");
   const orderDate = document.getElementById("order-date");
   const orderID = "O" + orderIncrement;
 
-  const productCodes = document.querySelectorAll('.order-product-code');
-  const productQtys = document.querySelectorAll('.order-product-qty');
+  
 
   const productList = [];
 
-  console.log(productCodes);
-  return;
+  // console.log("getOrderTotal in addOrder(): " + getOrderTotal());
+  // return;
   
   
-  if(orderName.value=="" || contact.value==""){
+  if(customerCode.value=="" || orderDate.value=="" || getOrderTotal()==0){
     alert("Please fill all the fields");
   } else {
     orderIncrement++;
