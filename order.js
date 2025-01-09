@@ -27,7 +27,7 @@ addProductToOrderBtn.addEventListener("click", () => {
     qtyList.push(element.value);
   })
 
-  const htmlEl = `
+  orderProductCodeQty.innerHTML+=`
     <div class="input-group mb-1">
       <label class="input-group-text">Product Code</label>
       <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code">
@@ -35,7 +35,6 @@ addProductToOrderBtn.addEventListener("click", () => {
       <input type="number" class="form-control order-product-qty" placeholder="Qty" id="order-product-qty" name="order-product-qty">
     </div>
   `;
-  orderProductCodeQty.innerHTML+=htmlEl;
 
   // copy earlier copied values
   const newOrderCodes = document.querySelectorAll('.order-product-code');
@@ -74,7 +73,7 @@ function getProductsCount(){
 
 }
 
-function addOrder(){
+function setOrder(){
   const productCodes = document.querySelectorAll('.order-product-code')
   const customerCode = document.getElementById("order-customer-code");
   const orderDate = document.getElementById("order-date");
@@ -83,53 +82,77 @@ function addOrder(){
   const productQtys = document.querySelectorAll('.order-product-qty');
   
   let index = 0;
-  let addToOrderList=false;
-  
+  // let addToOrderList=false;
+  let isValidCustomer = false;
   if(customerCode.value=="" || orderDate.value=="" || getProductsCount()==0){
     alert("Please fill all the fields");
-  } else {
-    const products = [];
-    // document.querySelectorAll('.order-product-code').forEach(item => {
-      productCodes.forEach(item => {
-      productList.forEach(product=>{
-        if(item.value==product.id) {
-          products.push({
-            id: product.id,
-            qty: +productQtys[index].value,
-            price: +product.price,
-            discount: +product.discount
-          });
-          
-        } else {
-          console.log("invalid product: " + item.value);
-          
+  } 
+  else {
+    customerList.forEach(customer=>{
+      if (customer.id==customerCode.value) {
+        isValidCustomer = true;
+      }
+    })
+    if (!isValidCustomer) {
+      alert("Invalid customer code")
+    } else {
+        const products = [];
+          productCodes.forEach(item => {
+          productList.forEach(product=>{
+            if(item.value==product.id) {
+              products.push({
+                id: product.id,
+                qty: +productQtys[index].value,
+                price: +product.price,
+                discount: +product.discount
+              });
+              console.log(customerCode.value);
+              
+              
+            } else {
+              console.log("invalid product: " + item.value);
+              
+            }
+          })
+          index++;
+        });
+      
+        let htmlEl=document.getElementById("table-body-order");
+        const order = {
+          id: orderID,
+          customerCode: customerCode.value,
+          products: products
         }
-      })
-      index++;
-    });
-   
-    let htmlEl=document.getElementById("table-body-order");
-    const order = {
-      id: orderID,
-      customerCode: customerCode.value,
-      products: products
+    
+        return order;
+      } 
     }
-    if (order.products.length>0) {
+}
+
+function addOrder(){
+  // Add order to list
+    if (setOrder().products.length>0) {
+      orderList.push(setOrder());
       orderIncrement++;
-      orderList.push(order);
-      document.getElementById("show-order-add-form").innerHTML=`<p>removed</p>`;
-      productQtys.forEach(item=>item.value="");
-      customerCode.value="";
-      orderDate.value="";
+      document.getElementById("order-customer-code").value="";
+      document.getElementById("order-date").value="";
+    } else{
+      console.log("addOrder else: " + setOrder().count);
+      
     }
     console.log(orderList);
-    // clear form after adding
-    productCodes.forEach(item=>item.value="");
+    orderProductCodeQty.innerHTML=`
+    <div class="input-group mb-1">
+      <label class="input-group-text">Product Code</label>
+      <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code">
+      <label class="input-group-text">Qty</label>
+      <input type="number" class="form-control order-product-qty" placeholder="Qty" id="order-product-qty" name="order-product-qty">
+    </div>
+  `;
 
     return;
     addToTable(orderList, htmlEl, tableColumns.order, renderOrderTableButtons);
-    clearOrderForm();
-  }
+    // clearOrderForm();
 }
 
 function clearOrderForm(){
