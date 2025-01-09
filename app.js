@@ -63,8 +63,6 @@ changeProductBtn.addEventListener("click", ()=>{
   changeProduct(productID);
 });
 
-
-
 function toggleShowForm(operation, showFormBtn, clearForm, item="product") {
   const form = document.getElementById(`add-${item}`);
   const addBtn = document.getElementById(`add-${item}-btn`);
@@ -110,12 +108,6 @@ fetch('products.json')
   })
   .catch(error => console.error('Error loading the data:', error));
 
-  // id: productID,
-  // name: productName.value,
-  // price: productPrice.value,
-  // discount: productDiscount.value,
-  // category: productCategory.value
-
 function addProduct(){
   const productName = document.getElementById("product-name");
   const productPrice = document.getElementById("product-price");
@@ -123,7 +115,6 @@ function addProduct(){
   const productCategory = document.getElementById("product-category");
   const productID = "B" + productIncrement;
   
-  // console.log(productName.value=="");
   if(productName.value=="" || productPrice.value=="" || productDiscount.value==""){
     alert("Please fill all the fields");
   } else {

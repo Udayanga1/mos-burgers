@@ -52,52 +52,81 @@ addProductToOrderBtn.addEventListener("click", () => {
   // document.querySelectorAll('.order-product-code').forEach(element => console.log(element.value));
 })
 
-function getOrderTotal(){
+function getProductsCount(){
   const productCodes = document.querySelectorAll('.order-product-code');
   const productQtys = document.querySelectorAll('.order-product-qty');
   let index=0;
-  let total=0;
+  let count=0;
   productCodes.forEach(productCode=>{
-    const productQty = +productQtys[index].value // +is for convert to number
+    const productQty = +productQtys[index].value // + converts to number
     if (productCode.value.length>0 && productQty>0) { 
-      total+=productQty;
+      count++;
     } else {
-      console.log(productCode.value.length + " code or qty not available");
-      console.log(typeof(+productQtys[index].value));
+      // console.log(productCode.value.length + " code or qty not available");
+      // console.log(typeof(+productQtys[index].value));
+      console.log("empty rows ignored");
+      
       
     }
     index++;
   })
-  return total;
+  return count;
 
 }
 
 function addOrder(){
+  const productCodes = document.querySelectorAll('.order-product-code')
   const customerCode = document.getElementById("order-customer-code");
   const orderDate = document.getElementById("order-date");
   const orderID = "O" + orderIncrement;
-
   
-
-  const productList = [];
-
-  // console.log("getOrderTotal in addOrder(): " + getOrderTotal());
-  // return;
+  const productQtys = document.querySelectorAll('.order-product-qty');
   
+  let index = 0;
+  let addToOrderList=false;
   
-  if(customerCode.value=="" || orderDate.value=="" || getOrderTotal()==0){
+  if(customerCode.value=="" || orderDate.value=="" || getProductsCount()==0){
     alert("Please fill all the fields");
   } else {
-    orderIncrement++;
+    const products = [];
+    // document.querySelectorAll('.order-product-code').forEach(item => {
+      productCodes.forEach(item => {
+      productList.forEach(product=>{
+        if(item.value==product.id) {
+          products.push({
+            id: product.id,
+            qty: +productQtys[index].value,
+            price: +product.price,
+            discount: +product.discount
+          });
+          
+        } else {
+          console.log("invalid product: " + item.value);
+          
+        }
+      })
+      index++;
+    });
+   
     let htmlEl=document.getElementById("table-body-order");
-    
     const order = {
       id: orderID,
-      name: orderName.value,
-      contact: contact.value
+      customerCode: customerCode.value,
+      products: products
     }
-  
-    orderList.push(order);
+    if (order.products.length>0) {
+      orderIncrement++;
+      orderList.push(order);
+      document.getElementById("show-order-add-form").innerHTML=`<p>removed</p>`;
+      productQtys.forEach(item=>item.value="");
+      customerCode.value="";
+      orderDate.value="";
+    }
+    console.log(orderList);
+    // clear form after adding
+    productCodes.forEach(item=>item.value="");
+
+    return;
     addToTable(orderList, htmlEl, tableColumns.order, renderOrderTableButtons);
     clearOrderForm();
   }
