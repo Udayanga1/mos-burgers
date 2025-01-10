@@ -1,6 +1,7 @@
 const showOrderFormBtn = document.getElementById("show-order-add-form");
 const addOrderBtn = document.getElementById("add-order-btn");
 const closeOrderFormBtn = document.getElementById("close-order-add-form");
+const addProductViewBtn = document.getElementById("view-order-btn");
 const changeOrderBtn = document.getElementById("edit-order-btn");
 const orderProductCodeQty = document.getElementById("order-product-code-qty");
 const addProductToOrderBtn = document.getElementById("add-product-to-order");
@@ -50,6 +51,11 @@ addProductToOrderBtn.addEventListener("click", () => {
   
   // document.querySelectorAll('.order-product-code').forEach(element => console.log(element.value));
 })
+
+addProductViewBtn.addEventListener("click", () =>{
+  viewOrder();
+  
+});
 
 function getProductsCount(){
   const productCodes = document.querySelectorAll('.order-product-code');
@@ -109,6 +115,7 @@ function setOrder(){
               orderNetTotal = orderGrossTotal - orderDiscount;
               products.push({
                 id: product.id,
+                name: product.name,
                 qty: +productQtys[index].value,
                 price: +product.price,
                 discount: +product.discount
@@ -155,6 +162,61 @@ function addOrder(){
 
     return;
     addToTable(orderList, htmlEl, tableColumns.order, renderOrderTableButtons);
+}
+
+function viewOrder(){
+  let productRows = '';
+  const order = setOrder();
+  order.products.forEach(product=>{
+    productRows+=`
+      <tr>
+        <td scope="col">${product.id}</td>
+        <td scope="col">${product.name}</td>
+        <td scope="col" align ="right">${product.qty}</td>
+        <td scope="col" align ="right">${product.price.toFixed(2)}</td>
+        <td scope="col" align ="right">${(product.price * product.qty).toFixed(2)}</td>
+      </tr>
+    `;
+  })
+  modalContainer.innerHTML=`
+  <div class="position-absolute top-50 p-2 mt-2 bg-light bg-gradient shadow-lg rounded" style="width: 38rem;">
+    <div>
+      <h5 class="text-danger">Order: ${order.id}</h5>
+      <hr>
+      <table class="table table-striped-columns">
+        <thead>
+          <tr>
+            <th scope="col">Code</th>
+            <th scope="col">Description</th>
+            <th scope="col"align ="right" align ="right">Qty</th>
+            <th scope="col"align ="right" align ="right">Unit Price</th>
+            <th scope="col"align ="right" align ="right">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${productRows}
+          <tr class="table-active">
+            <td colspan="4">Gross Total</td>
+            <td ="right" align ="right">${order.orderGrossTotal.toFixed(2)}</td>
+          </tr>
+          <tr>
+            <td colspan="4">Discount</td>
+            <td ="right" align ="right">${order.orderDiscount.toFixed(2)}</td>
+          </tr>
+          <tr class="table-active">
+            <td colspan="4">Net Total</td>
+            <td ="right" align ="right">${order.orderNetTotal.toFixed(2)}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>Do you want to delete <b></b>?</p>
+      <div class="d-flex justify-content-end gap-2">
+        <button class="btn btn-success" id="close-order-btn">No</button>
+        <button class="btn btn-danger" id="#">Yes</button>
+      </div>
+    </div>
+  </div>`;
 }
 
 function clearOrderForm(){
