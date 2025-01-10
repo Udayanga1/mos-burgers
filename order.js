@@ -97,9 +97,16 @@ function setOrder(){
       alert("Invalid customer code")
     } else {
         const products = [];
+        let orderDiscount = 0;
+        let orderGrossTotal = 0;
+        let orderNetTotal = 0;
           productCodes.forEach(item => {
           productList.forEach(product=>{
             if(item.value==product.id) {
+              const totalPerProduct = +product.price * +productQtys[index].value;
+              orderGrossTotal+=totalPerProduct;
+              orderDiscount+=totalPerProduct * (+product.discount/100);
+              orderNetTotal = orderGrossTotal - orderDiscount;
               products.push({
                 id: product.id,
                 qty: +productQtys[index].value,
@@ -121,7 +128,10 @@ function setOrder(){
         const order = {
           id: orderID,
           customerCode: customerCode.value,
-          products: products
+          products: products,
+          orderGrossTotal: orderGrossTotal,
+          orderDiscount: orderDiscount,
+          orderNetTotal: orderNetTotal
         }
     
         return order;
@@ -134,28 +144,28 @@ function addOrder(){
     if (setOrder().products.length>0) {
       orderList.push(setOrder());
       orderIncrement++;
-      document.getElementById("order-customer-code").value="";
-      document.getElementById("order-date").value="";
+      clearOrderForm();
+      // document.getElementById("order-customer-code").value="";
+      // document.getElementById("order-date").value="";
     } else{
       console.log("addOrder else: " + setOrder().count);
       
     }
     console.log(orderList);
-    orderProductCodeQty.innerHTML=`
-    <div class="input-group mb-1">
-      <label class="input-group-text">Product Code</label>
-      <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code">
-      <label class="input-group-text">Qty</label>
-      <input type="number" class="form-control order-product-qty" placeholder="Qty" id="order-product-qty" name="order-product-qty">
-    </div>
-  `;
 
     return;
     addToTable(orderList, htmlEl, tableColumns.order, renderOrderTableButtons);
-    // clearOrderForm();
 }
 
 function clearOrderForm(){
-  document.getElementById("customer-name").value="";
-  document.getElementById("customer-contact").value="";
+  document.getElementById("order-customer-code").value="";
+  document.getElementById("order-date").value="";
+  orderProductCodeQty.innerHTML=`
+  <div class="input-group mb-1">
+    <label class="input-group-text">Product Code</label>
+    <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code">
+    <label class="input-group-text">Qty</label>
+    <input type="number" class="form-control order-product-qty" placeholder="Qty" id="order-product-qty" name="order-product-qty">
+  </div>
+`;
 }
