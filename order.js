@@ -8,8 +8,14 @@ const addProductToOrderBtn = document.getElementById("add-product-to-order");
 
 let orderIncrement=101;
 let orderList = [];
+let editingOrderId = "";
 
-showOrderFormBtn.addEventListener("click", () => toggleShowForm("show", showOrderFormBtn, clearCustomerForm, "order"));
+showOrderFormBtn.addEventListener("click", () => {
+  toggleShowForm("show", showOrderFormBtn, clearCustomerForm, "order");
+  document.getElementById("view-order-btn").addEventListener("click", ()=>{
+    viewOrder();
+  })
+});
 closeOrderFormBtn.addEventListener("click", () => toggleShowForm("close", showOrderFormBtn, clearOrderForm, "order"));
 
 addOrderBtn.addEventListener("click", () => addOrder());
@@ -52,10 +58,14 @@ addProductToOrderBtn.addEventListener("click", () => {
   // document.querySelectorAll('.order-product-code').forEach(element => console.log(element.value));
 })
 
-addProductViewBtn.addEventListener("click", () =>{
-  viewOrder();
+// addProductViewBtn.addEventListener("click", () =>{
+//   viewOrder();
   
-});
+// });
+
+changeOrderBtn.addEventListener("click", ()=>{
+  changeOrder();
+})
 
 function getProductsCount(){
   const productCodes = document.querySelectorAll('.order-product-code');
@@ -79,12 +89,18 @@ function getProductsCount(){
 
 }
 
-function setOrder(){
+function setOrder(isEditing=false){
   const productCodes = document.querySelectorAll('.order-product-code')
   const customerCode = document.getElementById("order-customer-code");
   const orderDate = document.getElementById("order-date");
   const orderStatus = document.getElementById("order-status");
-  const orderID = "O" + orderIncrement;
+  // if (isEditing) {
+  //   const orderID = document.getElementById("order-id").value;
+  // } else {
+  //   const orderID = "O" + orderIncrement;
+  // }
+  const orderID = isEditing ? editingOrderId : "O" + orderIncrement;
+
   let customerName = "";
   
   const productQtys = document.querySelectorAll('.order-product-qty');
@@ -143,9 +159,10 @@ function setOrder(){
           orderGrossTotal: orderGrossTotal,
           orderDiscount: orderDiscount,
           orderNetTotal: orderNetTotal,
+          date:orderDate.value,
           status: orderStatus.value
         }
-    
+        // console.log("order.id in setOrder(): " + order.id);
         return order;
       } 
     }
@@ -161,23 +178,51 @@ function addOrder(){
       console.log("addOrder else: " + setOrder().count);
       
     }
-    // console.log(orderList);
+    console.log(orderList);
 
     addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
     closeOrderView();
 }
 
+function changeOrder(){
+  // change order
+    const order = setOrder(true);
+    let index = 0;
+    // console.log("before outer if changeOrder");
+    if (order.products.length>0) {
+      // console.log("outer if changeOrder");
+      orderList.forEach(item => {
+        console.log("order.id: " + order.id + " item.id: " + item.id);
+        if(item.id==order.id){
+          orderList[index]=order;
+          // console.log("inner if changeOrder");
+        }
+        index++;
+      })
+      // orderIncrement++;
+      clearOrderForm();
+    } else{
+      console.log("changeOrder else: " + order.count);
+      
+    }
+    console.log(orderList);
+
+    addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
+    closeOrderView();
+    toggleShowForm("close", showOrderFormBtn, clearOrderForm, "order");
+}
+
 function renderOrderTableButtons(element) {
   return `     
       <td width="200">
-        <button type="button" class="btn btn-secondary">Edit</button>
+        <button type="button" class="btn btn-secondary" onclick="showEditOrder('${element.id}')">Edit</button>
         <button type="button" class="btn btn-danger" onclick="deleteForm('${element.id}', 'Order', deleteOrder)">Delete</button>
       </td>
   `;
   
 }
 
-function viewOrder(){
+function viewOrder(isEditing=false){
   let productRows = '';
   const order = setOrder();
   order.products.forEach(product=>{
@@ -227,7 +272,7 @@ function viewOrder(){
 
       <p>Do you want to add the order ?</p>
       <div class="d-flex justify-content-end gap-2">
-        <button class="btn btn-success" id="#" onclick="addOrder()">Add</button>
+        ${isEditing ? '<button class="btn btn-warning" id="#" onclick="changeOrder()">Change</button>' : '<button class="btn btn-success" id="#" onclick="addOrder()">Add</button>'}
         <button class="btn btn-secondary" id="close-order-btn" onclick="closeOrderView()">Close</button>
       </div>
     </div>
@@ -237,6 +282,7 @@ function viewOrder(){
 function clearOrderForm(){
   document.getElementById("order-customer-code").value="";
   document.getElementById("order-date").value="";
+  document.getElementById("order-status").value ="Pending"
   orderProductCodeQty.innerHTML=`
   <div class="input-group mb-1">
     <label class="input-group-text">Product Code</label>
@@ -270,4 +316,33 @@ function deleteOrder(id){
         modalContainer.innerHTML="";
       }, 2000);  // Close the modal after 2 seconds
     }, 100);
+}
+
+function showEditOrder(id) {
+  let productsArea = "";
+  toggleShowForm("edit", showOrderFormBtn, clearCustomerForm, "order");
+  orderList.forEach(order => {
+    if (order.id==id) {
+      order.products.forEach(product=>{
+        productsArea+=`
+          <div class="input-group mb-1">
+            <label class="input-group-text">Product Code</label>
+            <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code" value=${product.id}>
+            <label class="input-group-text">Qty</label>
+            <input type="number" class="form-control order-product-qty" placeholder="Qty" id="order-product-qty" name="order-product-qty" value=${product.qty}>
+          </div>
+        `
+      });
+      document.getElementById("order-customer-code").value=order.customerCode;
+      document.getElementById("order-date").value = order.date;
+      document.getElementById("order-status").value = order.status;
+      orderProductCodeQty.innerHTML=productsArea;
+
+      editingOrderId=order.id;//this use as the id in setOrder(true);
+
+      document.getElementById("view-order-btn").addEventListener("click", ()=>{
+        viewOrder(true);
+      })
+    }
+  })
 }

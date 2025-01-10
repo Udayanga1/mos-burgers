@@ -160,12 +160,10 @@ function renderProductTableButtons(element){
 
 // clearProductForm productList showProductFormBtn
 function showEditForm(id, table, clearForm, array, showFormBtn){
-  console.log("showEditForm fired " + id);
   toggleShowForm("edit", showFormBtn, clearForm, table);
 
   array.forEach(element=>{
     if(element.id==id){
-      console.log("element.id outer loop : " + element.id);
       tableColumns[table].forEach(col =>{
         document.getElementById(`${table}-${col}`).value=element[col];
         
