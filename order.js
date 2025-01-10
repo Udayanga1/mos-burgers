@@ -167,11 +167,11 @@ function addOrder(){
     closeOrderView();
 }
 
-function renderOrderTableButtons() {
+function renderOrderTableButtons(element) {
   return `     
       <td width="200">
         <button type="button" class="btn btn-secondary">Edit</button>
-        <button type="button" class="btn btn-danger">Delete</button>
+        <button type="button" class="btn btn-danger" onclick="deleteForm('${element.id}', 'Order', deleteOrder)">Delete</button>
       </td>
   `;
   
@@ -251,16 +251,23 @@ function closeOrderView() {
   modalContainer.innerHTML="";
 }
 
-// function addToTable(array, htmlEl, table, renderButtons){
-//   let tableRow = '';
-//   for (let index = array.length-1; index >= 0; index--) {
-//     tableRow +='<tr>';
-//     table.forEach(item => {
-//       tableRow += `<td>${array[index][item]}</td>`  
-//     });
-//     tableRow+= renderButtons(array[index])
-    
-//     tableRow += '</tr>'
-//   }
-//   htmlEl.innerHTML = tableRow;  
-// }
+function deleteOrder(id){
+  orderList = orderList.filter(item => item.id !==id);
+    // let htmlEl = document.getElementById("table-body");
+    addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
+    toggleShowForm("close", showOrderFormBtn, clearOrderForm, "order");
+    setTimeout(() => {
+      modalContainer.innerHTML = `
+        <div class="position-absolute top-50 p-2 mt-2 bg-danger text-white bg-gradient shadow-lg rounded" style="width: 18rem;">
+          <div>
+            <h5>Item ${id} Deleted successfully</h5>
+            <hr>
+          </div>
+        </div>`;
+
+      // Close the modal after a few milliseconds
+      setTimeout(() => {
+        modalContainer.innerHTML="";
+      }, 2000);  // Close the modal after 2 seconds
+    }, 100);
+}
