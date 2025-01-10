@@ -21,9 +21,9 @@ const navMenuList = [
 
 const tableColumns = {
   product: ["id", "name", "price", "discount", "category"],
-  customer: ["id", "name", "contact"]
+  customer: ["id", "name", "contact"],
+  order: ["id", "customerName", "orderGrossTotal", "orderDiscount", "orderNetTotal"]
 }
-// "id", "name", "contact"
 
 // view nav menu
 function renderNavMenu() {

@@ -83,7 +83,9 @@ function setOrder(){
   const productCodes = document.querySelectorAll('.order-product-code')
   const customerCode = document.getElementById("order-customer-code");
   const orderDate = document.getElementById("order-date");
+  const orderStatus = document.getElementById("order-status");
   const orderID = "O" + orderIncrement;
+  let customerName = "";
   
   const productQtys = document.querySelectorAll('.order-product-qty');
   
@@ -96,6 +98,7 @@ function setOrder(){
   else {
     customerList.forEach(customer=>{
       if (customer.id==customerCode.value) {
+        customerName=customer.name;
         isValidCustomer = true;
       }
     })
@@ -135,10 +138,12 @@ function setOrder(){
         const order = {
           id: orderID,
           customerCode: customerCode.value,
+          customerName: customerName,
           products: products,
           orderGrossTotal: orderGrossTotal,
           orderDiscount: orderDiscount,
-          orderNetTotal: orderNetTotal
+          orderNetTotal: orderNetTotal,
+          status: orderStatus.value
         }
     
         return order;
@@ -152,16 +157,24 @@ function addOrder(){
       orderList.push(setOrder());
       orderIncrement++;
       clearOrderForm();
-      // document.getElementById("order-customer-code").value="";
-      // document.getElementById("order-date").value="";
     } else{
       console.log("addOrder else: " + setOrder().count);
       
     }
-    console.log(orderList);
+    // console.log(orderList);
 
-    return;
-    addToTable(orderList, htmlEl, tableColumns.order, renderOrderTableButtons);
+    addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
+    closeOrderView();
+}
+
+function renderOrderTableButtons() {
+  return `     
+      <td width="200">
+        <button type="button" class="btn btn-secondary">Edit</button>
+        <button type="button" class="btn btn-danger">Delete</button>
+      </td>
+  `;
+  
 }
 
 function viewOrder(){
@@ -181,39 +194,41 @@ function viewOrder(){
   modalContainer.innerHTML=`
   <div class="position-absolute top-50 p-2 mt-2 bg-light bg-gradient shadow-lg rounded" style="width: 38rem;">
     <div>
-      <h5 class="text-danger">Order: ${order.id}</h5>
+      <h5 class="text-danger">Order: ${order.id} (${order.status})</h5>
       <hr>
-      <table class="table table-striped-columns">
+      <table class="table table-striped">
         <thead>
           <tr>
             <th scope="col">Code</th>
             <th scope="col">Description</th>
-            <th scope="col"align ="right" align ="right">Qty</th>
-            <th scope="col"align ="right" align ="right">Unit Price</th>
-            <th scope="col"align ="right" align ="right">Total</th>
+            <th scope="col" align ="right">Qty</th>
+            <th scope="col" align ="right">Unit Price</th>
+            <th scope="col" align ="right">Total</th>
           </tr>
         </thead>
         <tbody>
           ${productRows}
+        </tbody>
+        <tfoot class="table-dark">
           <tr class="table-active">
             <td colspan="4">Gross Total</td>
-            <td ="right" align ="right">${order.orderGrossTotal.toFixed(2)}</td>
+            <td ="right" align ="right">${parseFloat(order.orderGrossTotal.toFixed(2)).toLocaleString()}</td>
           </tr>
           <tr>
             <td colspan="4">Discount</td>
-            <td ="right" align ="right">${order.orderDiscount.toFixed(2)}</td>
+            <td ="right" align ="right">${parseFloat(order.orderDiscount.toFixed(2)).toLocaleString()}</td>
           </tr>
           <tr class="table-active">
             <td colspan="4">Net Total</td>
-            <td ="right" align ="right">${order.orderNetTotal.toFixed(2)}</td>
+            <td ="right" align ="right">${parseFloat(order.orderNetTotal.toFixed(2)).toLocaleString()}</td>
           </tr>
-        </tbody>
+        </tfoot>
       </table>
 
-      <p>Do you want to delete <b></b>?</p>
+      <p>Do you want to add the order ?</p>
       <div class="d-flex justify-content-end gap-2">
-        <button class="btn btn-success" id="close-order-btn">No</button>
-        <button class="btn btn-danger" id="#">Yes</button>
+        <button class="btn btn-success" id="#" onclick="addOrder()">Add</button>
+        <button class="btn btn-secondary" id="close-order-btn" onclick="closeOrderView()">Close</button>
       </div>
     </div>
   </div>`;
@@ -231,3 +246,21 @@ function clearOrderForm(){
   </div>
 `;
 }
+
+function closeOrderView() {
+  modalContainer.innerHTML="";
+}
+
+// function addToTable(array, htmlEl, table, renderButtons){
+//   let tableRow = '';
+//   for (let index = array.length-1; index >= 0; index--) {
+//     tableRow +='<tr>';
+//     table.forEach(item => {
+//       tableRow += `<td>${array[index][item]}</td>`  
+//     });
+//     tableRow+= renderButtons(array[index])
+    
+//     tableRow += '</tr>'
+//   }
+//   htmlEl.innerHTML = tableRow;  
+// }

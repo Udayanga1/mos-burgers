@@ -108,7 +108,14 @@
         <label class="input-group-text">Order Date</label>
         <input type="date" class="form-control" placeholder="Order date" id="order-date" name="order-date">
       </div>
-      
+      <div class="input-group mb-3">
+        <label class="input-group-text">Status</label>
+        <select class="form-select" id="order-status">
+          <option selected value="Pending">Pending</option>
+          <option value="Completed">Completed</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
       
       <div class="">
         <button type="button" class="btn btn-success mr-2" id="add-order-btn">Add +</button>
