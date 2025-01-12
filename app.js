@@ -89,7 +89,7 @@ function toggleShowForm(operation, showFormBtn, clearForm, item="product") {
 }
 
 // load products from products.json
-fetch('products.json')
+fetch('data/products.json')
   .then(response => response.json())
   .then(data => {
     // console.log(data[0]);

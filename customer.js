@@ -86,3 +86,21 @@ function deleteCustomer(id){
       }, 2000);  // Close the modal after 2 seconds
     }, 100);
 }
+
+// load customers from customers.json
+fetch('data/customers.json')
+  .then(response => response.json())
+  .then(data => {
+    // console.log(data[0]);
+    data.forEach(item=>{
+      const customer = {
+        id: item.id,
+        name: item.name,
+        contact: item.contact
+      }
+      customerIncrement++;
+      customerList.push(customer);
+    });
+    addToTable(customerList, document.getElementById("table-body-customer"), tableColumns.customer, renderCustomerTableButtons);
+  })
+  .catch(error => console.error('Error loading the data:', error));

@@ -346,3 +346,42 @@ function showEditOrder(id) {
     }
   })
 }
+
+// load orders from orders.json
+fetch('data/orders.json')
+  .then(response => response.json())
+  .then(data => {
+    // console.log(data[0]);
+    data.forEach(item=>{
+      // const customer = {
+      //   id: item.id,
+      //   name: item.name,
+      //   contact: item.contact
+      // }
+      const products = [];
+      item.products.forEach(product => {
+        products.push({
+          id: product.itemCode,
+          name: product.itemName,
+          qty: +product.qty,
+          price: +product.priceLKR,
+          discount: +product.discount
+        });
+      })
+      const order = {
+        id: item.id,
+        customerCode: item.customerCode,
+        customerName: item.customerName,
+        products: products,
+        orderGrossTotal: item.orderGrossTotal,
+        orderDiscount: item.orderDiscount,
+        orderNetTotal: item.orderNetTotal,
+        date:item.date,
+        status: item.status
+      }
+      orderIncrement++;
+      orderList.push(order);
+    });
+    addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
+  })
+  .catch(error => console.error('Error loading the data:', error));

@@ -1,0 +1,751 @@
+[
+  {
+    "customerCode": "C101",
+    "customerName": "Sahan Perera",
+    "date": "2024-10-01",
+    "id": "O101",
+    "orderDiscount": 0,
+    "orderGrossTotal": 3600,
+    "orderNetTotal": 3600,
+    "products": [
+      {
+        "itemCode": "B1001",
+        "itemName": "Classic Burger (Large)",
+        "qty": 2,
+        "priceLKR": 750,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1045",
+        "itemName": "Coca-Cola (330ml)",
+        "qty": 2,
+        "priceLKR": 1230,
+        "discount": "0"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C102",
+    "customerName": "Nadeesha Fernando",
+    "date": "2024-10-03",
+    "id": "O102",
+    "orderDiscount": 0,
+    "orderGrossTotal": 1200,
+    "orderNetTotal": 1200,
+    "products": [
+      {
+        "itemCode": "B1002",
+        "itemName": "Classic Burger (Regular)",
+        "qty": 1,
+        "priceLKR": 1500,
+        "discount": "15"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C103",
+    "customerName": "Chathura Silva",
+    "date": "2024-10-05",
+    "id": "O103",
+    "orderDiscount": 0,
+    "orderGrossTotal": 4600,
+    "orderNetTotal": 4600,
+    "products": [
+      {
+        "itemCode": "B1006",
+        "itemName": "Cheese Burger (Large)",
+        "qty": 3,
+        "priceLKR": 1000,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1044",
+        "itemName": "Pepsi (330ml)",
+        "qty": 2,
+        "priceLKR": 990,
+        "discount": "5"
+      }
+    ],
+    "status": "Pending"
+  },
+  {
+    "customerCode": "C104",
+    "customerName": "Dinesh Kumara",
+    "date": "2024-10-07",
+    "id": "O104",
+    "orderDiscount": 0,
+    "orderGrossTotal": 5400,
+    "orderNetTotal": 5400,
+    "products": [
+      {
+        "itemCode": "B1005",
+        "itemName": "Chicken Burger (Regular)",
+        "qty": 2,
+        "priceLKR": 800,
+        "discount": "20"
+      },
+      {
+        "itemCode": "B1017",
+        "itemName": "Crispy Chicken Submarine (Regular)",
+        "qty": 1,
+        "priceLKR": 1500,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1045",
+        "itemName": "Coca-Cola (330ml)",
+        "qty": 2,
+        "priceLKR": 1230,
+        "discount": "0"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C105",
+    "customerName": "Tharindu Rajapaksha",
+    "date": "2024-10-09",
+    "id": "O105",
+    "orderDiscount": 0,
+    "orderGrossTotal": 4400,
+    "orderNetTotal": 4400,
+    "products": [
+      {
+        "itemCode": "B1025",
+        "itemName": "Steak Fries (Large)",
+        "qty": 2,
+        "priceLKR": 1200,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1026",
+        "itemName": "Steak Fries (Medium)",
+        "qty": 3,
+        "priceLKR": 600,
+        "discount": "0"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C106",
+    "customerName": "Kasuni Wijesuriya",
+    "date": "2024-10-12",
+    "id": "O106",
+    "orderDiscount": 0,
+    "orderGrossTotal": 6200,
+    "orderNetTotal": 6200,
+    "products": [
+      {
+        "itemCode": "B1030",
+        "itemName": "Sweet Potato Fries (Large)",
+        "qty": 1,
+        "priceLKR": 600,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1031",
+        "itemName": "Chicken n Cheese Pasta",
+        "qty": 2,
+        "priceLKR": 1600,
+        "discount": "15"
+      },
+      {
+        "itemCode": "B1047",
+        "itemName": "Mirinda (330ml)",
+        "qty": 1,
+        "priceLKR": 850,
+        "discount": "7"
+      }
+    ],
+    "status": "Pending"
+  },
+  {
+    "customerCode": "C107",
+    "customerName": "Udara Jayasinghe",
+    "date": "2024-10-15",
+    "id": "O107",
+    "orderDiscount": 0,
+    "orderGrossTotal": 5400,
+    "orderNetTotal": 5400,
+    "products": [
+      {
+        "itemCode": "B1018",
+        "itemName": "Chicken Submarine (Large)",
+        "qty": 1,
+        "priceLKR": 1800,
+        "discount": "3"
+      },
+      {
+        "itemCode": "B1020",
+        "itemName": "Grinder Submarine",
+        "qty": 2,
+        "priceLKR": 2300,
+        "discount": "0"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C108",
+    "customerName": "Dilani Bandara",
+    "date": "2024-10-17",
+    "id": "O108",
+    "orderDiscount": 0,
+    "orderGrossTotal": 4000,
+    "orderNetTotal": 4000,
+    "products": [
+      {
+        "itemCode": "B1004",
+        "itemName": "Chicken Burger (Large)",
+        "qty": 1,
+        "priceLKR": 1400,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1022",
+        "itemName": "Double Cheese n Chicken Submarine",
+        "qty": 2,
+        "priceLKR": 1900,
+        "discount": "16"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C109",
+    "customerName": "Shirantha De Silva",
+    "date": "2024-10-20",
+    "id": "O109",
+    "orderDiscount": 0,
+    "orderGrossTotal": 3300,
+    "orderNetTotal": 3300,
+    "products": [
+      {
+        "itemCode": "B1009",
+        "itemName": "Shawarma Burger",
+        "qty": 2,
+        "priceLKR": 800,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1029",
+        "itemName": "French Fries (Small)",
+        "qty": 2,
+        "priceLKR": 450,
+        "discount": "0"
+      }
+    ],
+    "status": "Pending"
+  },
+  {
+    "customerCode": "C110",
+    "customerName": "Kumari Wickramasinghe",
+    "date": "2024-10-22",
+    "id": "O110",
+    "orderDiscount": 0,
+    "orderGrossTotal": 4500,
+    "orderNetTotal": 4500,
+    "products": [
+      {
+        "itemCode": "B1034",
+        "itemName": "Creamy Shrimp Pasta",
+        "qty": 2,
+        "priceLKR": 2000,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1046",
+        "itemName": "Sprite (330ml)",
+        "qty": 3,
+        "priceLKR": 1500,
+        "discount": "3"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C111",
+    "customerName": "Hiruni Perera",
+    "date": "2024-10-24",
+    "id": "O111",
+    "orderDiscount": 0,
+    "orderGrossTotal": 5100,
+    "orderNetTotal": 5100,
+    "products": [
+      {
+        "itemCode": "B1007",
+        "itemName": "Cheese Burger (Regular)",
+        "qty": 3,
+        "priceLKR": 600,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1035",
+        "itemName": "Lemon Butter Pasta",
+        "qty": 1,
+        "priceLKR": 1950,
+        "discount": "0"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C112",
+    "customerName": "Malitha Seneviratne",
+    "date": "2024-10-27",
+    "id": "O112",
+    "orderDiscount": 0,
+    "orderGrossTotal": 5700,
+    "orderNetTotal": 5700,
+    "products": [
+      {
+        "itemCode": "B1037",
+        "itemName": "Baked Ravioli",
+        "qty": 2,
+        "priceLKR": 2000,
+        "discount": "1"
+      },
+      {
+        "itemCode": "B1020",
+        "itemName": "Grinder Submarine",
+        "qty": 1,
+        "priceLKR": 2300,
+        "discount": "0"
+      }
+    ],
+    "status": "Pending"
+  },
+  {
+    "customerCode": "C113",
+    "customerName": "Dinushi Weerasinghe",
+    "date": "2024-10-30",
+    "id": "O113",
+    "orderDiscount": 0,
+    "orderGrossTotal": 6700,
+    "orderNetTotal": 6700,
+    "products": [
+      {
+        "itemCode": "B1038",
+        "itemName": "Fried Chicken (Small)",
+        "qty": 2,
+        "priceLKR": 1200,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1039",
+        "itemName": "Fried Chicken (Regular)",
+        "qty": 1,
+        "priceLKR": 2300,
+        "discount": "10"
+      },
+      {
+        "itemCode": "B1045",
+        "itemName": "Coca-Cola (330ml)",
+        "qty": 2,
+        "priceLKR": 1230,
+        "discount": "0"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C114",
+    "customerName": "Sampath Jayawardana",
+    "date": "2024-11-02",
+    "id": "O114",
+    "orderDiscount": 0,
+    "orderGrossTotal": 4800,
+    "orderNetTotal": 4800,
+    "products": [
+      {
+        "itemCode": "B1008",
+        "itemName": "Bacon Burger",
+        "qty": 3,
+        "priceLKR": 650,
+        "discount": "15"
+      },
+      {
+        "itemCode": "B1047",
+        "itemName": "Mirinda (330ml)",
+        "qty": 2,
+        "priceLKR": 850,
+        "discount": "7"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C115",
+    "customerName": "Anusha Madhusanka",
+    "date": "2024-11-05",
+    "id": "O115",
+    "orderDiscount": 0,
+    "orderGrossTotal": 3500,
+    "orderNetTotal": 3500,
+    "products": [
+      {
+        "itemCode": "B1033",
+        "itemName": "Ground Turkey Pasta Bake",
+        "qty": 1,
+        "priceLKR": 2900,
+        "discount": "10"
+      },
+      {
+        "itemCode": "B1027",
+        "itemName": "French Fries (Large)",
+        "qty": 1,
+        "priceLKR": 800,
+        "discount": "0"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C116",
+    "customerName": "Gihan Fernando",
+    "date": "2024-11-08",
+    "id": "O116",
+    "orderDiscount": 0,
+    "orderGrossTotal": 5300,
+    "orderNetTotal": 5300,
+    "products": [
+      {
+        "itemCode": "B1004",
+        "itemName": "Chicken Burger (Large)",
+        "qty": 3,
+        "priceLKR": 1400,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1031",
+        "itemName": "Chicken n Cheese Pasta",
+        "qty": 1,
+        "priceLKR": 1600,
+        "discount": "15"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C117",
+    "customerName": "Chamara Rajapaksha",
+    "date": "2024-11-10",
+    "id": "O117",
+    "orderDiscount": 0,
+    "orderGrossTotal": 5100,
+    "orderNetTotal": 5100,
+    "products": [
+      {
+        "itemCode": "B1019",
+        "itemName": "Chicken Submarine (Regular)",
+        "qty": 2,
+        "priceLKR": 1400,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1028",
+        "itemName": "French Fries (Medium)",
+        "qty": 2,
+        "priceLKR": 650,
+        "discount": "0"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C118",
+    "customerName": "Madara Abeysinghe",
+    "date": "2024-11-12",
+    "id": "O118",
+    "orderDiscount": 0,
+    "orderGrossTotal": 4600,
+    "orderNetTotal": 4600,
+    "products": [
+      {
+        "itemCode": "B1036",
+        "itemName": "Tagliatelle Pasta",
+        "qty": 2,
+        "priceLKR": 2400,
+        "discount": "1"
+      },
+      {
+        "itemCode": "B1002",
+        "itemName": "Classic Burger (Regular)",
+        "qty": 1,
+        "priceLKR": 1500,
+        "discount": "15"
+      }
+    ],
+    "status": "Pending"
+  },
+  {
+    "customerCode": "C119",
+    "customerName": "Niranjan Perera",
+    "date": "2024-11-15",
+    "id": "O119",
+    "orderDiscount": 0,
+    "orderGrossTotal": 6000,
+    "orderNetTotal": 6000,
+    "products": [
+      {
+        "itemCode": "B1014",
+        "itemName": "Crispy Chicken Burger (Large)",
+        "qty": 1,
+        "priceLKR": 1600,
+        "discount": "10"
+      },
+      {
+        "itemCode": "B1046",
+        "itemName": "Sprite (330ml)",
+        "qty": 2,
+        "priceLKR": 1500,
+        "discount": "3"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C111",
+    "customerName": "Hiruni Perera",
+    "date": "2024-10-24",
+    "id": "O111",
+    "orderDiscount": 0,
+    "orderGrossTotal": 5100,
+    "orderNetTotal": 5100,
+    "products": [
+      {
+        "itemCode": "B1007",
+        "itemName": "Cheese Burger (Regular)",
+        "qty": 3,
+        "priceLKR": 600,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1035",
+        "itemName": "Lemon Butter Pasta",
+        "qty": 1,
+        "priceLKR": 1950,
+        "discount": "0"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C112",
+    "customerName": "Malitha Seneviratne",
+    "date": "2024-10-27",
+    "id": "O112",
+    "orderDiscount": 0,
+    "orderGrossTotal": 5700,
+    "orderNetTotal": 5700,
+    "products": [
+      {
+        "itemCode": "B1037",
+        "itemName": "Baked Ravioli",
+        "qty": 2,
+        "priceLKR": 2000,
+        "discount": "1"
+      },
+      {
+        "itemCode": "B1020",
+        "itemName": "Grinder Submarine",
+        "qty": 1,
+        "priceLKR": 2300,
+        "discount": "0"
+      }
+    ],
+    "status": "Pending"
+  },
+  {
+    "customerCode": "C113",
+    "customerName": "Dinushi Weerasinghe",
+    "date": "2024-10-30",
+    "id": "O113",
+    "orderDiscount": 0,
+    "orderGrossTotal": 6700,
+    "orderNetTotal": 6700,
+    "products": [
+      {
+        "itemCode": "B1038",
+        "itemName": "Fried Chicken (Small)",
+        "qty": 2,
+        "priceLKR": 1200,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1039",
+        "itemName": "Fried Chicken (Regular)",
+        "qty": 1,
+        "priceLKR": 2300,
+        "discount": "10"
+      },
+      {
+        "itemCode": "B1045",
+        "itemName": "Coca-Cola (330ml)",
+        "qty": 2,
+        "priceLKR": 1230,
+        "discount": "0"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C114",
+    "customerName": "Sampath Jayawardana",
+    "date": "2024-11-02",
+    "id": "O114",
+    "orderDiscount": 0,
+    "orderGrossTotal": 4800,
+    "orderNetTotal": 4800,
+    "products": [
+      {
+        "itemCode": "B1008",
+        "itemName": "Bacon Burger",
+        "qty": 3,
+        "priceLKR": 650,
+        "discount": "15"
+      },
+      {
+        "itemCode": "B1047",
+        "itemName": "Mirinda (330ml)",
+        "qty": 2,
+        "priceLKR": 850,
+        "discount": "7"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C115",
+    "customerName": "Anusha Madhusanka",
+    "date": "2024-11-05",
+    "id": "O115",
+    "orderDiscount": 0,
+    "orderGrossTotal": 3500,
+    "orderNetTotal": 3500,
+    "products": [
+      {
+        "itemCode": "B1033",
+        "itemName": "Ground Turkey Pasta Bake",
+        "qty": 1,
+        "priceLKR": 2900,
+        "discount": "10"
+      },
+      {
+        "itemCode": "B1027",
+        "itemName": "French Fries (Large)",
+        "qty": 1,
+        "priceLKR": 800,
+        "discount": "0"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C116",
+    "customerName": "Gihan Fernando",
+    "date": "2024-11-08",
+    "id": "O116",
+    "orderDiscount": 0,
+    "orderGrossTotal": 5300,
+    "orderNetTotal": 5300,
+    "products": [
+      {
+        "itemCode": "B1004",
+        "itemName": "Chicken Burger (Large)",
+        "qty": 3,
+        "priceLKR": 1400,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1031",
+        "itemName": "Chicken n Cheese Pasta",
+        "qty": 1,
+        "priceLKR": 1600,
+        "discount": "15"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C117",
+    "customerName": "Chamara Rajapaksha",
+    "date": "2024-11-10",
+    "id": "O117",
+    "orderDiscount": 0,
+    "orderGrossTotal": 5100,
+    "orderNetTotal": 5100,
+    "products": [
+      {
+        "itemCode": "B1019",
+        "itemName": "Chicken Submarine (Regular)",
+        "qty": 2,
+        "priceLKR": 1400,
+        "discount": "0"
+      },
+      {
+        "itemCode": "B1028",
+        "itemName": "French Fries (Medium)",
+        "qty": 2,
+        "priceLKR": 650,
+        "discount": "0"
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C118",
+    "customerName": "Madara Abeysinghe",
+    "date": "2024-11-12",
+    "id": "O118",
+    "orderDiscount": 0,
+    "orderGrossTotal": 4600,
+    "orderNetTotal": 4600,
+    "products": [
+      {
+        "itemCode": "B1036",
+        "itemName": "Tagliatelle Pasta",
+        "qty": 2,
+        "priceLKR": 2400,
+        "discount": "1"
+      },
+      {
+        "itemCode": "B1002",
+        "itemName": "Classic Burger (Regular)",
+        "qty": 1,
+        "priceLKR": 1500,
+        "discount": "15"
+      }
+    ],
+    "status": "Pending"
+  },
+  {
+    "customerCode": "C119",
+    "customerName": "Niranjan Perera",
+    "date": "2024-11-15",
+    "id": "O119",
+    "orderDiscount": 0,
+    "orderGrossTotal": 6000,
+    "orderNetTotal": 6000,
+    "products": [
+      {
+        "itemCode": "B1014",
+        "itemName": "Crispy Chicken Burger (Large)",
+        "qty": 1,
+        "priceLKR": 1600,
+        "discount": "10"
+      },
+      {
+        "itemCode": "B1046",
+        "itemName": "Sprite (330ml)",
+        "qty": 2,
+        "priceLKR": 1500,
+        "discount": "3"
+      }
+    ],
+    "status": "Completed"
+  }
+]
