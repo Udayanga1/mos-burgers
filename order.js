@@ -156,9 +156,9 @@ function setOrder(isEditing=false){
           customerCode: customerCode.value,
           customerName: customerName,
           products: products,
-          orderGrossTotal: orderGrossTotal,
-          orderDiscount: orderDiscount,
-          orderNetTotal: orderNetTotal,
+          orderGrossTotal: orderGrossTotal.toFixed(2),
+          orderDiscount: orderDiscount.toFixed(2),
+          orderNetTotal: orderNetTotal.toFixed(2),
           date:orderDate.value,
           status: orderStatus.value
         }
@@ -224,7 +224,7 @@ function renderOrderTableButtons(element) {
 
 function viewOrder(isEditing=false){
   let productRows = '';
-  const order = setOrder();
+  const order = isEditing ? setOrder(true) : setOrder();
   order.products.forEach(product=>{
     productRows+=`
       <tr>
@@ -257,15 +257,15 @@ function viewOrder(isEditing=false){
         <tfoot class="table-dark">
           <tr class="table-active">
             <td colspan="4">Gross Total</td>
-            <td ="right" align ="right">${parseFloat(order.orderGrossTotal.toFixed(2)).toLocaleString()}</td>
+            <td ="right" align ="right">${parseFloat(order.orderGrossTotal).toLocaleString()}</td>
           </tr>
           <tr>
             <td colspan="4">Discount</td>
-            <td ="right" align ="right">${parseFloat(order.orderDiscount.toFixed(2)).toLocaleString()}</td>
+            <td ="right" align ="right">${parseFloat(order.orderDiscount).toLocaleString()}</td>
           </tr>
           <tr class="table-active">
             <td colspan="4">Net Total</td>
-            <td ="right" align ="right">${parseFloat(order.orderNetTotal.toFixed(2)).toLocaleString()}</td>
+            <td ="right" align ="right">${parseFloat(order.orderNetTotal).toLocaleString()}</td>
           </tr>
         </tfoot>
       </table>
@@ -353,33 +353,55 @@ fetch('data/orders.json')
   .then(data => {
     // console.log(data[0]);
     data.forEach(item=>{
-      // const customer = {
-      //   id: item.id,
-      //   name: item.name,
-      //   contact: item.contact
-      // }
+
+      // get customer name from customerList
+      let customerName = "";
+      customerList.forEach(customer=>{
+        if (item.customerCode==customer.id) {
+          customerName=customer.name;
+        }
+      });
+      
+      let orderTotal=0;
+      let orderDiscount=0;
+      
       const products = [];
-      item.products.forEach(product => {
-        products.push({
-          id: product.itemCode,
-          name: product.itemName,
-          qty: +product.qty,
-          price: +product.priceLKR,
-          discount: +product.discount
-        });
+      item.products.forEach(line => {
+        // console.log(item.products);
+        
+        productList.forEach(product=>{
+          // console.log("product id: " + product.id);
+          // console.log("line id: " + line.id);
+          console.log(line);
+          
+          if(product.id==line.itemCode){
+            products.push({
+              id: line.itemCode,
+              name: product.name,
+              qty: +line.qty,
+              price: +product.price,
+              discount: +product.discount
+            });
+            orderTotal+=+product.price * +line.qty;
+            orderDiscount+=product.price * +line.qty * (+product.discount/100);
+            // console.log(productList);
+          }
+        })
       })
       const order = {
-        id: item.id,
+        id: "O" + orderIncrement++,
         customerCode: item.customerCode,
-        customerName: item.customerName,
+        customerName: customerName,
         products: products,
-        orderGrossTotal: item.orderGrossTotal,
-        orderDiscount: item.orderDiscount,
-        orderNetTotal: item.orderNetTotal,
+        orderGrossTotal: orderTotal.toFixed(2),
+        orderDiscount: orderDiscount.toFixed(2),
+        orderNetTotal: (orderTotal - orderDiscount).toFixed(2),
         date:item.date,
         status: item.status
       }
-      orderIncrement++;
+      // console.log(order);
+      
+      // orderIncrement++;
       orderList.push(order);
     });
     addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
