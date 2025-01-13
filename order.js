@@ -351,7 +351,6 @@ function showEditOrder(id) {
 fetch('data/orders.json')
   .then(response => response.json())
   .then(data => {
-    // console.log(data[0]);
     data.forEach(item=>{
 
       // get customer name from customerList
@@ -367,12 +366,8 @@ fetch('data/orders.json')
       
       const products = [];
       item.products.forEach(line => {
-        // console.log(item.products);
         
         productList.forEach(product=>{
-          // console.log("product id: " + product.id);
-          // console.log("line id: " + line.id);
-          console.log(line);
           
           if(product.id==line.itemCode){
             products.push({
@@ -384,7 +379,6 @@ fetch('data/orders.json')
             });
             orderTotal+=+product.price * +line.qty;
             orderDiscount+=product.price * +line.qty * (+product.discount/100);
-            // console.log(productList);
           }
         })
       })
@@ -399,9 +393,6 @@ fetch('data/orders.json')
         date:item.date,
         status: item.status
       }
-      // console.log(order);
-      
-      // orderIncrement++;
       orderList.push(order);
     });
     addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);

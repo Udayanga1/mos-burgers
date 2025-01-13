@@ -265,7 +265,7 @@
     "status": "Completed"
   },
   {
-    "customerCode": "C120",
+    "customerCode": "C101",
     "date": "2025-01-12",
     "products": [
       {
@@ -411,7 +411,7 @@
     "status": "Completed"
   },
   {
-    "customerCode": "C120",
+    "customerCode": "C101",
     "date": "2024-11-02",
     "products": [
       {
@@ -646,6 +646,381 @@
       {
         "itemCode": "B1006",
         "qty": 1
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C116",
+    "date": "2024-12-17",
+    "products": [
+      {
+        "itemCode": "B1031",
+        "qty": 3
+      },
+      {
+        "itemCode": "B1024",
+        "qty": 2
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C117",
+    "date": "2024-12-20",
+    "products": [
+      {
+        "itemCode": "B1003",
+        "qty": 1
+      },
+      {
+        "itemCode": "B1039",
+        "qty": 2
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C118",
+    "date": "2024-12-22",
+    "products": [
+      {
+        "itemCode": "B1002",
+        "qty": 3
+      },
+      {
+        "itemCode": "B1015",
+        "qty": 2
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C119",
+    "date": "2024-12-25",
+    "products": [
+      {
+        "itemCode": "B1033",
+        "qty": 1
+      },
+      {
+        "itemCode": "B1046",
+        "qty": 3
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C101",
+    "date": "2024-12-28",
+    "products": [
+      {
+        "itemCode": "B1005",
+        "qty": 2
+      },
+      {
+        "itemCode": "B1017",
+        "qty": 1
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C101",
+    "date": "2024-12-31",
+    "products": [
+      {
+        "itemCode": "B1019",
+        "qty": 2
+      },
+      {
+        "itemCode": "B1026",
+        "qty": 2
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C102",
+    "date": "2025-01-02",
+    "products": [
+      {
+        "itemCode": "B1028",
+        "qty": 3
+      },
+      {
+        "itemCode": "B1009",
+        "qty": 1
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C103",
+    "date": "2025-01-04",
+    "products": [
+      {
+        "itemCode": "B1030",
+        "qty": 4
+      },
+      {
+        "itemCode": "B1045",
+        "qty": 1
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C104",
+    "date": "2025-01-07",
+    "products": [
+      {
+        "itemCode": "B1007",
+        "qty": 2
+      },
+      {
+        "itemCode": "B1029",
+        "qty": 3
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C105",
+    "date": "2025-01-09",
+    "products": [
+      {
+        "itemCode": "B1014",
+        "qty": 1
+      },
+      {
+        "itemCode": "B1032",
+        "qty": 4
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C106",
+    "date": "2025-01-11",
+    "products": [
+      {
+        "itemCode": "B1021",
+        "qty": 2
+      },
+      {
+        "itemCode": "B1012",
+        "qty": 3
+      }
+    ],
+    "status": "Pending"
+  },
+  {
+    "customerCode": "C107",
+    "date": "2025-01-13",
+    "products": [
+      {
+        "itemCode": "B1001",
+        "qty": 5
+      },
+      {
+        "itemCode": "B1037",
+        "qty": 2
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C108",
+    "date": "2025-01-15",
+    "products": [
+      {
+        "itemCode": "B1040",
+        "qty": 1
+      },
+      {
+        "itemCode": "B1035",
+        "qty": 3
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C109",
+    "date": "2025-01-18",
+    "products": [
+      {
+        "itemCode": "B1006",
+        "qty": 3
+      },
+      {
+        "itemCode": "B1043",
+        "qty": 2
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C110",
+    "date": "2025-01-20",
+    "products": [
+      {
+        "itemCode": "B1018",
+        "qty": 2
+      },
+      {
+        "itemCode": "B1022",
+        "qty": 3
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C111",
+    "date": "2025-01-22",
+    "products": [
+      {
+        "itemCode": "B1011",
+        "qty": 4
+      },
+      {
+        "itemCode": "B1020",
+        "qty": 2
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C112",
+    "date": "2025-01-25",
+    "products": [
+      {
+        "itemCode": "B1004",
+        "qty": 2
+      },
+      {
+        "itemCode": "B1033",
+        "qty": 1
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C113",
+    "date": "2025-01-28",
+    "products": [
+      {
+        "itemCode": "B1025",
+        "qty": 3
+      },
+      {
+        "itemCode": "B1036",
+        "qty": 2
+      }
+    ],
+    "status": "Pending"
+  },
+  {
+    "customerCode": "C114",
+    "date": "2025-01-30",
+    "products": [
+      {
+        "itemCode": "B1023",
+        "qty": 2
+      },
+      {
+        "itemCode": "B1044",
+        "qty": 1
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C115",
+    "date": "2025-02-02",
+    "products": [
+      {
+        "itemCode": "B1034",
+        "qty": 2
+      },
+      {
+        "itemCode": "B1015",
+        "qty": 3
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C116",
+    "date": "2025-02-05",
+    "products": [
+      {
+        "itemCode": "B1009",
+        "qty": 1
+      },
+      {
+        "itemCode": "B1027",
+        "qty": 3
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C117",
+    "date": "2025-02-08",
+    "products": [
+      {
+        "itemCode": "B1038",
+        "qty": 1
+      },
+      {
+        "itemCode": "B1010",
+        "qty": 2
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C118",
+    "date": "2025-02-10",
+    "products": [
+      {
+        "itemCode": "B1016",
+        "qty": 3
+      },
+      {
+        "itemCode": "B1020",
+        "qty": 2
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C119",
+    "date": "2025-02-12",
+    "products": [
+      {
+        "itemCode": "B1024",
+        "qty": 2
+      },
+      {
+        "itemCode": "B1008",
+        "qty": 1
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C101",
+    "date": "2025-02-15",
+    "products": [
+      {
+        "itemCode": "B1047",
+        "qty": 3
+      },
+      {
+        "itemCode": "B1007",
+        "qty": 2
       }
     ],
     "status": "Completed"
