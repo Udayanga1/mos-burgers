@@ -1,20 +1,13 @@
-// function logOrderDate() {
-//   orderList.forEach(order=>{
-//     // const date = new Date(order.date);
-//     console.log(order.date);
-    
-//     console.log(new Date(order.date).getMonth() + 1);
-//     console.log(new Date(order.date).getFullYear());
-//     console.log(new Date(order.date).getDate());
-    
-//   })
-// }
+const monthlySalesReportsBtn = document.getElementById("monthly-sales-reports-btn");
+const annualSalesReportsBtn = document.getElementById("annual-sales-reports-btn");
 
-const monthlySalesReporsBtn = document.getElementById("monthly-sales-reports-btn");
-
-monthlySalesReporsBtn.addEventListener("click", () => {
+monthlySalesReportsBtn.addEventListener("click", () => {
   monthlySalesReportView();
 });
+annualSalesReportsBtn.addEventListener("click", () => {
+  annualSalesReportView();
+  
+})
 
 function monthlySalesReportView() {
   modalContainer.innerHTML=`
@@ -211,7 +204,6 @@ function findMonthOrders(year, month){
   orderList.forEach(order=>{
     if(new Date(order.date).getFullYear()==year && 
       new Date(order.date).getMonth()==month) {
-      // monthOrders.push(order);
       if (order.status=="Pending") {
         totalPendingOrderValue+=+order.orderNetTotal;
         monthOrdersPending.push(order);
@@ -225,10 +217,185 @@ function findMonthOrders(year, month){
     } 
   });
   return {
-    monthOrdersPending,
+    monthOrdersPending, //pending orders array
     monthOrdersCompleted,
     monthOrdersCancelled,
-    totalPendingOrderValue,
+    totalPendingOrderValue, //pending orders total value
+    totalCompletedOrderValue,
+    totalCancelledOrderValue
+  }
+  
+}
+
+function annualSalesReportView() {
+  modalContainer.innerHTML=`
+  <div class="position-absolute top-50 p-2 mt-2 bg-light bg-gradient shadow-lg rounded" style="width: 38rem;">
+    <div>
+      <h5 class="text-danger">Monthly Sales Report</h5>
+      <div class="input-group mb-3">
+        <label class="input-group-text" for="inputGroupYear">Year</label>
+        <select class="form-select" id="inputGroupYear">
+          <option selected>Choose Year</option>
+          ${showYearsAsList()}
+        </select>
+      </div>
+      <div class="d-flex justify-content-end gap-2 my-2">
+        <button class="btn btn-success d-none" id="view-report-top-btn" onclick="viewAnnualSalesReport()">View Report</button>
+      </div>
+      <div id="report-view-container"></div>
+
+      <div class="d-flex justify-content-between gap-2">
+        <div>
+          <button class="btn btn-warning d-none" id="view-detailed-report-btn">View Detailed Report</button>
+        </div>
+        <div class="d-flex justify-content-end gap-2 mb-3">
+          <button class="btn btn-success" id="view-report-bottom-btn" onclick="viewAnnualSalesReport()">View Report</button>
+          <button class="btn btn-secondary" id="n" onclick="closeReportsView()">Close</button>
+        </div>
+      </div>
+
+      <div id="report-detailed-view-container" class="">
+        
+      </div>
+    </div>
+  </div>`;
+}
+// totalPendingOrderValue, //pending orders total value
+// totalCompletedOrderValue,
+// totalCancelledOrderValue
+
+function viewAnnualSalesReport() {
+  const reportYear = document.getElementById("inputGroupYear").value;
+  // console.log(reportYear);
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June", 
+    "July", "August", "September", "October", "November", "December"
+  ];
+  
+  // const monthOrders = findMonthOrders(reportYear, reportMonth);
+  const annualOrderValues = [];
+  for (let i = 0; i < monthNames.length; i++) {
+    const monthOrders = findMonthlyOrdersForYearReport(reportYear,i);
+    annualOrderValues.push(
+      {
+        pendingOrderValue: monthOrders.totalPendingOrderValue,
+        completedOrderValue: monthOrders.totalCompletedOrderValue,
+        cancelledOrderValue: monthOrders.totalCancelledOrderValue
+      }
+    );
+  }
+
+  let annualPendingOrderValue = 0;
+  let annualCompletedOrderValue = 0;
+  let annualCancelledOrderValue = 0;
+  
+  let table="";
+  let monthIndex=0;
+  annualOrderValues.forEach(month=>{
+    // console.log(month.completedOrderValue);
+    annualPendingOrderValue+=month.pendingOrderValue;
+    annualCompletedOrderValue+=month.completedOrderValue;
+    annualCancelledOrderValue+=month.cancelledOrderValue;
+    table += `
+    <table class="table table-striped" id="report-table" >
+      <thead>
+        <tr class="table-dark table-borderless">
+          <td colspan="4">${reportYear} ${monthNames[monthIndex]}</td>
+        </tr>
+      </thead>
+      <tbody class="table-dark">
+        <tr class="table-light table-borderless">
+          <td colspan="3">Completed Orders</td>
+          <td ="right" align ="right">${(month.completedOrderValue).toLocaleString('en-US')}</td>
+        </tr>
+        <tr class="table-light table-borderless">
+          <td colspan="3">Pending Orders</td>
+          <td ="right" align ="right">${(month.pendingOrderValue).toLocaleString('en-US')}</td>
+        </tr>
+        <tr class="table-light table-borderless">
+          <td colspan="3">Cancelled Orders</td>
+          <td ="right" align ="right">${(month.cancelledOrderValue).toLocaleString('en-US')}</td>
+        </tr>
+      </tbody>
+    </table>
+    `
+    monthIndex++;
+  });
+  // console.log(annualOrderValues);
+  
+  const detailedReportBtn = document.getElementById("report-detailed-view-container");
+  
+  document.getElementById("report-view-container").innerHTML=`
+  <hr>
+  ${reportYear=="Choose Year" ? "<h4 class="+"text-warning" + ">Please select a year</h4>" : "<h4 class="+"text-success" + ">Sales : " + reportYear  +"</h4>"} 
+  <table class="table table-striped" id="report-table" >
+  <tbody class="table-dark">
+  <tr class="table-active">
+  <td colspan="3">Total Orders</td>
+  <td ="right" align ="right">${(annualPendingOrderValue + annualCompletedOrderValue + annualCancelledOrderValue).toLocaleString('en-US')}</td>
+  </tr>
+  <tr class="table-active">
+  <td colspan="3">Less: Cancelled Orders</td>
+  <td ="right" align ="right">${annualCancelledOrderValue.toLocaleString('en-US')}</td>
+  </tr>
+  <tr class="table-active">
+  <td colspan="3">Total Sales</td>
+          <td ="right" align ="right">${(annualPendingOrderValue + annualCompletedOrderValue).toLocaleString('en-US')}</td>
+        </tr>
+      </tbody>
+      <br>
+      <tfoot class="table">
+        <tr class="table-light ">
+          <td colspan="3">Completed Orders</td>
+          <td ="right" align ="right">${annualCompletedOrderValue.toLocaleString('en-US')}</td>
+        </tr>
+        <tr class="table-light table-borderless">
+          <td colspan="3">Pending Orders</td>
+          <td ="right" align ="right">${annualPendingOrderValue.toLocaleString('en-US')}</td>
+        </tr>
+      </tfoot>
+    </table>
+  `
+  document.getElementById("view-report-bottom-btn").classList.add("d-none");
+  document.getElementById("view-report-top-btn").classList.remove("d-none");
+  
+  detailedReportBtn.classList.add("d-none");
+  
+
+  const viewDetailedSalesReportBtn = document.getElementById("view-detailed-report-btn");
+  viewDetailedSalesReportBtn.classList.remove("d-none");
+  viewDetailedSalesReportBtn.addEventListener("click", () => {
+    // console.log(document.getElementById("report-detailed-view-container"));
+    detailedReportBtn.classList.remove("d-none");
+  });
+
+  
+  // console.log(monthOrders);
+  annualOrderValues.forEach(month=>{
+    
+  })
+
+  detailedReportBtn.innerHTML=table;
+}
+
+function findMonthlyOrdersForYearReport(year, month){
+  let totalPendingOrderValue=0;
+  let totalCompletedOrderValue=0;
+  let totalCancelledOrderValue=0;
+  orderList.forEach(order=>{
+    if(new Date(order.date).getFullYear()==year && 
+      new Date(order.date).getMonth()==month) {
+      if (order.status=="Pending") {
+        totalPendingOrderValue+=+order.orderNetTotal;
+      } else if (order.status=="Completed") {
+        totalCompletedOrderValue+=+order.orderNetTotal;
+      } else if (order.status=="Cancelled") {
+        totalCancelledOrderValue+=+order.orderNetTotal
+      }
+    } 
+  });
+  return {
+    totalPendingOrderValue, //pending orders total value
     totalCompletedOrderValue,
     totalCancelledOrderValue
   }

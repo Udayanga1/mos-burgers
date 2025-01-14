@@ -933,7 +933,7 @@
         "qty": 1
       }
     ],
-    "status": "Completed"
+    "status": "Pending"
   },
   {
     "customerCode": "C115",
@@ -948,7 +948,7 @@
         "qty": 3
       }
     ],
-    "status": "Completed"
+    "status": "Pending"
   },
   {
     "customerCode": "C116",
@@ -963,7 +963,7 @@
         "qty": 3
       }
     ],
-    "status": "Completed"
+    "status": "Pending"
   },
   {
     "customerCode": "C117",
@@ -978,7 +978,7 @@
         "qty": 2
       }
     ],
-    "status": "Completed"
+    "status": "Pending"
   },
   {
     "customerCode": "C118",
@@ -993,7 +993,7 @@
         "qty": 2
       }
     ],
-    "status": "Completed"
+    "status": "Pending"
   },
   {
     "customerCode": "C119",
@@ -1008,7 +1008,7 @@
         "qty": 1
       }
     ],
-    "status": "Completed"
+    "status": "Pending"
   },
   {
     "customerCode": "C101",
@@ -1023,6 +1023,6 @@
         "qty": 2
       }
     ],
-    "status": "Completed"
+    "status": "Pending"
   }
 ]

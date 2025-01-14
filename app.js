@@ -37,7 +37,7 @@ function renderNavMenu() {
   navMenu.innerHTML = navMenuHTML;
 }
 
-renderNavMenu(); // Initially render the nav menu
+renderNavMenu();
 
 function navHandler(event){
   const targetValue = event.target.textContent;
