@@ -44,11 +44,23 @@ function monthlySalesReportView() {
           <option value="11">December</option>
         </select>
       </div>
+      <div class="d-flex justify-content-end gap-2 my-2">
+        <button class="btn btn-success d-none" id="view-report-top-btn" onclick="viewMonthlySalesReport()">View Report</button>
+      </div>
       <div id="report-view-container"></div>
 
-      <div class="d-flex justify-content-end gap-2">
-        <button class="btn btn-warning" id="#" onclick="viewMonthlySalesReport()" id="#" >Add</button>
-        <button class="btn btn-secondary" id="n" onclick="closeReportsView()">Close</button>
+      <div class="d-flex justify-content-between gap-2">
+        <div>
+          <button class="btn btn-warning d-none" id="view-detailed-report-btn">View Detailed Report</button>
+        </div>
+        <div class="d-flex justify-content-end gap-2">
+          <button class="btn btn-success" id="view-report-bottom-btn" onclick="viewMonthlySalesReport()">View Report</button>
+          <button class="btn btn-secondary" id="n" onclick="closeReportsView()">Close</button>
+        </div>
+      </div>
+
+      <div id="report-detailed-view-container" class="">
+        
       </div>
     </div>
   </div>`;
@@ -57,14 +69,22 @@ function monthlySalesReportView() {
 function viewMonthlySalesReport() {
   // console.log(document.getElementById("inputGroupYear").value);
   // console.log(document.getElementById("inputGroupMonth").value);
-  const monthOrders = findMonthOrders(document.getElementById("inputGroupYear").value, document.getElementById("inputGroupMonth").value);
+  const reportYear = document.getElementById("inputGroupYear").value;
+  const reportMonth = document.getElementById("inputGroupMonth").value;
+  const monthOrders = findMonthOrders(reportYear, reportMonth);
+  const detailedReportBtn = document.getElementById("report-detailed-view-container");
+
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June", 
+    "July", "August", "September", "October", "November", "December"
+  ];
+
   console.log(monthOrders.totalCompletedOrderValue);
   document.getElementById("report-view-container").innerHTML=`
     <hr>
-    <table class="table table-borderless" id="report-table" >
-      <tbody>
-      </tbody>
-      <tfoot class="table-dark">
+    ${reportYear=="Choose Year" || reportMonth=="Choose Month" ? "<h4 class="+"text-warning" + ">Please select year and month</h4>" : "<h4 class="+"text-success" + ">Sales : " + reportYear +" " + monthNames[reportMonth] +"</h4>"} 
+    <table class="table table-striped" id="report-table" >
+      <tbody class="table-dark">
         <tr class="table-active">
           <td colspan="3">Total Orders</td>
           <td ="right" align ="right">${(monthOrders.totalPendingOrderValue + monthOrders.totalCompletedOrderValue + monthOrders.totalCancelledOrderValue).toLocaleString('en-US')}</td>
@@ -77,8 +97,10 @@ function viewMonthlySalesReport() {
           <td colspan="3">Total Sales</td>
           <td ="right" align ="right">${(monthOrders.totalPendingOrderValue + monthOrders.totalCompletedOrderValue).toLocaleString('en-US')}</td>
         </tr>
-        <tr class="table-light table-borderless"><td></td></tr>
-        <tr class="table-light table-borderless">
+      </tbody>
+      <br>
+      <tfoot class="table">
+        <tr class="table-light ">
           <td colspan="3">Completed Orders</td>
           <td ="right" align ="right">${(monthOrders.totalCompletedOrderValue).toLocaleString('en-US')}</td>
         </tr>
@@ -89,12 +111,76 @@ function viewMonthlySalesReport() {
       </tfoot>
     </table>
   `
-  console.log(monthOrders);
+  document.getElementById("view-report-bottom-btn").classList.add("d-none");
+  document.getElementById("view-report-top-btn").classList.remove("d-none");
   
+  detailedReportBtn.classList.add("d-none");
+
+
+  const viewDetailedSalesReportBtn = document.getElementById("view-detailed-report-btn");
+  viewDetailedSalesReportBtn.classList.remove("d-none");
+  viewDetailedSalesReportBtn.addEventListener("click", () => {
+    // console.log(document.getElementById("report-detailed-view-container"));
+    detailedReportBtn.classList.remove("d-none");
+  });
+
+  
+  console.log(monthOrders);
+
+  let htmlEl = `
+    <hr>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Order No</th>
+              <th scope="col" align ="right">Value</th>
+              <th scope="col">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+  `;
+  monthOrders.monthOrdersCompleted.forEach(order=>{
+    htmlEl+=`
+      <tr class="table-success">
+        <td scope="col">${order.date}</td>
+        <td scope="col">${order.id}</td>
+        <td scope="col" align ="right">${order.orderNetTotal}</td>
+        <td scope="col">${order.status}</td>
+      </tr>
+    `;
+    console.log(order);
+    
+  });
+  monthOrders.monthOrdersPending.forEach(order=>{
+    htmlEl+=`
+      <tr class="table-warning">
+        <td scope="col">${order.date}</td>
+        <td scope="col">${order.id}</td>
+        <td scope="col" align ="right">${order.orderNetTotal}</td>
+        <td scope="col">${order.status}</td>
+      </tr>
+    `;
+    console.log(order);
+    
+  });
+  monthOrders.monthOrdersCancelled.forEach(order=>{
+    htmlEl+=`
+      <tr class="table-secondary">
+        <td scope="col">${order.date}</td>
+        <td scope="col">${order.id}</td>
+        <td scope="col" align ="right">${order.orderNetTotal}</td>
+        <td scope="col">${order.status}</td>
+      </tr>
+    `;
+    console.log(order);
+    
+  });
+
+  detailedReportBtn.innerHTML=htmlEl + `</tbody>
+  </table>`
 }
-// totalPendingOrderValue,
-//     totalCompletedOrderValue,
-//     totalCancelledOrderValue
+
 
 function getYearsFromOrders(){
   const years = [];
@@ -116,29 +202,37 @@ function showYearsAsList(){
 }
 
 function findMonthOrders(year, month){
-  const monthOrders=[];
+  const monthOrdersPending=[];
+  const monthOrdersCompleted = [];
+  const monthOrdersCancelled = [];
   let totalPendingOrderValue=0;
   let totalCompletedOrderValue=0;
   let totalCancelledOrderValue=0;
   orderList.forEach(order=>{
     if(new Date(order.date).getFullYear()==year && 
       new Date(order.date).getMonth()==month) {
-      monthOrders.push(order);
+      // monthOrders.push(order);
       if (order.status=="Pending") {
         totalPendingOrderValue+=+order.orderNetTotal;
+        monthOrdersPending.push(order);
       } else if (order.status=="Completed") {
         totalCompletedOrderValue+=+order.orderNetTotal;
+        monthOrdersCompleted.push(order);
       } else if (order.status=="Cancelled") {
         totalCancelledOrderValue+=+order.orderNetTotal
+        monthOrdersCancelled.push(order);
       }
     } 
   });
   return {
-    monthOrders,
+    monthOrdersPending,
+    monthOrdersCompleted,
+    monthOrdersCancelled,
     totalPendingOrderValue,
     totalCompletedOrderValue,
     totalCancelledOrderValue
   }
+  
 }
 
 function closeReportsView() {
