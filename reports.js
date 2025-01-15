@@ -66,8 +66,6 @@ function monthlySalesReportView() {
 }
 
 function viewMonthlySalesReport() {
-  // console.log(document.getElementById("inputGroupYear").value);
-  // console.log(document.getElementById("inputGroupMonth").value);
   const reportYear = document.getElementById("inputGroupYear").value;
   const reportMonth = document.getElementById("inputGroupMonth").value;
   const monthOrders = findMonthOrders(reportYear, reportMonth);
@@ -77,11 +75,16 @@ function viewMonthlySalesReport() {
     "January", "February", "March", "April", "May", "June", 
     "July", "August", "September", "October", "November", "December"
   ];
+  if (reportYear=="Choose Year" || reportMonth=="Choose Month") {
+    document.getElementById("report-view-container").innerHTML=`
+      <h4 class="text-warning">Please select year and month</h4>
+    `;
+    return;
+  }
 
-  console.log(monthOrders.totalCompletedOrderValue);
   document.getElementById("report-view-container").innerHTML=`
     <hr>
-    ${reportYear=="Choose Year" || reportMonth=="Choose Month" ? "<h4 class="+"text-warning" + ">Please select year and month</h4>" : "<h4 class="+"text-success" + ">Sales : " + reportYear +" " + monthNames[reportMonth] +"</h4>"} 
+    <h4 class="text-success">Sales : ${reportYear} ${monthNames[reportMonth]}</h4>
     <table class="table table-striped" id="report-table" >
       <tbody class="table-dark">
         <tr class="table-active">
@@ -119,12 +122,8 @@ function viewMonthlySalesReport() {
   const viewDetailedSalesReportBtn = document.getElementById("view-detailed-report-btn");
   viewDetailedSalesReportBtn.classList.remove("d-none");
   viewDetailedSalesReportBtn.addEventListener("click", () => {
-    // console.log(document.getElementById("report-detailed-view-container"));
     detailedReportBtn.classList.remove("d-none");
   });
-
-  
-  console.log(monthOrders);
 
   let htmlEl = `
     <hr>
@@ -148,7 +147,6 @@ function viewMonthlySalesReport() {
         <td scope="col">${order.status}</td>
       </tr>
     `;
-    console.log(order);
     
   });
   monthOrders.monthOrdersPending.forEach(order=>{
@@ -160,7 +158,6 @@ function viewMonthlySalesReport() {
         <td scope="col">${order.status}</td>
       </tr>
     `;
-    console.log(order);
     
   });
   monthOrders.monthOrdersCancelled.forEach(order=>{
@@ -172,7 +169,6 @@ function viewMonthlySalesReport() {
         <td scope="col">${order.status}</td>
       </tr>
     `;
-    console.log(order);
     
   });
 
@@ -188,7 +184,6 @@ function getYearsFromOrders(){
       years.push(new Date(order.date).getFullYear());
     }
   });
-  // console.log(years);
   return years;
 }
 
@@ -266,19 +261,14 @@ function annualSalesReportView() {
     </div>
   </div>`;
 }
-// totalPendingOrderValue, //pending orders total value
-// totalCompletedOrderValue,
-// totalCancelledOrderValue
 
 function viewAnnualSalesReport() {
   const reportYear = document.getElementById("inputGroupYear").value;
-  // console.log(reportYear);
   const monthNames = [
     "January", "February", "March", "April", "May", "June", 
     "July", "August", "September", "October", "November", "December"
   ];
   
-  // const monthOrders = findMonthOrders(reportYear, reportMonth);
   const annualOrderValues = [];
   for (let i = 0; i < monthNames.length; i++) {
     const monthOrders = findMonthlyOrdersForYearReport(reportYear,i);
@@ -298,7 +288,6 @@ function viewAnnualSalesReport() {
   let table="";
   let monthIndex=0;
   annualOrderValues.forEach(month=>{
-    // console.log(month.completedOrderValue);
     annualPendingOrderValue+=month.pendingOrderValue;
     annualCompletedOrderValue+=month.completedOrderValue;
     annualCancelledOrderValue+=month.cancelledOrderValue;
@@ -327,13 +316,18 @@ function viewAnnualSalesReport() {
     `
     monthIndex++;
   });
-  // console.log(annualOrderValues);
   
   const detailedReportBtn = document.getElementById("report-detailed-view-container");
-  
+  if (reportYear=="Choose Year") {
+    document.getElementById("report-view-container").innerHTML=`
+      <h4 class="text-warning">Please select a year</h4>
+    `;
+    return;
+  }
+
   document.getElementById("report-view-container").innerHTML=`
   <hr>
-  ${reportYear=="Choose Year" ? "<h4 class="+"text-warning" + ">Please select a year</h4>" : "<h4 class="+"text-success" + ">Sales : " + reportYear  +"</h4>"} 
+  <h4 class="text-success">Sales : ${reportYear}</h4> 
   <table class="table table-striped" id="report-table" >
   <tbody class="table-dark">
   <tr class="table-active">
@@ -371,12 +365,10 @@ function viewAnnualSalesReport() {
   const viewDetailedSalesReportBtn = document.getElementById("view-detailed-report-btn");
   viewDetailedSalesReportBtn.classList.remove("d-none");
   viewDetailedSalesReportBtn.addEventListener("click", () => {
-    // console.log(document.getElementById("report-detailed-view-container"));
     detailedReportBtn.classList.remove("d-none");
   });
 
   
-  // console.log(monthOrders);
   annualOrderValues.forEach(month=>{
     
   })
@@ -458,9 +450,6 @@ function customerReportView() {
   </div>`;
 }
 
-// highestOrderRateCustomer,
-//     highestOrderValueCustomer,
-//     customerListForReport
 
 function viewMonthlyCustomerReport() {
   const reportYear = document.getElementById("inputGroupYear").value;
@@ -540,16 +529,11 @@ function viewMonthlyCustomerReport() {
   
   detailedReportBtn.classList.add("d-none");
 
-
   const viewDetailedSalesReportBtn = document.getElementById("view-detailed-report-btn");
   viewDetailedSalesReportBtn.classList.remove("d-none");
   viewDetailedSalesReportBtn.addEventListener("click", () => {
-    // console.log(document.getElementById("report-detailed-view-container"));
     detailedReportBtn.classList.remove("d-none");
   });
-  
-  
-  // console.log(monthOrders);
 
   let htmlEl = `
     <hr>
@@ -613,8 +597,6 @@ function findMonthOrdersByCustomer(year, month) {
       });
     }
   });
-
-  // console.log(customerListForReport);
   
   // find customer with the highest order rate
   let highestOrderRateCustomer=customerListForReport[0];
@@ -631,11 +613,6 @@ function findMonthOrdersByCustomer(year, month) {
       highestOrderValueCustomer=customer;
     }
   });
-  // console.log(customerListForReport);
-  // console.log("highest rate: ");
-  // console.log(highestOrderRateCustomer);
-  // console.log("highest value: ");
-  // console.log(highestOrderValueCustomer);
     
   return {
     highestOrderRateCustomer,
