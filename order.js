@@ -359,6 +359,7 @@ fetch('data/orders.json')
         if (item.customerCode==customer.id) {
           customerName=customer.name;
         }
+        
       });
       
       let orderTotal=0;

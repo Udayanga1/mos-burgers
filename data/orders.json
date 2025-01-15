@@ -741,21 +741,6 @@
     "status": "Completed"
   },
   {
-    "customerCode": "C102",
-    "date": "2025-01-02",
-    "products": [
-      {
-        "itemCode": "B1028",
-        "qty": 3
-      },
-      {
-        "itemCode": "B1009",
-        "qty": 1
-      }
-    ],
-    "status": "Completed"
-  },
-  {
     "customerCode": "C103",
     "date": "2025-01-04",
     "products": [
@@ -771,7 +756,22 @@
     "status": "Completed"
   },
   {
-    "customerCode": "C104",
+    "customerCode": "C109",
+    "date": "2025-01-05",
+    "products": [
+      {
+        "itemCode": "B1028",
+        "qty": 3
+      },
+      {
+        "itemCode": "B1009",
+        "qty": 1
+      }
+    ],
+    "status": "Completed"
+  },
+  {
+    "customerCode": "C109",
     "date": "2025-01-07",
     "products": [
       {
@@ -786,7 +786,7 @@
     "status": "Completed"
   },
   {
-    "customerCode": "C105",
+    "customerCode": "C108",
     "date": "2025-01-09",
     "products": [
       {
@@ -846,7 +846,7 @@
     "status": "Completed"
   },
   {
-    "customerCode": "C109",
+    "customerCode": "C108",
     "date": "2025-01-18",
     "products": [
       {
@@ -861,7 +861,7 @@
     "status": "Completed"
   },
   {
-    "customerCode": "C110",
+    "customerCode": "C109",
     "date": "2025-01-20",
     "products": [
       {
@@ -876,7 +876,7 @@
     "status": "Completed"
   },
   {
-    "customerCode": "C111",
+    "customerCode": "C109",
     "date": "2025-01-22",
     "products": [
       {

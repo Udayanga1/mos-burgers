@@ -1,11 +1,17 @@
 const monthlySalesReportsBtn = document.getElementById("monthly-sales-reports-btn");
 const annualSalesReportsBtn = document.getElementById("annual-sales-reports-btn");
+const customerReportsBtn = document.getElementById("customer-reports-btn");
 
 monthlySalesReportsBtn.addEventListener("click", () => {
   monthlySalesReportView();
 });
 annualSalesReportsBtn.addEventListener("click", () => {
   annualSalesReportView();
+  
+});
+
+customerReportsBtn.addEventListener("click", ()=>{
+  customerReportView();
   
 })
 
@@ -231,7 +237,7 @@ function annualSalesReportView() {
   modalContainer.innerHTML=`
   <div class="position-absolute top-50 p-2 mt-2 bg-light bg-gradient shadow-lg rounded" style="width: 38rem;">
     <div>
-      <h5 class="text-danger">Monthly Sales Report</h5>
+      <h5 class="text-danger">Annual Sales Report</h5>
       <div class="input-group mb-3">
         <label class="input-group-text" for="inputGroupYear">Year</label>
         <select class="form-select" id="inputGroupYear">
@@ -400,6 +406,243 @@ function findMonthlyOrdersForYearReport(year, month){
     totalCancelledOrderValue
   }
   
+}
+
+function customerReportView() {
+  modalContainer.innerHTML=`
+  <div class="position-absolute top-50 p-2 mt-2 bg-light bg-gradient shadow-lg rounded" style="width: 38rem;">
+    <div>
+      <h5 class="text-danger">Customer Reports</h5>
+      <div class="input-group mb-3">
+        <label class="input-group-text" for="inputGroupYear">Year</label>
+        <select class="form-select" id="inputGroupYear">
+          <option selected>Choose Year</option>
+          ${showYearsAsList()}
+        </select>
+        <label class="input-group-text" for="inputGroupMonth">Month</label>
+        <select class="form-select" id="inputGroupMonth">
+          <option selected>Choose Month</option>
+          <option value="0">January</option>
+          <option value="1">February</option>
+          <option value="2">March</option>
+          <option value="3">April</option>
+          <option value="4">May</option>
+          <option value="5">June</option>
+          <option value="6">July</option>
+          <option value="7">August</option>
+          <option value="8">September</option>
+          <option value="9">October</option>
+          <option value="10">November</option>
+          <option value="11">December</option>
+        </select>
+      </div>
+      <div class="d-flex justify-content-end gap-2 my-2">
+        <button class="btn btn-success d-none" id="view-report-top-btn" onclick="viewMonthlyCustomerReport()">View Reports</button>
+      </div>
+      <div id="report-view-container"></div>
+
+      <div class="d-flex justify-content-between gap-2">
+        <div>
+          <button class="btn btn-warning d-none" id="view-detailed-report-btn">View Detailed Report</button>
+        </div>
+        <div class="d-flex justify-content-end gap-2">
+          <button class="btn btn-success" id="view-report-bottom-btn" onclick="viewMonthlyCustomerReport()">View Reports</button>
+          <button class="btn btn-secondary" id="n" onclick="closeReportsView()">Close</button>
+        </div>
+      </div>
+
+      <div id="report-detailed-view-container" class="">
+        
+      </div>
+    </div>
+  </div>`;
+}
+
+// highestOrderRateCustomer,
+//     highestOrderValueCustomer,
+//     customerListForReport
+
+function viewMonthlyCustomerReport() {
+  const reportYear = document.getElementById("inputGroupYear").value;
+  const reportMonth = document.getElementById("inputGroupMonth").value;
+  const monthOrders = findMonthOrdersByCustomer(reportYear, reportMonth);
+  const detailedReportBtn = document.getElementById("report-detailed-view-container");
+
+  const monthNames = [
+    "January", "February", "March", "April", "May", "June", 
+    "July", "August", "September", "October", "November", "December"
+  ];
+
+  if (reportYear=="Choose Year" || reportMonth=="Choose Month") {
+    document.getElementById("report-view-container").innerHTML=`
+      <h4 class="text-warning">Please select year and month</h4>
+    `;
+    return;
+  }
+
+  if (monthOrders.emptyList) {
+    document.getElementById("report-view-container").innerHTML=`
+      <h5 class="text-danger">No records available for ${reportYear} ${monthNames[reportMonth]}</h5>
+    `;
+    return;
+  }
+
+  
+  document.getElementById("report-view-container").innerHTML=`
+    <hr>
+    ${reportYear=="Choose Year" || reportMonth=="Choose Month" ? "<h4 class="+"text-warning" + ">Please select year and month</h4>" : "<h4 class="+"text-success" + ">Customer Reports : " + reportYear +" " + monthNames[reportMonth] +"</h4>"} 
+    <table class="table table-striped" id="report-table" >
+      <thead class="table-dark">
+        <tr class="table-active">
+          <td colspan="4">Customer : Highest Rate of Orders</td>
+        </tr>
+        
+      </thead>
+      <tbody class="table-light">
+        <tr class="table-active">
+          <td colspan="2">Name</td>
+          <td colspan="2">${monthOrders.highestOrderRateCustomer.name}</td>
+        </tr>
+        <tr class="table-active">
+          <td colspan="2">No. of Orders</td>
+          <td colspan="2">${monthOrders.highestOrderRateCustomer.noOfOrders}</td>
+        </tr>
+        <tr class="table-active">
+          <td colspan="2">Value of Orders</td>
+          <td colspan="2">${(monthOrders.highestOrderRateCustomer.orderValue).toLocaleString('en-US')}</td>
+        </tr>
+      </tbody>
+      <thead class="table-dark my-3">
+        <tr class="table-active">
+          <td colspan="4">Customer : Highest Value of Orders</td>
+        </tr>
+        
+      </thead>
+      <tbody class="table-light">
+        <tr class="table-active">
+          <td colspan="2">Name</td>
+          <td colspan="2">${monthOrders.highestOrderValueCustomer.name}</td>
+        </tr>
+        <tr class="table-active">
+          <td colspan="2">No. of Orders</td>
+          <td colspan="2">${monthOrders.highestOrderValueCustomer.noOfOrders}</td>
+        </tr>
+        <tr class="table-active">
+          <td colspan="2">Value of Orders</td>
+          <td colspan="2">${(monthOrders.highestOrderValueCustomer.orderValue).toLocaleString('en-US')}</td>
+        </tr>
+      </tbody>
+      
+    </table>
+  `
+  document.getElementById("view-report-bottom-btn").classList.add("d-none");
+  document.getElementById("view-report-top-btn").classList.remove("d-none");
+  
+  detailedReportBtn.classList.add("d-none");
+
+
+  const viewDetailedSalesReportBtn = document.getElementById("view-detailed-report-btn");
+  viewDetailedSalesReportBtn.classList.remove("d-none");
+  viewDetailedSalesReportBtn.addEventListener("click", () => {
+    // console.log(document.getElementById("report-detailed-view-container"));
+    detailedReportBtn.classList.remove("d-none");
+  });
+  
+  
+  // console.log(monthOrders);
+
+  let htmlEl = `
+    <hr>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">No of Orders</th>
+              <th scope="col" align ="right">Value of Orders</th>
+            </tr>
+          </thead>
+          <tbody>
+  `;
+  monthOrders.customerListForReport.forEach(customer=>{
+    htmlEl+=`
+      <tr class="table-active">
+        <td scope="col">${customer.id}</td>
+        <td scope="col">${customer.name}</td>
+        <td scope="col" align ="center">${customer.noOfOrders}</td>
+        <td scope="col" align ="right">${(customer.orderValue).toLocaleString('en-US')}</td>
+      </tr>
+    `;
+  });
+
+  detailedReportBtn.innerHTML=htmlEl + `</tbody>
+  </table>`
+  return;
+}
+
+function findMonthOrdersByCustomer(year, month) {
+  let customerListForReport = [];
+  const monthCompletedAndPendingOrderList = [];
+  let emptyList=true;
+
+  // Get monthly orders
+  orderList.forEach(order => {
+    if (new Date(order.date).getFullYear() == year &&
+      new Date(order.date).getMonth() == month) {
+      if (order.status == "Pending" || order.status == "Completed") {
+        monthCompletedAndPendingOrderList.push(order);
+        emptyList=false;
+      }
+    }
+  });
+
+  monthCompletedAndPendingOrderList.forEach(order => {
+    const customer = customerListForReport.find(customer => customer.id == order.customerCode);
+
+    if (customer) {
+      customer.orderValue += +order.orderNetTotal;
+      customer.noOfOrders++;
+      customer.orders.push(order);
+    } else {
+      customerListForReport.push({
+        id: order.customerCode,
+        name: order.customerName,
+        orderValue: +order.orderNetTotal,
+        noOfOrders: 1,
+        orders: [order]
+      });
+    }
+  });
+
+  // console.log(customerListForReport);
+  
+  // find customer with the highest order rate
+  let highestOrderRateCustomer=customerListForReport[0];
+  customerListForReport.forEach(customer=>{
+    if (customer.noOfOrders > highestOrderRateCustomer.noOfOrders) {
+      highestOrderRateCustomer=customer;
+    }
+  });
+  
+  // find customer with the highest order value
+  let highestOrderValueCustomer=customerListForReport[0];
+  customerListForReport.forEach(customer=>{
+    if (customer.orderValue > highestOrderValueCustomer.orderValue) {
+      highestOrderValueCustomer=customer;
+    }
+  });
+  // console.log(customerListForReport);
+  // console.log("highest rate: ");
+  // console.log(highestOrderRateCustomer);
+  // console.log("highest value: ");
+  // console.log(highestOrderValueCustomer);
+    
+  return {
+    highestOrderRateCustomer,
+    highestOrderValueCustomer,
+    customerListForReport,
+    emptyList
+  };
 }
 
 function closeReportsView() {
