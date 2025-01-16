@@ -54,7 +54,7 @@ function monthlySalesReportView() {
         </div>
         <div class="d-flex justify-content-end gap-2">
           <button class="btn btn-success" id="view-report-bottom-btn" onclick="viewMonthlySalesReport()">View Report</button>
-          <button class="btn btn-secondary" id="n" onclick="closeReportsView()">Close</button>
+          <button class="btn btn-secondary" id="" onclick="closeReportsView()">Close</button>
         </div>
       </div>
 
