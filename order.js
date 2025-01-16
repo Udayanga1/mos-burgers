@@ -14,7 +14,8 @@ showOrderFormBtn.addEventListener("click", () => {
   toggleShowForm("show", showOrderFormBtn, clearCustomerForm, "order");
   document.getElementById("view-order-btn").addEventListener("click", ()=>{
     viewOrder();
-  })
+  });
+  getCustomerNameOnBlur();
 });
 closeOrderFormBtn.addEventListener("click", () => toggleShowForm("close", showOrderFormBtn, clearOrderForm, "order"));
 
@@ -58,10 +59,6 @@ addProductToOrderBtn.addEventListener("click", () => {
   // document.querySelectorAll('.order-product-code').forEach(element => console.log(element.value));
 })
 
-// addProductViewBtn.addEventListener("click", () =>{
-//   viewOrder();
-  
-// });
 
 changeOrderBtn.addEventListener("click", ()=>{
   changeOrder();
@@ -94,11 +91,9 @@ function setOrder(isEditing=false){
   const customerCode = document.getElementById("order-customer-code");
   const orderDate = document.getElementById("order-date");
   const orderStatus = document.getElementById("order-status");
-  // if (isEditing) {
-  //   const orderID = document.getElementById("order-id").value;
-  // } else {
-  //   const orderID = "O" + orderIncrement;
-  // }
+  
+  
+
   const orderID = isEditing ? editingOrderId : "O" + orderIncrement;
 
   let customerName = "";
@@ -178,7 +173,6 @@ function addOrder(){
       console.log("addOrder else: " + setOrder().count);
       
     }
-    console.log(orderList);
 
     addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
     closeOrderView();
@@ -345,6 +339,10 @@ function showEditOrder(id) {
       })
     }
   })
+  const adjacentHTML = document.getElementById("customer-code-adjacentHTML");
+  if (adjacentHTML) {
+    adjacentHTML.remove();
+  }
 }
 
 // load orders from orders.json
@@ -399,3 +397,24 @@ fetch('data/orders.json')
     addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
   })
   .catch(error => console.error('Error loading the data:', error));
+
+// validate customer when focus is away from the customer code input
+function getCustomerNameOnBlur() {
+  const customerCodeInOrder = document.getElementById("order-customer-code");
+  customerCodeInOrder.addEventListener("blur", ()=>{
+    const customer = customerList.find(customer=> customer.id == customerCodeInOrder.value);
+    const adjacentHTML = document.getElementById("customer-code-adjacentHTML");
+    if (customer) {
+      // console.log(customer.name);
+      if (adjacentHTML) {
+        adjacentHTML.remove();
+      }
+      document.getElementById("order-customer-code-container").insertAdjacentHTML("afterend",`<p class="text-success pl-1" id="customer-code-adjacentHTML">${customer.name} selected</p>`)
+    } else {
+      if (adjacentHTML) {
+        adjacentHTML.remove();
+      }
+      document.getElementById("order-customer-code-container").insertAdjacentHTML("afterend",`<p class="text-danger pl-1" id="customer-code-adjacentHTML"> Customer code is not correct</p>`)
+    }
+  });
+}

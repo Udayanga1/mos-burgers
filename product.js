@@ -161,8 +161,6 @@ function searchProducts() {
       </tr>
     `;
   });
-  console.log(productRows);
-  console.log(searchResults);
   
   document.getElementById("modal-container").innerHTML= searchResults.length==0 ? `
   <div class="position-absolute top-50 end-0 p-2 mt-2 bg-light bg-gradient shadow-lg rounded" style="width: 28rem;">
