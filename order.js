@@ -55,10 +55,8 @@ addProductToOrderBtn.addEventListener("click", () => {
       index++;
     }
   })
-  
-  // document.querySelectorAll('.order-product-code').forEach(element => console.log(element.value));
-})
 
+})
 
 changeOrderBtn.addEventListener("click", ()=>{
   changeOrder();
@@ -73,12 +71,6 @@ function getProductsCount(){
     const productQty = +productQtys[index].value // + converts to number
     if (productCode.value.length>0 && productQty>0) { 
       count++;
-    } else {
-      // console.log(productCode.value.length + " code or qty not available");
-      // console.log(typeof(+productQtys[index].value));
-      console.log("empty rows ignored");
-      
-      
     }
     index++;
   })
@@ -91,8 +83,6 @@ function setOrder(isEditing=false){
   const customerCode = document.getElementById("order-customer-code");
   const orderDate = document.getElementById("order-date");
   const orderStatus = document.getElementById("order-status");
-  
-  
 
   const orderID = isEditing ? editingOrderId : "O" + orderIncrement;
 
@@ -134,13 +124,8 @@ function setOrder(isEditing=false){
                 price: +product.price,
                 discount: +product.discount
               });
-              console.log(customerCode.value);
-              
-              
-            } else {
-              console.log("invalid product: " + item.value);
-              
-            }
+            } 
+            
           })
           index++;
         });
@@ -157,7 +142,7 @@ function setOrder(isEditing=false){
           date:orderDate.value,
           status: orderStatus.value
         }
-        // console.log("order.id in setOrder(): " + order.id);
+
         return order;
       } 
     }
@@ -169,10 +154,7 @@ function addOrder(){
       orderList.push(setOrder());
       orderIncrement++;
       clearOrderForm();
-    } else{
-      console.log("addOrder else: " + setOrder().count);
-      
-    }
+    } 
 
     addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
     closeOrderView();
@@ -182,24 +164,16 @@ function changeOrder(){
   // change order
     const order = setOrder(true);
     let index = 0;
-    // console.log("before outer if changeOrder");
     if (order.products.length>0) {
-      // console.log("outer if changeOrder");
       orderList.forEach(item => {
-        console.log("order.id: " + order.id + " item.id: " + item.id);
         if(item.id==order.id){
           orderList[index]=order;
-          // console.log("inner if changeOrder");
         }
         index++;
       })
       // orderIncrement++;
       clearOrderForm();
-    } else{
-      console.log("changeOrder else: " + order.count);
-      
-    }
-    console.log(orderList);
+    } 
 
     addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
     closeOrderView();
@@ -285,6 +259,8 @@ function clearOrderForm(){
     <input type="number" class="form-control order-product-qty" placeholder="Qty" id="order-product-qty" name="order-product-qty">
   </div>
 `;
+  // clear customer name
+  document.getElementById("order-customer-name").innerText="";
 }
 
 function closeOrderView() {
@@ -337,6 +313,8 @@ function showEditOrder(id) {
       document.getElementById("view-order-btn").addEventListener("click", ()=>{
         viewOrder(true);
       })
+      // clear previous order customer name
+      document.getElementById("order-customer-name").innerText="";
     }
   })
   const adjacentHTML = document.getElementById("customer-code-adjacentHTML");
@@ -405,16 +383,15 @@ function getCustomerNameOnBlur() {
     const customer = customerList.find(customer=> customer.id == customerCodeInOrder.value);
     const adjacentHTML = document.getElementById("customer-code-adjacentHTML");
     if (customer) {
-      // console.log(customer.name);
       if (adjacentHTML) {
         adjacentHTML.remove();
       }
-      document.getElementById("order-customer-code-container").insertAdjacentHTML("afterend",`<p class="text-success pl-1" id="customer-code-adjacentHTML">${customer.name} selected</p>`)
+      document.getElementById("order-customer-name").innerText=customer.name;
     } else {
       if (adjacentHTML) {
         adjacentHTML.remove();
       }
-      document.getElementById("order-customer-code-container").insertAdjacentHTML("afterend",`<p class="text-danger pl-1" id="customer-code-adjacentHTML"> Customer code is not correct</p>`)
+      document.getElementById("order-customer-code-container").insertAdjacentHTML("afterend",`<p class="text-danger pl-1" id="customer-code-adjacentHTML"><small> Customer code is not correct</small></p>`)
     }
   });
 }

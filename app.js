@@ -6,6 +6,7 @@ const reportsSection = document.getElementById("reports");
 
 const modalContainer = document.getElementById("modal-container");
 
+
 const navMenuList = [ 
   {item:"Products", isActive: true, relatedSection:productsSection},
   {item:"Orders", isActive: false, relatedSection:ordersSection}, 

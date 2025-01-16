@@ -91,7 +91,6 @@ function deleteCustomer(id){
 fetch('data/customers.json')
   .then(response => response.json())
   .then(data => {
-    // console.log(data[0]);
     data.forEach(item=>{
       const customer = {
         id: item.id,
