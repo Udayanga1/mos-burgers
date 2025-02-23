@@ -88,7 +88,7 @@ function deleteCustomer(id){
 }
 
 // load customers from customers.json
-fetch('data/customers.json')
+fetch('../data/customers.json')
   .then(response => response.json())
   .then(data => {
     data.forEach(item=>{

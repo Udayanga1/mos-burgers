@@ -1,4 +1,4 @@
-const navMenu = document.getElementById("navbar-nav");
+// const navMenu = document.getElementById("navbar-nav");
 const productsSection = document.getElementById("products");
 const ordersSection = document.getElementById("orders");
 const customersSection = document.getElementById("customers");
@@ -6,12 +6,11 @@ const reportsSection = document.getElementById("reports");
 
 const modalContainer = document.getElementById("modal-container");
 
-
 const navMenuList = [ 
-  {item:"Products", isActive: true, relatedSection:productsSection},
-  {item:"Orders", isActive: false, relatedSection:ordersSection}, 
-  {item:"Customers", isActive: false, relatedSection:customersSection}, 
-  {item:"Reports", isActive: false, relatedSection:reportsSection}
+  {item:"Products", isActive: false, relatedSection:productsSection, redirectLink:"/pages/products.html"},
+  {item:"Orders", isActive: false, relatedSection:ordersSection, redirectLink:"#"}, 
+  {item:"Customers", isActive: false, relatedSection:customersSection, redirectLink:"#"}, 
+  {item:"Reports", isActive: false, relatedSection:reportsSection, redirectLink:"#"}
 ];
 
 const tableColumns = {
@@ -21,34 +20,36 @@ const tableColumns = {
 }
 
 // view nav menu
-function renderNavMenu() {
-  let navMenuHTML = navMenuList.map(element => {
-    return `
-      <li class="${element.isActive ? "nav-item rounded shadow rounded" : "nav-item"}">
-        <a class="${element.isActive ? "nav-link active" : "nav-link"}" onclick="navHandler(event)">${element.item}</a>
-      </li>
-    `;
-  }).join(''); // Join the array into a single string
-  navMenu.innerHTML = navMenuHTML;
-}
+// function renderNavMenu() {
+//   let navMenuHTML = navMenuList.map(element => {
+   
+//     return `
+//       <li class="${element.isActive ? "nav-item rounded shadow rounded" : "nav-item"}">
+//         <a class="${element.isActive ? "nav-link active" : "nav-link"}" onclick="navHandler(event)" href=${element.redirectLink}>${element.item}</a>
+//       </li>
+//     `;
+   
+//   }).join(''); // Join the array into a single string
+//   navMenu.innerHTML = navMenuHTML;
+// }
 
-renderNavMenu();
+// renderNavMenu();
 
-function navHandler(event){
-  const targetValue = event.target.textContent;
-  navMenuList.forEach(element=>{
-    if(targetValue==element.item){
-      element.isActive=true;
-      element.relatedSection.classList.remove("d-none");
-      element.relatedSection.classList.add("d-block");
-    } else {
-      element.isActive=false;
-      element.relatedSection.classList.remove("d-block");
-      element.relatedSection.classList.add("d-none");
-    }
-  })
-  renderNavMenu();
-}
+// function navHandler(event){
+//   const targetValue = event.target.textContent;
+//   navMenuList.forEach(element=>{
+//     if(targetValue==element.item){
+//       element.isActive=true;
+//       element.relatedSection.classList.remove("d-none");
+//       element.relatedSection.classList.add("d-block");
+//     } else {
+//       element.isActive=false;
+//       element.relatedSection.classList.remove("d-block");
+//       element.relatedSection.classList.add("d-none");
+//     }
+//   })
+//   renderNavMenu();
+// }
 
 function toggleShowForm(operation, showFormBtn, clearForm, item="product") {
   const form = document.getElementById(`add-${item}`);

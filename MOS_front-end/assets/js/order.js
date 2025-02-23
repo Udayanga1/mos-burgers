@@ -324,7 +324,7 @@ function showEditOrder(id) {
 }
 
 // load orders from orders.json
-fetch('data/orders.json')
+fetch('../data/orders.json')
   .then(response => response.json())
   .then(data => {
     data.forEach(item=>{
