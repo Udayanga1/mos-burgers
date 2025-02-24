@@ -7,9 +7,14 @@ const searchProductBtn = document.getElementById("search-product-btn");
 let productIncrement=1001;
 let productList = [];
 
+let fileName = "";
+let imageUrl = "";
+
 showProductFormBtn.addEventListener("click", () => toggleShowForm("show", showProductFormBtn, clearProductForm));
 closeProductFormBtn.addEventListener("click", () => toggleShowForm("close", showProductFormBtn, clearProductForm));
-addProductBtn.addEventListener("click", () => addProduct());
+addProductBtn.addEventListener("click", () => {
+  addProduct()
+});
 changeProductBtn.addEventListener("click", ()=>{
   const productID = document.getElementById("product-id").value;
   changeProduct(productID);
@@ -39,14 +44,38 @@ fetch('../data/products.json')
   })
   .catch(error => console.error('Error loading the data:', error));
 
-function addProduct(){
-  const productName = document.getElementById("product-name");
-  const productPrice = document.getElementById("product-price");
-  const productDiscount = document.getElementById("product-discount");
-  const productCategory = document.getElementById("product-category");
+// get image name of the product
+document.getElementById("product-image").addEventListener("change", (event)=>{
+  fileName = event.target.files[0].name; // Get the selected file
+  if (fileName) {
+      const category = document.getElementById("product-category").value;
+      imageUrl = `/assets/images/${category}/${fileName}`;
+      // console.log("Selected file:", fileName);
+      document.getElementById("img-thumbnail-container").innerHTML=`
+        <img src=${imageUrl} class="img-thumbnail mb-2" style="height: 200px; width: 200px;" alt="${fileName}">
+      `;
+  } else {
+      console.log("No file selected");
+  }
+})
+
+function addProduct(){  
+  const name = document.getElementById("product-name");
+  const price = document.getElementById("product-price");
+  const discount = document.getElementById("product-discount");
+  const category = document.getElementById("product-category");
+  // const imageUrl = document.getElementById("product-image");
+
   const productID = "B" + productIncrement;
   
-  if(productName.value=="" || productPrice.value=="" || productDiscount.value==""){
+  // console.log(fileName);
+
+  if(!imageUrl){
+    imageUrl=`/assets/images/${category.value}/no-image`;
+  }
+  
+
+  if(name.value=="" || price.value=="" || discount.value==""){
     alert("Please fill all the fields");
   } else {
     productIncrement++;
@@ -54,17 +83,43 @@ function addProduct(){
     
     const product = {
       id: productID,
-      name: productName.value,
-      price: productPrice.value,
-      discount: productDiscount.value,
-      category: productCategory.value
+      name: name.value,
+      price: price.value,
+      discount: discount.value,
+      category: category.value,
+      imageUrl: imageUrl
+
     }
-    
+
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      "name": product.name,
+      "price": product.price,
+      "discount": product.discount,
+      "category": product.category,
+      "imageUrl": product.imageUrl
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    fetch("http://localhost:8080/product/add", requestOptions)
+      .then((response) => response.json())
+      .then((result) => console.log(result))
+      .catch((error) => console.error(error));
+
     productList.push(product);
     addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
     clearProductForm();
   }
 }
+
 
 function renderProductTableButtons(element){
   return `     
