@@ -71,7 +71,7 @@ function addProduct(){
   // console.log(fileName);
 
   if(!imageUrl){
-    imageUrl=`/assets/images/${category.value}/no-image`;
+    imageUrl=`/assets/images/${category.value}/no-image.jpg`;
   }
   
 
@@ -113,6 +113,8 @@ function addProduct(){
       .then((response) => response.json())
       .then((result) => console.log(result))
       .catch((error) => console.error(error));
+
+    imageUrl="";
 
     productList.push(product);
     addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);

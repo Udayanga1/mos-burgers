@@ -113,3 +113,44 @@ function deleteForm(id, table, deleteItem){
     modalContainer.innerHTML="";
   });
 }
+
+function showProductsOnLandingPage(){
+  let productList = "";
+  // const myHeaders = new Headers();
+  // myHeaders.append("Content-Type", "application/json");
+
+  // const raw = JSON.stringify({
+  //   "name": "Dasun",
+  //   "price": 220,
+  //   "discount": 5,
+  //   "category": "Beverages"
+  // });
+
+  const requestOptions = {
+    method: "GET",
+    // headers: myHeaders,
+    // body: raw,
+  };
+
+  fetch("http://localhost:8080/product/all", requestOptions)
+    .then((response) => response.json())
+    .then((result) => {
+      // console.log(result)
+      result.forEach(product=>{
+        console.log(product);
+        productList+=`
+          <div class="card" style="width: 18rem;">
+            <img src=${product.imageUrl} class="card-img-top" alt="${product.name}">
+            <div class="card-body">
+              <h5 class="card-title">${product.name}</h5>
+              <p Price : ${product.price}</p>
+              <p Price : ${product.discount}</p>
+              <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+          </div>
+        `
+      });
+      document.getElementById("mos-landing").innerHTML = productList;
+    })
+    .catch((error) => console.error(error));
+}
