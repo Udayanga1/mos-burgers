@@ -32,3 +32,7 @@ form {
   text-align: right;
 }
 
+.swiper-wrapper img {
+  height: 15rem;
+}
+

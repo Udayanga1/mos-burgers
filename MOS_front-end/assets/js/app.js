@@ -116,20 +116,16 @@ function deleteForm(id, table, deleteItem){
 
 function showProductsOnLandingPage(){
   let productList = "";
-  // const myHeaders = new Headers();
-  // myHeaders.append("Content-Type", "application/json");
-
-  // const raw = JSON.stringify({
-  //   "name": "Dasun",
-  //   "price": 220,
-  //   "discount": 5,
-  //   "category": "Beverages"
-  // });
+  
+  let burgerList = "";  
+  let submarineList = "";
+  let friesList = "";
+  let pastaList = "";
+  let chickenList = "";
+  let beverageList = "";
 
   const requestOptions = {
     method: "GET",
-    // headers: myHeaders,
-    // body: raw,
   };
 
   fetch("http://localhost:8080/product/all", requestOptions)
@@ -138,19 +134,122 @@ function showProductsOnLandingPage(){
       // console.log(result)
       result.forEach(product=>{
         console.log(product);
-        productList+=`
-          <div class="card" style="width: 18rem;">
-            <img src=${product.imageUrl} class="card-img-top" alt="${product.name}">
-            <div class="card-body">
-              <h5 class="card-title">${product.name}</h5>
-              <p Price : ${product.price}</p>
-              <p Price : ${product.discount}</p>
-              <a href="#" class="btn btn-primary">Go somewhere</a>
+        if (product.category=="Burgers") {
+          burgerList+=`
+            <div class="card swiper-slide" style="width: 18rem;">
+                <img src=${product.imageUrl} class="card-img-top" alt="${product.name}">
+                <div class="card-body">
+                  <h4 class="card-title">${product.name}</h4>
+                  <h6> Price : ${product.price}</h6>
+                  <h6> Price : ${product.discount}</h6>
+                </div>
             </div>
-          </div>
-        `
+          `
+        } else if(product.category == "Submarines"){
+            submarineList+=`
+            <div class="card swiper-slide" style="width: 18rem;">
+                <img src=${product.imageUrl} class="card-img-top" alt="${product.name}">
+                <div class="card-body">
+                  <h4 class="card-title">${product.name}</h4>
+                  <h6> Price : ${product.price}</h6>
+                  <h6> Price : ${product.discount}</h6>
+                </div>
+            </div>
+          `
+        } else if(product.category == "Fries"){
+
+          friesList+=`
+            <div class="card swiper-slide" style="width: 18rem;">
+                <img src=${product.imageUrl} class="card-img-top" alt="${product.name}">
+                <div class="card-body">
+                  <h4 class="card-title">${product.name}</h4>
+                  <h6> Price : ${product.price}</h6>
+                  <h6> Price : ${product.discount}</h6>
+                </div>
+            </div>
+          `
+        } else if(product.category == "Pasta"){
+
+          pastaList+=`
+            <div class="card swiper-slide" style="width: 18rem;">
+                <img src=${product.imageUrl} class="card-img-top" alt="${product.name}">
+                <div class="card-body">
+                  <h4 class="card-title">${product.name}</h4>
+                  <h6> Price : ${product.price}</h6>
+                  <h6> Price : ${product.discount}</h6>
+                </div>
+            </div>
+          `
+        } else if(product.category == "Chicken"){
+
+          chickenList+=`
+            <div class="card swiper-slide" style="width: 18rem;">
+                <img src=${product.imageUrl} class="card-img-top" alt="${product.name}">
+                <div class="card-body">
+                  <h4 class="card-title">${product.name}</h4>
+                  <h6> Price : ${product.price}</h6>
+                  <h6> Price : ${product.discount}</h6>
+                </div>
+            </div>
+          `
+        } else if(product.category == "Beverages"){
+
+          beverageList+=`
+            <div class="card swiper-slide" style="width: 18rem;">
+                <img src=${product.imageUrl} class="card-img-top" alt="${product.name}">
+                <div class="card-body">
+                  <h4 class="card-title">${product.name}</h4>
+                  <h6> Price : ${product.price}</h6>
+                  <h6> Price : ${product.discount}</h6>
+                </div>
+            </div>
+          `
+        } 
+
       });
-      document.getElementById("mos-landing").innerHTML = productList;
+      loadSwiper(burgerList, "mos-landing-burgers");
+      loadSwiper(submarineList, "mos-landing-submarines");
+      loadSwiper(friesList, "mos-landing-fries");
+      loadSwiper(pastaList, "mos-landing-pasta");
+      loadSwiper(chickenList, "mos-landing-chicken");
+      loadSwiper(beverageList, "mos-landing-beverage");
     })
     .catch((error) => console.error(error));
+}
+
+function loadSwiper(list, htmlId){
+  document.getElementById(htmlId).innerHTML = `
+          <div class="swiper">
+            <!-- Additional required wrapper -->
+            <div class="swiper-wrapper">
+                <!-- Slides -->
+                ${list}              
+            </div>
+  
+            <!-- If we need pagination -->
+            <div class="swiper-pagination"></div>
+            
+            <!-- If we need navigation buttons -->
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+          </div> 
+          
+        `;
+        var swiper = new Swiper('.swiper', {
+          slidesPerView: 3,
+          spaceBetween: 10,
+          loop: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+          autoplay: {
+            delay: 2500,
+            disableOnInteraction: false,
+          }
+        });
 }
