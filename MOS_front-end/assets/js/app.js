@@ -128,6 +128,8 @@ function showProductsOnLandingPage(){
     method: "GET",
   };
 
+  const baseImageUrl = "http://localhost:8080/product/download";
+
   fetch("http://localhost:8080/product/all", requestOptions)
     .then((response) => response.json())
     .then((result) => {
@@ -136,71 +138,71 @@ function showProductsOnLandingPage(){
         console.log(product);
         if (product.category=="Burgers") {
           burgerList+=`
-            <div class="card swiper-slide" style="width: 18rem;">
-                <img src=${product.imageUrl} class="card-img-top" alt="${product.name}">
+            <div class="card swiper-slide bg-success" style="width: 18rem;">
+                <img src=${baseImageUrl + product.imageUrl} class="card-img-top" alt="${product.name}">
                 <div class="card-body">
-                  <h4 class="card-title">${product.name}</h4>
-                  <h6> Price : ${product.price}</h6>
-                  <h6> Price : ${product.discount}</h6>
+                  <h4 class="card-title text-light">${product.name}</h4>
+                  <h6 class="text-warning"> Price : ${product.price}</h6>
+                  <p class="text-warning"> Discount : ${product.discount}%</p>
                 </div>
             </div>
           `
         } else if(product.category == "Submarines"){
             submarineList+=`
-            <div class="card swiper-slide" style="width: 18rem;">
-                <img src=${product.imageUrl} class="card-img-top" alt="${product.name}">
+            <div class="card swiper-slide bg-success" style="width: 18rem;">
+                <img src=${baseImageUrl + product.imageUrl} class="card-img-top" alt="${product.name}">
                 <div class="card-body">
-                  <h4 class="card-title">${product.name}</h4>
-                  <h6> Price : ${product.price}</h6>
-                  <h6> Price : ${product.discount}</h6>
+                  <h4 class="card-title text-light">${product.name}</h4>
+                  <h6 class="text-warning"> Price : ${product.price}</h6>
+                  <p class="text-warning"> Discount : ${product.discount}%</p>
                 </div>
             </div>
           `
         } else if(product.category == "Fries"){
 
           friesList+=`
-            <div class="card swiper-slide" style="width: 18rem;">
-                <img src=${product.imageUrl} class="card-img-top" alt="${product.name}">
+            <div class="card swiper-slide bg-success" style="width: 18rem;">
+                <img src=${baseImageUrl + product.imageUrl} class="card-img-top" alt="${product.name}">
                 <div class="card-body">
-                  <h4 class="card-title">${product.name}</h4>
-                  <h6> Price : ${product.price}</h6>
-                  <h6> Price : ${product.discount}</h6>
+                  <h4 class="card-title text-light">${product.name}</h4>
+                  <h6 class="text-warning"> Price : ${product.price}</h6>
+                  <p class="text-warning"> Discount : ${product.discount}%</p>
                 </div>
             </div>
           `
         } else if(product.category == "Pasta"){
 
           pastaList+=`
-            <div class="card swiper-slide" style="width: 18rem;">
-                <img src=${product.imageUrl} class="card-img-top" alt="${product.name}">
+            <div class="card swiper-slide bg-success" style="width: 18rem;">
+                <img src=${baseImageUrl + product.imageUrl} class="card-img-top" alt="${product.name}">
                 <div class="card-body">
-                  <h4 class="card-title">${product.name}</h4>
-                  <h6> Price : ${product.price}</h6>
-                  <h6> Price : ${product.discount}</h6>
+                  <h4 class="card-title text-light">${product.name}</h4>
+                  <h6 class="text-warning"> Price : ${product.price}</h6>
+                  <p class="text-warning"> Discount : ${product.discount}%</p>
                 </div>
             </div>
           `
         } else if(product.category == "Chicken"){
 
           chickenList+=`
-            <div class="card swiper-slide" style="width: 18rem;">
-                <img src=${product.imageUrl} class="card-img-top" alt="${product.name}">
+            <div class="card swiper-slide bg-success" style="width: 18rem;">
+                <img src=${baseImageUrl + product.imageUrl} class="card-img-top" alt="${product.name}">
                 <div class="card-body">
-                  <h4 class="card-title">${product.name}</h4>
-                  <h6> Price : ${product.price}</h6>
-                  <h6> Price : ${product.discount}</h6>
+                  <h4 class="card-title text-light">${product.name}</h4>
+                  <h6 class="text-warning"> Price : ${product.price}</h6>
+                  <p class="text-warning"> Discount : ${product.discount}%</p>
                 </div>
             </div>
           `
         } else if(product.category == "Beverages"){
 
           beverageList+=`
-            <div class="card swiper-slide" style="width: 18rem;">
-                <img src=${product.imageUrl} class="card-img-top" alt="${product.name}">
+            <div class="card swiper-slide bg-success" style="width: 18rem;">
+                <img src=${baseImageUrl + product.imageUrl} class="card-img-top" alt="${product.name}">
                 <div class="card-body">
-                  <h4 class="card-title">${product.name}</h4>
-                  <h6> Price : ${product.price}</h6>
-                  <h6> Price : ${product.discount}</h6>
+                  <h4 class="card-title text-light">${product.name}</h4>
+                  <h6 class="text-warning"> Price : ${product.price}</h6>
+                  <p class="text-warning"> Discount : ${product.discount}%</p>
                 </div>
             </div>
           `

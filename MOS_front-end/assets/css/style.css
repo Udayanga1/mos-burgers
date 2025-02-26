@@ -7,6 +7,10 @@
   font-family: var(--roboto-font);
 }
 
+body {
+  background-color: rgba(255, 193, 07, 0.60);
+}
+
 .navbar-brand {
   font-family: var(--russo-font);
 }
@@ -32,7 +36,12 @@ form {
   text-align: right;
 }
 
+
 .swiper-wrapper img {
   height: 15rem;
+}
+
+.swiper-button-prev, .swiper-button-next {
+  color: #198754;
 }
 

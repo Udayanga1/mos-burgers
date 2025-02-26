@@ -5,8 +5,12 @@ import edu.icet.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/product")
@@ -27,4 +31,15 @@ public class ProductController {
     public List<Product> getAll(){
         return service.getAll();
     }
+
+
+//    public String printText(@RequestBody Map<String, String> request) {
+//        String text = request.get("text"); // Extract text from JSON request
+//        System.out.println("User Entered: " + text); // Print to console
+//        return "Received: " + text;
+//    }
+
+    
+
+
 }

@@ -9,6 +9,7 @@ let productList = [];
 
 let fileName = "";
 let imageUrl = "";
+let fileExtension = "";
 
 showProductFormBtn.addEventListener("click", () => toggleShowForm("show", showProductFormBtn, clearProductForm));
 closeProductFormBtn.addEventListener("click", () => toggleShowForm("close", showProductFormBtn, clearProductForm));
@@ -46,18 +47,30 @@ fetch('../data/products.json')
 
 // get image name of the product
 document.getElementById("product-image").addEventListener("change", (event)=>{
-  fileName = event.target.files[0].name; // Get the selected file
-  if (fileName) {
-      const category = document.getElementById("product-category").value;
-      imageUrl = `/assets/images/${category}/${fileName}`;
-      // console.log("Selected file:", fileName);
-      document.getElementById("img-thumbnail-container").innerHTML=`
-        <img src=${imageUrl} class="img-thumbnail mb-2" style="height: 200px; width: 200px;" alt="${fileName}">
-      `;
-  } else {
-      console.log("No file selected");
-  }
+  // fileName = event.target.files[0].name; // Get the selected file
+  fileName = event.target.files[0];
+  // console.log("changed" + fileName.name);
+  
+  console.log(fileName.name);
+  fileExtension = fileName.name.split('.').pop();
+
+  
+   // Get the selected file
+  // if (fileName) {
+  //     imageUrl = `/${document.getElementById("product-id").value}`;
+  //     console.log("imageUrl in if:  " + imageUrl);
+      
+  //     document.getElementById("img-thumbnail-container").innerHTML=`
+  //       <img src=${imageUrl} class="img-thumbnail mb-2" style="height: 200px; width: 200px;" alt="${fileName.name}">
+  //     `;
+  // } else {
+  //     console.log("No file selected");
+  // }
 })
+
+// document.getElementById("product-id").addEventListener("change", ()=>{
+//   console.log("product-id changed");
+// })
 
 function addProduct(){  
   const name = document.getElementById("product-name");
@@ -70,8 +83,14 @@ function addProduct(){
   
   // console.log(fileName);
 
+  console.log("filename: " + (fileName ?  "true" : "false"));
+  
+  
+  
+  
+
   if(!imageUrl){
-    imageUrl=`/assets/images/${category.value}/no-image.jpg`;
+    imageUrl=`/${category.value}-no-image.jpg`;
   }
   
 
@@ -80,6 +99,16 @@ function addProduct(){
   } else {
     productIncrement++;
     let htmlEl=document.getElementById("table-body");
+
+    // console.log('File extension:', fileExtension);
+    // console.log("productID before const product: " + productID);
+
+    if (fileName) {
+      imageUrl=`/${productID}.${fileExtension}`
+    }
+
+    console.log("image Url: " + imageUrl);
+    
     
     const product = {
       id: productID,
@@ -90,6 +119,8 @@ function addProduct(){
       imageUrl: imageUrl
 
     }
+    setImageName(productID, fileName);
+    // uploadImage(fileName);
 
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -110,18 +141,58 @@ function addProduct(){
     };
 
     fetch("http://localhost:8080/product/add", requestOptions)
-      .then((response) => response.json())
+      .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.error(error));
 
     imageUrl="";
+    fileName="";
 
+    
     productList.push(product);
     addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
     clearProductForm();
   }
 }
 
+function uploadImage(fileInput){
+  const formdata = new FormData();
+  formdata.append("file", fileInput);
+  const requestOptions = {
+    method: "POST",
+    body: formdata,
+    redirect: "follow"
+  };
+
+  fetch("http://localhost:8080/product/upload", requestOptions)
+    .then((response) => response.json())
+    .then((result) => console.log(result))
+    .catch((error) => console.error(error));
+}
+
+function setImageName(text, fileInput){
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const raw = JSON.stringify({
+    "text": text
+  });
+
+  const requestOptions = {
+    method: "POST",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow"
+  };
+
+  fetch("http://localhost:8080/product/get-product-code", requestOptions)
+    .then((response) => response.text())
+    .then((result) => {
+      console.log("Server Response" , result);
+      uploadImage(fileInput);
+    })
+    .catch((error) => console.error(error));
+}
 
 function renderProductTableButtons(element){
   return `     
@@ -172,7 +243,6 @@ function changeProduct(id){
   addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
   toggleShowForm("close", showProductFormBtn, clearProductForm);
 }
-
 
 function deleteProduct(id){
   productList = productList.filter(item => item.id !==id);
