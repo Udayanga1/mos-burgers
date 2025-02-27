@@ -5,7 +5,7 @@ const changeProductBtn = document.getElementById("edit-product-btn");
 const searchProductBtn = document.getElementById("search-product-btn");
 
 let productIncrement=1001;
-let productList = [];
+
 
 let fileName = "";
 let imageUrl = "";
@@ -26,51 +26,15 @@ searchProductBtn.addEventListener("click", (event) => {
   searchProducts();
 });
 
-// load products from products.json
-fetch('../data/products.json')
-  .then(response => response.json())
-  .then(data => {
-    data.forEach(item=>{
-      const product = {
-        id: item.itemCode,
-        name: item.itemName,
-        price: item.priceLKR,
-        discount: item.discount,
-        category: item.category 
-      }
-      productIncrement++;
-      productList.push(product);
-    });
-    addToTable(productList, document.getElementById("table-body"), tableColumns.product, renderProductTableButtons);
-  })
-  .catch(error => console.error('Error loading the data:', error));
+
 
 // get image name of the product
 document.getElementById("product-image").addEventListener("change", (event)=>{
-  // fileName = event.target.files[0].name; // Get the selected file
   fileName = event.target.files[0];
-  // console.log("changed" + fileName.name);
-  
-  console.log(fileName.name);
   fileExtension = fileName.name.split('.').pop();
 
-  
-   // Get the selected file
-  // if (fileName) {
-  //     imageUrl = `/${document.getElementById("product-id").value}`;
-  //     console.log("imageUrl in if:  " + imageUrl);
-      
-  //     document.getElementById("img-thumbnail-container").innerHTML=`
-  //       <img src=${imageUrl} class="img-thumbnail mb-2" style="height: 200px; width: 200px;" alt="${fileName.name}">
-  //     `;
-  // } else {
-  //     console.log("No file selected");
-  // }
 })
 
-// document.getElementById("product-id").addEventListener("change", ()=>{
-//   console.log("product-id changed");
-// })
 
 function addProduct(){  
   const name = document.getElementById("product-name");
@@ -90,9 +54,6 @@ function addProduct(){
   } else {
     productIncrement++;
     let htmlEl=document.getElementById("table-body");
-
-    // console.log('File extension:', fileExtension);
-    // console.log("productID before const product: " + productID);
 
     fetch("http://localhost:8080/product/all")
     .then((response) => response.json())
@@ -122,7 +83,6 @@ function addProduct(){
   
       }
       setImageName(lastIndex, fileName);
-      // uploadImage(fileName);
   
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -144,14 +104,16 @@ function addProduct(){
   
       fetch("http://localhost:8080/product/add", requestOptions)
         .then((response) => response.text())
-        .then((result) => console.log(result))
-        .catch((error) => console.error(error));
-        
-        imageUrl="";
-        fileName="";
-        
-        productList.push(product);
-        addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
+        .then((result) => {
+          // console.log(result)
+          showProductsInTable();
+          })
+          .catch((error) => console.error(error));
+          
+          imageUrl="";
+          fileName="";
+          
+          // productList.push(product);
         clearProductForm();
         // console.log(lastIndex);
       })
@@ -200,20 +162,7 @@ function setImageName(text, fileInput){
     })
     .catch((error) => console.error(error));
 }
-// function getLastIndexOfProducts(){
-//   fetch("http://localhost:8080/product/all")
-//     .then((response) => response.json())
-//     .then((result) => {
-//       lastIndex = result.pop().id;
-//       console.log(lastIndex);
-//     })
-//     .catch((error) => console.error(error));
-// }
 
-// document.getElementById("get-last-index").addEventListener("click", ()=>{
-//   console.log("from addEventListener: " + getLastIndexOfProducts.then);
-  
-// })
 
 function renderProductTableButtons(element){
   return `     
@@ -347,7 +296,45 @@ function closeSearchView() {
   document.getElementById("search-product-input").value="";
 }
 
+function showProductsInTable(){
+  let productList = [];
+  fetch("http://localhost:8080/product/all")
+    .then((response) => response.json())
+    .then((result) => {
+      // console.log(result)
+      result.forEach(product=>{
+        const row = {
+          id: "B" + (product.id+1000),
+          name: product.name,
+          price: product.price,
+          discount: product.discount,
+          category: product.category 
+        }
+        // console.log(product);
+        productList.push(row);
+      });
+      addToTable(productList, document.getElementById("table-body"), tableColumns.product, renderProductTableButtons);
+    })
+    .catch((error) => console.error(error));
+}
 
-
+// load products from products.json
+// fetch('../data/products.json')
+//   .then(response => response.json())
+//   .then(data => {
+//     data.forEach(item=>{
+//       const product = {
+//         id: item.itemCode,
+//         name: item.itemName,
+//         price: item.priceLKR,
+//         discount: item.discount,
+//         category: item.category 
+//       }
+//       productIncrement++;
+//       productList.push(product);
+//     });
+//     // addToTable(productList, document.getElementById("table-body"), tableColumns.product, renderProductTableButtons);
+//   })
+//   .catch(error => console.error('Error loading the data:', error));
 
 

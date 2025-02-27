@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/assets/css/style.css">
   <title>MOS Burgers | Products</title>
 </head>
-<body>
+<body onload="showProductsInTable()">
   <nav class="navbar bg-success navbar-expand-lg" data-bs-theme="dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="/index.html">MOS Burgers</a>
@@ -96,6 +96,7 @@
           <th scope="col border">Price (LKR)</th>
           <th scope="col border">Discount (%)</th>
           <th scope="col border">Category</th>
+          <th scope="col border"></th>
         </tr>
       </thead>
       <tbody class="table-group-divider" id="table-body">

@@ -19,38 +19,6 @@ const tableColumns = {
   order: ["id", "customerName", "orderGrossTotal", "orderDiscount", "orderNetTotal"]
 }
 
-// view nav menu
-// function renderNavMenu() {
-//   let navMenuHTML = navMenuList.map(element => {
-   
-//     return `
-//       <li class="${element.isActive ? "nav-item rounded shadow rounded" : "nav-item"}">
-//         <a class="${element.isActive ? "nav-link active" : "nav-link"}" onclick="navHandler(event)" href=${element.redirectLink}>${element.item}</a>
-//       </li>
-//     `;
-   
-//   }).join(''); // Join the array into a single string
-//   navMenu.innerHTML = navMenuHTML;
-// }
-
-// renderNavMenu();
-
-// function navHandler(event){
-//   const targetValue = event.target.textContent;
-//   navMenuList.forEach(element=>{
-//     if(targetValue==element.item){
-//       element.isActive=true;
-//       element.relatedSection.classList.remove("d-none");
-//       element.relatedSection.classList.add("d-block");
-//     } else {
-//       element.isActive=false;
-//       element.relatedSection.classList.remove("d-block");
-//       element.relatedSection.classList.add("d-none");
-//     }
-//   })
-//   renderNavMenu();
-// }
-
 function toggleShowForm(operation, showFormBtn, clearForm, item="product") {
   const form = document.getElementById(`add-${item}`);
   const addBtn = document.getElementById(`add-${item}-btn`);
