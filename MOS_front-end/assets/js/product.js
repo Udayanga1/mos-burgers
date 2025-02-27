@@ -120,9 +120,6 @@ function addProduct(){
         // console.log(lastIndex);
       })
       .catch((error) => console.error(error));
-      
-      
-      
   }
 }
 
@@ -170,8 +167,15 @@ function renderProductTableButtons(element){
   return `     
       <td width="200">
         <button type="button" class="btn btn-secondary" id="edit-product-btn-table" onclick="showProductEditProduct('${element.id}')">Edit</button>
-        <button type="button" class="btn btn-danger" onclick="deleteForm('${element.id}', 'Product', deleteProduct)">Delete</button></td>
+        <button type="button" class="btn btn-danger" id="delete-product-btn-table" onclick="getDeleteConfirmation(this)">Delete</button></td>
   `;
+}
+
+function getDeleteConfirmation(buttonEl){
+  const id = buttonEl.closest("tr").querySelector("td").textContent.trim();
+  // console.log(id);
+  const dbId = (id.substring(1)) - 1000;
+  deleteForm(dbId, "Product", deleteProduct);
 }
 
 function showProductEditProduct(id){
@@ -259,41 +263,47 @@ function editProduct(id){
 
   fetch("http://localhost:8080/product/update", requestOptions)
     .then((response) => response.text())
-    .then((result) => console.log(result))
+    .then((result) => {
+      setImageName(productID, fileName);
+      showProductsInTable();
+    })
     .catch((error) => console.error(error));
 
-  // productList.forEach(element=>{
-  //   if(element.id==id){
-  //     element.id = productID.value;
-  //     element.name = productName.value;
-  //     element.price = productPrice.value;
-  //     element.discount = productDiscount.value;
-  //     element.category = productCategory.value;
-  //   }
-  // })
-  // addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
   toggleShowForm("close", showProductFormBtn, clearProductForm);
 }
 
-function deleteProduct(id){
-  productList = productList.filter(item => item.id !==id);
-    let htmlEl = document.getElementById("table-body");
-    addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
-    toggleShowForm("close", showProductFormBtn, clearProductForm);
-    setTimeout(() => {
-      modalContainer.innerHTML = `
-        <div class="position-absolute top-50 p-2 mt-2 bg-danger text-white bg-gradient shadow-lg rounded" style="width: 18rem;">
-          <div>
-            <h5>Item ${id} Deleted successfully</h5>
-            <hr>
-          </div>
-        </div>`;
 
-      // Close the modal after a few milliseconds
-      setTimeout(() => {
-        modalContainer.innerHTML="";
-      }, 2000);  // Close the modal after 2 seconds
-    }, 100);
+function deleteProduct(id){
+
+  // console.log("Id from deleteProduct: " + id);
+  const requestOptions = {
+    method: "DELETE",
+    redirect: "follow"
+  };
+  
+  fetch("http://localhost:8080/product/delete/"+id, requestOptions)
+    .then((response) => response.text())
+    .then((result) => {
+      showProductsInTable();
+      console.log(result)
+    })
+    .catch((error) => console.error(error));
+  
+  toggleShowForm("close", showProductFormBtn, clearProductForm);
+  setTimeout(() => {
+    modalContainer.innerHTML = `
+      <div class="position-absolute top-50 p-2 mt-2 bg-danger text-white bg-gradient shadow-lg rounded" style="width: 18rem;">
+        <div>
+          <h5>Item ${id} Deleted successfully</h5>
+          <hr>
+        </div>
+      </div>`;
+
+    // Close the modal after a few milliseconds
+    setTimeout(() => {
+      modalContainer.innerHTML="";
+    }, 2000);  // Close the modal after 2 seconds
+  }, 100);
 }
 
 function searchProducts() {
