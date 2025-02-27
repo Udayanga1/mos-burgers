@@ -18,7 +18,9 @@ addProductBtn.addEventListener("click", () => {
 });
 changeProductBtn.addEventListener("click", ()=>{
   const productID = document.getElementById("product-id").value;
-  changeProduct(productID);
+  console.log("id from edit form: " + productID);
+  
+  editProduct(productID);
 });
 
 searchProductBtn.addEventListener("click", (event) => {
@@ -167,10 +169,37 @@ function setImageName(text, fileInput){
 function renderProductTableButtons(element){
   return `     
       <td width="200">
-        <button type="button" class="btn btn-secondary" onclick="showEditForm('${element.id}', 'product', clearProductForm, productList, showProductFormBtn)">Edit</button>
+        <button type="button" class="btn btn-secondary" id="edit-product-btn-table" onclick="showProductEditProduct('${element.id}')">Edit</button>
         <button type="button" class="btn btn-danger" onclick="deleteForm('${element.id}', 'Product', deleteProduct)">Delete</button></td>
   `;
 }
+
+function showProductEditProduct(id){
+  const dbId = (id.substring(1)) - 1000;
+  
+  fetch("http://localhost:8080/product/" + dbId)
+    .then((response) => response.json())
+    .then((result) => {
+      toggleShowForm("edit", document.getElementById("show-product-add-form"), clearProductForm);
+      document.getElementById("product-id").value=result.id;
+      document.getElementById("product-name").value=result.name;
+      document.getElementById("product-price").value=result.price;
+      document.getElementById("product-discount").value=result.discount;
+      document.getElementById("product-category").value=result.category;
+      // console.log(result)
+    })
+    .catch((error) => console.error(error));
+  
+}
+
+
+// function renderProductTableButtons(element){
+//   return `     
+//       <td width="200">
+//         <button type="button" class="btn btn-secondary" onclick="showEditForm('${element.id}', 'product', clearProductForm, productList, showProductFormBtn)">Edit</button>
+//         <button type="button" class="btn btn-danger" onclick="deleteForm('${element.id}', 'Product', deleteProduct)">Delete</button></td>
+//   `;
+// }
 
 // clearProductForm productList showProductFormBtn
 function showEditForm(id, table, clearForm, array, showFormBtn){
@@ -193,24 +222,56 @@ function clearProductForm(){
   document.getElementById("product-category").value="Burgers";
 }
 
-function changeProduct(id){
-  const productID = document.getElementById("product-id");
-  const productName = document.getElementById("product-name");
-  const productPrice = document.getElementById("product-price");
-  const productDiscount = document.getElementById("product-discount");
-  const productCategory = document.getElementById("product-category");
-  let htmlEl=document.getElementById("table-body");
+function editProduct(id){
+  const productID = document.getElementById("product-id").value;
+  const productName = document.getElementById("product-name").value;
+  const productPrice = document.getElementById("product-price").value;
+  const productDiscount = document.getElementById("product-discount").value;
+  const productCategory = document.getElementById("product-category").value;
 
-  productList.forEach(element=>{
-    if(element.id==id){
-      element.id = productID.value;
-      element.name = productName.value;
-      element.price = productPrice.value;
-      element.discount = productDiscount.value;
-      element.category = productCategory.value;
-    }
-  })
-  addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
+  if(!imageUrl){
+    imageUrl=`/${productCategory}-no-image.jpg`;
+  }
+  
+  if (fileName) {
+    imageUrl=`/${productID}.${fileExtension}`
+  }
+  // let htmlEl=document.getElementById("table-body");
+
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  const raw = JSON.stringify({
+    "id": productID,
+    "name": productName,
+    "price": productPrice,
+    "discount": productDiscount,
+    "category": productCategory,
+    "imageUrl": imageUrl
+  });
+
+  const requestOptions = {
+    method: "PUT",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow"
+  };
+
+  fetch("http://localhost:8080/product/update", requestOptions)
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.error(error));
+
+  // productList.forEach(element=>{
+  //   if(element.id==id){
+  //     element.id = productID.value;
+  //     element.name = productName.value;
+  //     element.price = productPrice.value;
+  //     element.discount = productDiscount.value;
+  //     element.category = productCategory.value;
+  //   }
+  // })
+  // addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
   toggleShowForm("close", showProductFormBtn, clearProductForm);
 }
 
