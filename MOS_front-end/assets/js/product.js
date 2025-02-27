@@ -85,15 +85,6 @@ function addProduct(){
 
   console.log("filename: " + (fileName ?  "true" : "false"));
   
-  
-  
-  
-
-  if(!imageUrl){
-    imageUrl=`/${category.value}-no-image.jpg`;
-  }
-  
-
   if(name.value=="" || price.value=="" || discount.value==""){
     alert("Please fill all the fields");
   } else {
@@ -103,55 +94,71 @@ function addProduct(){
     // console.log('File extension:', fileExtension);
     // console.log("productID before const product: " + productID);
 
-    if (fileName) {
-      imageUrl=`/${productID}.${fileExtension}`
-    }
+    fetch("http://localhost:8080/product/all")
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result.length);
 
-    console.log("image Url: " + imageUrl);
-    
-    
-    const product = {
-      id: productID,
-      name: name.value,
-      price: price.value,
-      discount: discount.value,
-      category: category.value,
-      imageUrl: imageUrl
-
-    }
-    setImageName(productID, fileName);
-    // uploadImage(fileName);
-
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    const raw = JSON.stringify({
-      "name": product.name,
-      "price": product.price,
-      "discount": product.discount,
-      "category": product.category,
-      "imageUrl": product.imageUrl
-    });
-
-    const requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow"
-    };
-
-    fetch("http://localhost:8080/product/add", requestOptions)
-      .then((response) => response.text())
-      .then((result) => console.log(result))
+      let lastIndex = result.length == 0 ? 0 : result.pop().id;
+      
+      if(!imageUrl){
+        imageUrl=`/${category.value}-no-image.jpg`;
+      }
+      
+      if (fileName) {
+        imageUrl=`/${++lastIndex}.${fileExtension}`
+      }
+  
+      console.log("image Url: " + imageUrl);
+      
+      
+      const product = {
+        id: productID,
+        name: name.value,
+        price: price.value,
+        discount: discount.value,
+        category: category.value,
+        imageUrl: imageUrl
+  
+      }
+      setImageName(lastIndex, fileName);
+      // uploadImage(fileName);
+  
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+  
+      const raw = JSON.stringify({
+        "name": product.name,
+        "price": product.price,
+        "discount": product.discount,
+        "category": product.category,
+        "imageUrl": product.imageUrl
+      });
+  
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow"
+      };
+  
+      fetch("http://localhost:8080/product/add", requestOptions)
+        .then((response) => response.text())
+        .then((result) => console.log(result))
+        .catch((error) => console.error(error));
+        
+        imageUrl="";
+        fileName="";
+        
+        productList.push(product);
+        addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
+        clearProductForm();
+        // console.log(lastIndex);
+      })
       .catch((error) => console.error(error));
-
-    imageUrl="";
-    fileName="";
-
-    
-    productList.push(product);
-    addToTable(productList, htmlEl, tableColumns.product, renderProductTableButtons);
-    clearProductForm();
+      
+      
+      
   }
 }
 
@@ -193,6 +200,20 @@ function setImageName(text, fileInput){
     })
     .catch((error) => console.error(error));
 }
+// function getLastIndexOfProducts(){
+//   fetch("http://localhost:8080/product/all")
+//     .then((response) => response.json())
+//     .then((result) => {
+//       lastIndex = result.pop().id;
+//       console.log(lastIndex);
+//     })
+//     .catch((error) => console.error(error));
+// }
+
+// document.getElementById("get-last-index").addEventListener("click", ()=>{
+//   console.log("from addEventListener: " + getLastIndexOfProducts.then);
+  
+// })
 
 function renderProductTableButtons(element){
   return `     

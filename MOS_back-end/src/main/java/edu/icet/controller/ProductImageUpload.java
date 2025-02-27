@@ -34,7 +34,7 @@ public class ProductImageUpload {
         // Generate a new file name
         String originalFilename = file.getOriginalFilename();
         String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".")); // Get file extension
-        String newFilename = customImageName + fileExtension; // Rename using timestamp
+        String newFilename = customImageName + fileExtension; // Rename the file
 
         String uploadDir = System.getProperty("user.dir") + "/Uploads";
         File directory = new File(uploadDir);
@@ -79,50 +79,12 @@ public class ProductImageUpload {
         // Creating a new File instance
         File directory= new File(folderPath);
 
-        // list() method returns an array of strings
-        // naming the files and directories
-        // in the directory denoted by this abstract pathname
         String[] filenames = directory.list();
 
-        // returning the list of filenames
         return filenames;
 
     }
 
-    // Downloading a file
-//    @RequestMapping(value = "/download/{path:.+}", method = RequestMethod.GET)
-//    public ResponseEntity downloadFile(@PathVariable("path") String filename) throws FileNotFoundException {
-//
-//        // Checking whether the file requested for download exists or not
-//        String fileUploadpath = System.getProperty("user.dir") +"/Uploads";
-//        String[] filenames = this.getFiles();
-//        boolean contains = Arrays.asList(filenames).contains(filename);
-//        if(!contains) {
-//            return new ResponseEntity("FIle Not Found", HttpStatus.NOT_FOUND);
-//        }
-//
-//        // Setting up the filepath
-//        String filePath = fileUploadpath+File.separator+filename;
-//
-//        // Creating new file instance
-//        File file= new File(filePath);
-//
-//        // Creating a new InputStreamResource object
-//        InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
-//
-//        // Creating a new instance of HttpHeaders Object
-//        HttpHeaders headers = new HttpHeaders();
-//
-//        // Setting up values for contentType and headerValue
-//        String contentType = "application/octet-stream";
-//        String headerValue = "attachment; filename=\"" + resource.getFilename() + "\"";
-//
-//        return ResponseEntity.ok()
-//                .contentType(MediaType.parseMediaType(contentType))
-//                .header(HttpHeaders.CONTENT_DISPOSITION, headerValue)
-//                .body(resource);
-//
-//    }
 
     @GetMapping("/download/{filename:.+}")
     public ResponseEntity<InputStreamResource> downloadFile(@PathVariable String filename) throws FileNotFoundException {
