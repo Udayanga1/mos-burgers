@@ -197,27 +197,20 @@ function showProductEditProduct(id){
 }
 
 
-// function renderProductTableButtons(element){
-//   return `     
-//       <td width="200">
-//         <button type="button" class="btn btn-secondary" onclick="showEditForm('${element.id}', 'product', clearProductForm, productList, showProductFormBtn)">Edit</button>
-//         <button type="button" class="btn btn-danger" onclick="deleteForm('${element.id}', 'Product', deleteProduct)">Delete</button></td>
-//   `;
-// }
 
 // clearProductForm productList showProductFormBtn
-function showEditForm(id, table, clearForm, array, showFormBtn){
-  toggleShowForm("edit", showFormBtn, clearForm, table);
+// function showEditForm(id, table, clearForm, array, showFormBtn){
+//   toggleShowForm("edit", showFormBtn, clearForm, table);
 
-  array.forEach(element=>{
-    if(element.id==id){
-      tableColumns[table].forEach(col =>{
-        document.getElementById(`${table}-${col}`).value=element[col];
+//   array.forEach(element=>{
+//     if(element.id==id){
+//       tableColumns[table].forEach(col =>{
+//         document.getElementById(`${table}-${col}`).value=element[col];
         
-      })
-    }
-  });
-}
+//       })
+//     }
+//   });
+// }
 
 function clearProductForm(){
   document.getElementById("product-name").value="";
@@ -240,7 +233,6 @@ function editProduct(id){
   if (fileName) {
     imageUrl=`/${productID}.${fileExtension}`
   }
-  // let htmlEl=document.getElementById("table-body");
 
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -274,8 +266,6 @@ function editProduct(id){
 
 
 function deleteProduct(id){
-
-  // console.log("Id from deleteProduct: " + id);
   const requestOptions = {
     method: "DELETE",
     redirect: "follow"
