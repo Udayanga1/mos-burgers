@@ -1,4 +1,4 @@
-package edu.icet.entity;
+package edu.icet.mos.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,12 +11,14 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Entity
-@Table(name="customer")
-public class CustomerEntity {
+@Table(name="product")
+public class ProductEntity {
     @Id //id as the primary key
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    private String contactNo;
-
+    private Double price;
+    private Double discount;
+    private String category;
+    String imageUrl;
 }

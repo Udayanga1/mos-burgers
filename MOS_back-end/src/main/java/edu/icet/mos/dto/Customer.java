@@ -1,4 +1,4 @@
-package edu.icet.dto;
+package edu.icet.mos.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,11 +9,9 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Product {
+public class Customer {
     Integer id;
     String name;
-    Double price;
-    Double discount;
-    String category;
-    String imageUrl;
+    Integer preferenceId;
+    Integer points;
 }

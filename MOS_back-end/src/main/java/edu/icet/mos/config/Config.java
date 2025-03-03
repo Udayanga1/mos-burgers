@@ -1,4 +1,4 @@
-package edu.icet.config;
+package edu.icet.mos.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

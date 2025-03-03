@@ -1,7 +1,8 @@
-package edu.icet.controller;
+package edu.icet.mos.controller;
 
+import edu.icet.mos.service.ProductImageUploadService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +11,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.util.Arrays;
 import java.util.Map;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/product")
-public class ProductImageUpload {
-
+@RequiredArgsConstructor
+public class ProductImageUploadController {
+    final ProductImageUploadService service;
     private String customImageName = "no-image-selected";
 
     @PostMapping("/get-product-code")
@@ -27,10 +28,10 @@ public class ProductImageUpload {
         return "Received: " + customImageName;
     }
 
-    @RequestMapping(value = "/upload", method = RequestMethod.POST)
-    public String uploadFile(@RequestParam("file") MultipartFile file){
-//        String filePath = System.getProperty("user.dir") + "/Uploads" + File.separator + file.getOriginalFilename();
+    @PostMapping("/upload")
+    public void uploadFile(@RequestParam("file") MultipartFile file){
 
+//        service.upload(file);
         // Generate a new file name
         String originalFilename = file.getOriginalFilename();
         String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".")); // Get file extension
@@ -66,7 +67,7 @@ public class ProductImageUpload {
             e.printStackTrace();
             fileUploadStatus =  "Error in uploading file: " + e;
         }
-        return fileUploadStatus;
+//        return fileUploadStatus;
     }
 
 
