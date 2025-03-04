@@ -41,7 +41,7 @@
       </div>
     </div>
   </nav>
-  <div id="modal-container" class="position-relative d-flex justify-content-center z-3">
+  <div id="modal-container" class="position-relative d-flex justify-content-center" style="z-index: 1000;">
   </div>
   <section class="customers container-lg" id="customers">
     <button type="button" class="btn btn-success my-3" id="show-customer-add-form">Add Customer +</button>
@@ -58,11 +58,17 @@
         <label class="input-group-text">Contact Number</label>
         <input type="text" class="form-control" placeholder="000 000 0000" name="contact-number" id="customer-contact">
       </div>
+      <div class="input-group mb-3">
+        <label class="input-group-text">Preference Id</label>
+        <input type="text" class="form-control" placeholder="0" name="preference-id" id="preference-id">
+        <button type="button" class="btn btn-outline-success">Check Preference</button>
+        <button type="button" class="btn btn-outline-success" id="show-preference-add-btn">Add Preference</button>
+      </div>
       
       <div class="">
         <button type="button" class="btn btn-success mr-2" id="add-customer-btn">Add +</button>
         <button type="button" class="btn btn-warning mr-2" id="edit-customer-btn">Change</button>
-        <button type="button" class="btn btn-secondary m-2" id="close-customer-add-form">Cancel</button>
+        <button type="button" class="btn btn-secondary m-2" id="close-customer-add-form">Cancel</button> 
       </div>
     </form>
     <table class="table table-striped table-bordered">
@@ -82,6 +88,7 @@
 
     <script src="../assets/js/app.js"></script>
     <script src="../assets/js/customer.js"></script>
+    <script src="../assets/js/customer_preference.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     
   </body>
