@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/customer-preference")
 @RequiredArgsConstructor
+@CrossOrigin
 public class CustomerPreferenceController {
     final CustomerPreferenceService service;
 

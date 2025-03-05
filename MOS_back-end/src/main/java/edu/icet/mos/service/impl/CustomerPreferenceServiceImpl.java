@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerServicePreferenceImpl implements CustomerPreferenceService {
+public class CustomerPreferenceServiceImpl implements CustomerPreferenceService {
     final CustomerPreferenceRepository repository;
     final ModelMapper mapper;
 
@@ -40,7 +40,7 @@ public class CustomerServicePreferenceImpl implements CustomerPreferenceService 
 
     @Override
     public List<CustomerPreference> searchByPreference(String preference) {
-        List<CustomerPreferenceEntity> byPreference = repository.findByPreference(preference);
+        List<CustomerPreferenceEntity> byPreference = repository.findByPreferenceContaining(preference);
         List<CustomerPreference> preferenceList = new ArrayList<>();
         byPreference.forEach(preferenceEntity -> {
             preferenceList.add(mapper.map(preferenceEntity, CustomerPreference.class));

@@ -9,6 +9,6 @@ import java.util.List;
 
 @Service
 public interface CustomerPreferenceRepository extends JpaRepository<CustomerPreferenceEntity, Integer> {
-    List<CustomerPreferenceEntity> findByPreference(String name);
+    List<CustomerPreferenceEntity> findByPreferenceContaining(String name);
 }
 
