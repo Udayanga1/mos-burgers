@@ -61,6 +61,8 @@ function showSearchPreferenceForm(){
         <button type="button" class="btn btn-success mr-2" onclick="searchPreference()">Search</button>
         <button type="button" class="btn btn-secondary" onclick="closePreferenceForm()">Cancel</button>           
       </div>
+      <div id="search-preference-results">
+      </div>
     </div>`;
 
 }
@@ -71,6 +73,9 @@ document.getElementById("show-preference-search-btn").addEventListener("click", 
 
 function searchPreference(){
   const preference = document.getElementById("customer-preference");
+  const resultsContainer = document.getElementById("search-preference-results");
+
+  resultsContainer.innerHTML=`<h6 class="mt-4">Search Results</h6>`
   console.log(isNaN(preference.value));
  
   if (!isNaN(preference.value)){
@@ -78,13 +83,24 @@ function searchPreference(){
       .then((response) => response.text())
       .then((result) => {
         if (!result) {
-          console.log("id npt avail");
+          console.log("id not available");
           preference.value="";
+          resultsContainer.innerHTML+=`<h6 class="mt-1 text-warning">No results found</h6>`;
         } else{
           const parsedResult = JSON.parse(result);
           preference.value="";
           console.log(parsedResult.id)
           console.log(parsedResult.preference)
+          resultsContainer.innerHTML+=`
+            <table class="table table-striped table-bordered mt-1">
+              <tbody class="">
+                <tr>
+                  <td class="text-success">ID ${parsedResult.id}</td>
+                  <td class="text-success">${parsedResult.preference}</td>
+                </tr>
+              </tbody>
+            </table>
+          `
         }
       })
       .catch((error) => console.error(error));
@@ -95,15 +111,29 @@ function searchPreference(){
       if (result.length==0) {
         console.log("not available");
         preference.value="";
+        resultsContainer.innerHTML+=`<h6 class="mt-1 text-warning">No results found</h6>`;
       } else{
+        let prefRows=``;
         result.forEach(pref=>{
           console.log(pref.id)
           console.log(pref.preference)
+          prefRows+=`
+            <tr>
+              <td class="text-success">ID ${pref.id}</td>
+              <td class="text-success">${pref.preference}</td>
+            </tr>
+          `
         })
+        resultsContainer.innerHTML+=`
+        <table class="table table-striped table-bordered mt-1">
+          <tbody class="">
+            ${prefRows}
+          </tbody>
+        </table>
+        `
         preference.value="";
       }
     })
     .catch((error) => console.error(error));
   }
-
 }

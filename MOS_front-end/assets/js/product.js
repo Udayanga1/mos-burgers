@@ -43,6 +43,7 @@ function addProduct(){
   const price = document.getElementById("product-price");
   const discount = document.getElementById("product-discount");
   const category = document.getElementById("product-category");
+  const qty = document.getElementById("product-qty");
   // const imageUrl = document.getElementById("product-image");
 
   const productID = "B" + productIncrement;
@@ -51,11 +52,11 @@ function addProduct(){
 
   console.log("filename: " + (fileName ?  "true" : "false"));
   
-  if(name.value=="" || price.value=="" || discount.value==""){
+  if(name.value=="" || price.value=="" || discount.value=="" || qty.value==""){
     alert("Please fill all the fields");
   } else {
     productIncrement++;
-    let htmlEl=document.getElementById("table-body");
+    // let htmlEl=document.getElementById("table-body");
 
     fetch("http://localhost:8080/product/all")
     .then((response) => response.json())
@@ -81,8 +82,8 @@ function addProduct(){
         price: price.value,
         discount: discount.value,
         category: category.value,
-        imageUrl: imageUrl
-  
+        imageUrl: imageUrl,
+        qty: qty.value
       }
       setImageName(lastIndex, fileName);
   
@@ -94,7 +95,8 @@ function addProduct(){
         "price": product.price,
         "discount": product.discount,
         "category": product.category,
-        "imageUrl": product.imageUrl
+        "imageUrl": product.imageUrl,
+        "qty": product.qty
       });
   
       const requestOptions = {
@@ -369,7 +371,8 @@ function showProductsInTable(){
           name: product.name,
           price: product.price,
           discount: product.discount,
-          category: product.category 
+          category: product.category,
+          qty: product.qty 
         }
         // console.log(product);
         productList.push(row);
@@ -379,23 +382,5 @@ function showProductsInTable(){
     .catch((error) => console.error(error));
 }
 
-// load products from products.json
-// fetch('../data/products.json')
-//   .then(response => response.json())
-//   .then(data => {
-//     data.forEach(item=>{
-//       const product = {
-//         id: item.itemCode,
-//         name: item.itemName,
-//         price: item.priceLKR,
-//         discount: item.discount,
-//         category: item.category 
-//       }
-//       productIncrement++;
-//       productList.push(product);
-//     });
-//     // addToTable(productList, document.getElementById("table-body"), tableColumns.product, renderProductTableButtons);
-//   })
-//   .catch(error => console.error('Error loading the data:', error));
 
 

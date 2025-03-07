@@ -20,5 +20,6 @@ public class ProductEntity {
     private Double price;
     private Double discount;
     private String category;
-    String imageUrl;
+    private String imageUrl;
+    private Integer qty;
 }
