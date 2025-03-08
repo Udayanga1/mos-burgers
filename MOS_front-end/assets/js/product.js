@@ -173,11 +173,12 @@ function renderProductTableButtons(element){
   `;
 }
 
-function getDeleteConfirmation(buttonEl){
-  const id = buttonEl.closest("tr").querySelector("td").textContent.trim();
-  // console.log(id);
-  const dbId = (id.substring(1)) - 1000;
-  deleteForm(dbId, "Product", deleteProduct);
+function clearProductForm(){
+  document.getElementById("product-name").value="";
+  document.getElementById("product-price").value="";
+  document.getElementById("product-discount").value="";
+  document.getElementById("product-category").value="Burgers";
+  document.getElementById("product-qty").value="";
 }
 
 function showProductEditProduct(id){
@@ -192,33 +193,11 @@ function showProductEditProduct(id){
       document.getElementById("product-price").value=result.price;
       document.getElementById("product-discount").value=result.discount;
       document.getElementById("product-category").value=result.category;
+      document.getElementById("product-qty").value=result.qty;
       // console.log(result)
     })
     .catch((error) => console.error(error));
   
-}
-
-
-
-// clearProductForm productList showProductFormBtn
-// function showEditForm(id, table, clearForm, array, showFormBtn){
-//   toggleShowForm("edit", showFormBtn, clearForm, table);
-
-//   array.forEach(element=>{
-//     if(element.id==id){
-//       tableColumns[table].forEach(col =>{
-//         document.getElementById(`${table}-${col}`).value=element[col];
-        
-//       })
-//     }
-//   });
-// }
-
-function clearProductForm(){
-  document.getElementById("product-name").value="";
-  document.getElementById("product-price").value="";
-  document.getElementById("product-discount").value="";
-  document.getElementById("product-category").value="Burgers";
 }
 
 function editProduct(id){
@@ -227,6 +206,7 @@ function editProduct(id){
   const productPrice = document.getElementById("product-price").value;
   const productDiscount = document.getElementById("product-discount").value;
   const productCategory = document.getElementById("product-category").value;
+  const productQty = document.getElementById("product-qty").value;
 
   if(!imageUrl){
     imageUrl=`/${productCategory}-no-image.jpg`;
@@ -245,7 +225,8 @@ function editProduct(id){
     "price": productPrice,
     "discount": productDiscount,
     "category": productCategory,
-    "imageUrl": imageUrl
+    "imageUrl": imageUrl,
+    "qty": productQty
   });
 
   const requestOptions = {
@@ -266,6 +247,12 @@ function editProduct(id){
   toggleShowForm("close", showProductFormBtn, clearProductForm);
 }
 
+function getDeleteConfirmation(buttonEl){
+  const id = buttonEl.closest("tr").querySelector("td").textContent.trim();
+  // console.log(id);
+  const dbId = (id.substring(1)) - 1000;
+  deleteForm(dbId, "Product", deleteProduct);
+}
 
 function deleteProduct(id){
   const requestOptions = {

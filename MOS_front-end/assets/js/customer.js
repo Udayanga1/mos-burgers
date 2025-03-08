@@ -14,6 +14,7 @@ addCustomerBtn.addEventListener("click", () => addCustomer());
 function addCustomer(){
   const customerName = document.getElementById("customer-name");
   const contact = document.getElementById("customer-contact");
+  const preference = document.getElementById("preference-id");
   const customerID = "C" + customerIncrement;
   
   if(customerName.value=="" || contact.value==""){
@@ -25,11 +26,36 @@ function addCustomer(){
     const customer = {
       id: customerID,
       name: customerName.value,
-      contact: contact.value
+      contact: contact.value,
+      preference: preference.value
     }
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      "name": customer.name,
+      "preferenceId": customer.preference,
+      "contactNo": customer.contact,
+      "points": 0
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    fetch("http://localhost:8080/customer/add", requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        // console.log(result)
+        showCustomerTable();
+      })
+      .catch((error) => console.error(error));
   
-    customerList.push(customer);
-    addToTable(customerList, htmlEl, tableColumns.customer, renderCustomerTableButtons);
+    // customerList.push(customer);
+    // addToTable(customerList, htmlEl, tableColumns.customer, renderCustomerTableButtons);
     clearCustomerForm();
   }
 }
@@ -37,6 +63,33 @@ function addCustomer(){
 function clearCustomerForm(){
   document.getElementById("customer-name").value="";
   document.getElementById("customer-contact").value="";
+  document.getElementById("preference-id").value="";
+}
+
+function showCustomerTable(){
+  // document.getElementById("table-body-customer").innerHTML
+  let rows = ``;
+  fetch("http://localhost:8080/customer/all")
+    .then((response) => response.json())
+    .then((result) => {
+      // console.log(result)
+      result.forEach((row)=>{
+        // console.log(row);
+        rows=`
+          <tr>
+            <td>C${row.id+100}</td>
+            <td>${row.name}</td>
+            <td>${row.contactNo}</td>
+            <td>${row.preferenceId}</td>
+            <td>${row.points}</td>
+          </tr>
+        ` + rows;
+      })
+    })
+    .then(()=>{
+      document.getElementById("table-body-customer").innerHTML=rows;
+    })
+    .catch((error) => console.error(error));
 }
 
 function renderCustomerTableButtons(element){
@@ -88,18 +141,18 @@ function deleteCustomer(id){
 }
 
 // load customers from customers.json
-fetch('../data/customers.json')
-  .then(response => response.json())
-  .then(data => {
-    data.forEach(item=>{
-      const customer = {
-        id: item.id,
-        name: item.name,
-        contact: item.contact
-      }
-      customerIncrement++;
-      customerList.push(customer);
-    });
-    addToTable(customerList, document.getElementById("table-body-customer"), tableColumns.customer, renderCustomerTableButtons);
-  })
-  .catch(error => console.error('Error loading the data:', error));
+// fetch('../data/customers.json')
+//   .then(response => response.json())
+//   .then(data => {
+//     data.forEach(item=>{
+//       const customer = {
+//         id: item.id,
+//         name: item.name,
+//         contact: item.contact
+//       }
+//       customerIncrement++;
+//       customerList.push(customer);
+//     });
+//     addToTable(customerList, document.getElementById("table-body-customer"), tableColumns.customer, renderCustomerTableButtons);
+//   })
+//   .catch(error => console.error('Error loading the data:', error));

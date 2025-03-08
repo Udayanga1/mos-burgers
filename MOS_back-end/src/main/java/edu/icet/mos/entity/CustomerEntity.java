@@ -17,6 +17,7 @@ public class CustomerEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
-    Integer preferenceId;
-    Integer points;
+    private Integer preferenceId;
+    private Integer points;
+    private String contactNo;
 }
