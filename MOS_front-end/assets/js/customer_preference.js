@@ -25,7 +25,6 @@ function closePreferenceForm(){
 
 function addPreference(){
   const preference = document.getElementById("customer-preference")
-  console.log(preference.value);
 
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -43,7 +42,6 @@ function addPreference(){
   fetch("http://localhost:8080/customer-preference/add", requestOptions)
     .then((response) => response.text())
     .then((result) => {
-      console.log(result)
       preference.value="";
     })
     .catch((error) => console.error(error));
@@ -76,21 +74,17 @@ function searchPreference(){
   const resultsContainer = document.getElementById("search-preference-results");
 
   resultsContainer.innerHTML=`<h6 class="mt-4">Search Results</h6>`
-  console.log(isNaN(preference.value));
  
   if (!isNaN(preference.value)){
     fetch("http://localhost:8080/customer-preference/" + preference.value)
       .then((response) => response.text())
       .then((result) => {
         if (!result) {
-          console.log("id not available");
           preference.value="";
           resultsContainer.innerHTML+=`<h6 class="mt-1 text-warning">No results found</h6>`;
         } else{
           const parsedResult = JSON.parse(result);
           preference.value="";
-          console.log(parsedResult.id)
-          console.log(parsedResult.preference)
           resultsContainer.innerHTML+=`
             <table class="table table-striped table-bordered mt-1">
               <tbody class="">
@@ -109,14 +103,11 @@ function searchPreference(){
     .then((response) => response.json())
     .then((result) => {   
       if (result.length==0) {
-        console.log("not available");
         preference.value="";
         resultsContainer.innerHTML+=`<h6 class="mt-1 text-warning">No results found</h6>`;
       } else{
         let prefRows=``;
         result.forEach(pref=>{
-          console.log(pref.id)
-          console.log(pref.preference)
           prefRows+=`
             <tr>
               <td class="text-success">ID ${pref.id}</td>

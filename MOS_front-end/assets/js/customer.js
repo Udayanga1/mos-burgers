@@ -67,14 +67,11 @@ function clearCustomerForm(){
 }
 
 function showCustomerTable(){
-  // document.getElementById("table-body-customer").innerHTML
   let rows = ``;
   fetch("http://localhost:8080/customer/all")
     .then((response) => response.json())
     .then((result) => {
-      // console.log(result)
       result.forEach((row)=>{
-        // console.log(row);
         rows=`
           <tr>
             <td>C${row.id+100}</td>
@@ -84,7 +81,7 @@ function showCustomerTable(){
             <td>${row.points}</td>
             <td width="200">
             <button type="button" class="btn btn-secondary" onclick="showCustomerEditForm('${row.id}', 'customer', clearCustomerForm, customerList, showCustomerFormBtn)">Edit</button>
-            <button type="button" class="btn btn-danger" onclick="deleteForm('${row.id}', 'Customer', deleteCustomer)">Delete</button></td>
+            <button type="button" class="btn btn-danger" onclick="deleteForm('C${row.id+100}', 'Customer', deleteCustomer)">Delete</button></td>
           </tr>
         ` + rows;
       })
@@ -95,21 +92,8 @@ function showCustomerTable(){
     .catch((error) => console.error(error));
 }
 
-// function renderCustomerTableButtons(element){
-//   return `     
-//       <td width="200">
-//         <button type="button" class="btn btn-secondary" onclick="showEditForm('${element.id}', 'customer', clearCustomerForm, customerList, showCustomerFormBtn)">Edit</button>
-//         <button type="button" class="btn btn-danger" onclick="deleteForm('${element.id}', 'Customer', deleteCustomer)">Delete</button></td>
-//   `;
-// }
-
 function showCustomerEditForm(id){
   toggleShowForm("edit", showCustomerFormBtn, clearCustomerForm, "customer");
-  // const customerName = document.getElementById("customer-name");
-  // const contact = document.getElementById("customer-contact");
-  // const preference = document.getElementById("preference-id");
-  // const cusId = document.getElementById("customer-id");
-  // const points = document.getElementById("customer-points");
 
   fetch("http://localhost:8080/customer/"+id)
     .then((response) => response.json())
@@ -127,8 +111,6 @@ function showCustomerEditForm(id){
 
 function editCustomer(){
   const customer = catchCustomerFormFields();
-  // console.log(customer.id.value);
-
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
@@ -158,39 +140,38 @@ function editCustomer(){
 }
 
 function deleteCustomer(id){
-  customerList = customerList.filter(item => item.id !==id);
-    let htmlEl = document.getElementById("table-body-customer");
-    addToTable(customerList, htmlEl, tableColumns.customer, renderCustomerTableButtons);
-    toggleShowForm("close", showCustomerFormBtn, clearCustomerForm, "customer");
-    setTimeout(() => {
-      modalContainer.innerHTML = `
-        <div class="position-absolute top-50 p-2 mt-2 bg-danger text-white bg-gradient shadow-lg rounded" style="width: 18rem;">
-          <div>
-            <h5>Item ${id} Deleted successfully</h5>
-            <hr>
-          </div>
-        </div>`;
+    const dbId = id.substring(1) - 100;
 
-      // Close the modal after a few milliseconds
-      setTimeout(() => {
-        modalContainer.innerHTML="";
-      }, 2000);  // Close the modal after 2 seconds
-    }, 100);
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const requestOptions = {
+      method: "DELETE",
+      headers: myHeaders,
+      body: "",
+      redirect: "follow"
+    };
+
+    fetch("http://localhost:8080/customer/delete/"+dbId, requestOptions)
+      .then((response) => response.text())
+      .then((result) => {
+        console.log(result)
+        setTimeout(() => {
+          modalContainer.innerHTML = `
+            <div class="position-absolute top-50 p-2 mt-2 bg-danger text-white bg-gradient shadow-lg rounded" style="width: 18rem;">
+              <div>
+                <h5>Item ${id} Deleted successfully</h5>
+                <hr>
+              </div>
+            </div>`;
+    
+          // Close the modal after a few milliseconds
+          setTimeout(() => {
+            modalContainer.innerHTML="";
+          }, 2000);  // Close the modal after 2 seconds
+        }, 100);
+        showCustomerTable();
+      })
+      .catch((error) => console.error(error));
 }
 
-// load customers from customers.json
-// fetch('../data/customers.json')
-//   .then(response => response.json())
-//   .then(data => {
-//     data.forEach(item=>{
-//       const customer = {
-//         id: item.id,
-//         name: item.name,
-//         contact: item.contact
-//       }
-//       customerIncrement++;
-//       customerList.push(customer);
-//     });
-//     addToTable(customerList, document.getElementById("table-body-customer"), tableColumns.customer, renderCustomerTableButtons);
-//   })
-//   .catch(error => console.error('Error loading the data:', error));
