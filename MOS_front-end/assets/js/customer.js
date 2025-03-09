@@ -1,7 +1,7 @@
 const showCustomerFormBtn = document.getElementById("show-customer-add-form");
 const addCustomerBtn = document.getElementById("add-customer-btn");
 const closeCustomerFormBtn = document.getElementById("close-customer-add-form");
-const changeCustomerBtn = document.getElementById("edit-customer-btn");
+const editCustomerBtn = document.getElementById("edit-customer-btn");
 
 let customerIncrement=101;
 let customerList = [];
@@ -10,33 +10,34 @@ showCustomerFormBtn.addEventListener("click", () => toggleShowForm("show", showC
 closeCustomerFormBtn.addEventListener("click", () => toggleShowForm("close", showCustomerFormBtn, clearCustomerForm, "customer"));
 
 addCustomerBtn.addEventListener("click", () => addCustomer());
+editCustomerBtn.addEventListener("click", ()=>{
+  editCustomer();
+});
+
+function catchCustomerFormFields(){
+  return {
+    id: document.getElementById("customer-id"),
+    name: document.getElementById("customer-name"),
+    contact: document.getElementById("customer-contact"),
+    preference: document.getElementById("preference-id"),
+    points: document.getElementById("customer-points")
+  }
+}
 
 function addCustomer(){
-  const customerName = document.getElementById("customer-name");
-  const contact = document.getElementById("customer-contact");
-  const preference = document.getElementById("preference-id");
-  const customerID = "C" + customerIncrement;
+  const customer = catchCustomerFormFields();  
   
-  if(customerName.value=="" || contact.value==""){
+  if(catchCustomerFormFields().name.value=="" || catchCustomerFormFields().contact.value==""){
     alert("Please fill all the fields");
   } else {
-    customerIncrement++;
-    let htmlEl=document.getElementById("table-body-customer");
-    
-    const customer = {
-      id: customerID,
-      name: customerName.value,
-      contact: contact.value,
-      preference: preference.value
-    }
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     const raw = JSON.stringify({
-      "name": customer.name,
-      "preferenceId": customer.preference,
-      "contactNo": customer.contact,
-      "points": 0
+      "name": customer.name.value,
+      "preferenceId": customer.preference.value,
+      "contactNo": customer.contact.value,
+      "points": customer.points.value
     });
 
     const requestOptions = {
@@ -49,21 +50,20 @@ function addCustomer(){
     fetch("http://localhost:8080/customer/add", requestOptions)
       .then((response) => response.text())
       .then((result) => {
-        // console.log(result)
         showCustomerTable();
       })
       .catch((error) => console.error(error));
   
-    // customerList.push(customer);
-    // addToTable(customerList, htmlEl, tableColumns.customer, renderCustomerTableButtons);
     clearCustomerForm();
   }
 }
 
 function clearCustomerForm(){
-  document.getElementById("customer-name").value="";
-  document.getElementById("customer-contact").value="";
-  document.getElementById("preference-id").value="";
+  const customer = catchCustomerFormFields();
+  customer.name.value="";
+  customer.contact.value="";
+  customer.preference.value="";
+  customer.points.value="";
 }
 
 function showCustomerTable(){
@@ -82,6 +82,9 @@ function showCustomerTable(){
             <td>${row.contactNo}</td>
             <td>${row.preferenceId}</td>
             <td>${row.points}</td>
+            <td width="200">
+            <button type="button" class="btn btn-secondary" onclick="showCustomerEditForm('${row.id}', 'customer', clearCustomerForm, customerList, showCustomerFormBtn)">Edit</button>
+            <button type="button" class="btn btn-danger" onclick="deleteForm('${row.id}', 'Customer', deleteCustomer)">Delete</button></td>
           </tr>
         ` + rows;
       })
@@ -92,30 +95,65 @@ function showCustomerTable(){
     .catch((error) => console.error(error));
 }
 
-function renderCustomerTableButtons(element){
-  return `     
-      <td width="200">
-        <button type="button" class="btn btn-secondary" onclick="showEditForm('${element.id}', 'customer', clearCustomerForm, customerList, showCustomerFormBtn)">Edit</button>
-        <button type="button" class="btn btn-danger" onclick="deleteForm('${element.id}', 'Customer', deleteCustomer)">Delete</button></td>
-  `;
+// function renderCustomerTableButtons(element){
+//   return `     
+//       <td width="200">
+//         <button type="button" class="btn btn-secondary" onclick="showEditForm('${element.id}', 'customer', clearCustomerForm, customerList, showCustomerFormBtn)">Edit</button>
+//         <button type="button" class="btn btn-danger" onclick="deleteForm('${element.id}', 'Customer', deleteCustomer)">Delete</button></td>
+//   `;
+// }
+
+function showCustomerEditForm(id){
+  toggleShowForm("edit", showCustomerFormBtn, clearCustomerForm, "customer");
+  // const customerName = document.getElementById("customer-name");
+  // const contact = document.getElementById("customer-contact");
+  // const preference = document.getElementById("preference-id");
+  // const cusId = document.getElementById("customer-id");
+  // const points = document.getElementById("customer-points");
+
+  fetch("http://localhost:8080/customer/"+id)
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result)
+      const customer = catchCustomerFormFields();
+      customer.name.value=result.name;
+      customer.contact.value=result.contactNo;
+      customer.preference.value=result.preferenceId;
+      customer.id.value=result.id;
+      customer.points.value=result.points;
+    })
+    .catch((error) => console.error(error));
 }
 
-changeCustomerBtn.addEventListener("click", ()=>{
-  const customerID = document.getElementById("customer-id").value;
-  changeCustomer(customerID);
-});
+function editCustomer(){
+  const customer = catchCustomerFormFields();
+  // console.log(customer.id.value);
 
-function changeCustomer(id){
-  let htmlEl=document.getElementById("table-body-customer");
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
 
-  customerList.forEach(element=>{
-    if(element.id==id){
-      element.id = document.getElementById("customer-id").value;
-      element.name = document.getElementById("customer-name").value;
-      element.contact = document.getElementById("customer-contact").value;
-    }
-  })
-  addToTable(customerList, htmlEl, tableColumns.customer, renderCustomerTableButtons);
+  const raw = JSON.stringify({
+    "id": customer.id.value,
+    "name": customer.name.value,
+    "contactNo": customer.contact.value,
+    "preferenceId": customer.preference.value,
+    "points": customer.points.value
+  });
+
+  const requestOptions = {
+    method: "PUT",
+    headers: myHeaders,
+    body: raw,
+    redirect: "follow"
+  };
+
+  fetch("http://localhost:8080/customer/update", requestOptions)
+    .then((response) => response.text())
+    .then((result) => {
+      showCustomerTable();
+    })
+    .catch((error) => console.error(error));
+
   toggleShowForm("close", showCustomerFormBtn, clearCustomerForm, "customer");
 }
 

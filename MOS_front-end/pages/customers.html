@@ -48,7 +48,7 @@
     <form action="" method="post" class="my-3 d-none" id="add-customer">
       <div class="input-group mb-3 d-none">
         <label class="input-group-text">ID</label>
-        <input type="text" class="form-control" id="customer-id" name="customer">
+        <input type="number" class="form-control" id="customer-id" name="customer">
       </div>
       <div class="input-group mb-3">
         <label class="input-group-text">Customer Name</label>
@@ -57,17 +57,19 @@
       <div class="input-group mb-3">
         <label class="input-group-text">Contact Number</label>
         <input type="text" class="form-control" placeholder="000 000 0000" name="contact-number" id="customer-contact">
+        <label class="input-group-text">Points</label>
+        <input type="number" class="form-control" placeholder="0" name="points" id="customer-points">
       </div>
       <div class="input-group mb-3">
         <label class="input-group-text">Preference Id</label>
-        <input type="text" class="form-control" placeholder="0" name="preference-id" id="preference-id">
+        <input type="number" class="form-control" placeholder="0" name="preference-id" id="preference-id">
         <button type="button" class="btn btn-outline-success" id="show-preference-search-btn">Search Preference</button>
         <button type="button" class="btn btn-outline-success" id="show-preference-add-btn">Add Preference</button>
       </div>
       
       <div class="">
         <button type="button" class="btn btn-success mr-2" id="add-customer-btn">Add +</button>
-        <button type="button" class="btn btn-warning mr-2" id="edit-customer-btn">Change</button>
+        <button type="button" class="btn btn-warning mr-2" id="edit-customer-btn">Edit</button>
         <button type="button" class="btn btn-secondary m-2" id="close-customer-add-form">Cancel</button> 
       </div>
     </form>
