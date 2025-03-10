@@ -87,6 +87,9 @@ function setOrder(isEditing=false){
   const orderID = isEditing ? editingOrderId : "O" + orderIncrement;
 
   let customerName = "";
+
+  console.log(orderDate.value);
+  
   
   const productQtys = document.querySelectorAll('.order-product-qty');
   
