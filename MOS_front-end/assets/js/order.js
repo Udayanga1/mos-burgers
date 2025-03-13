@@ -11,7 +11,7 @@ let orderList = [];
 let editingOrderId = "";
 
 showOrderFormBtn.addEventListener("click", () => {
-  toggleShowForm("show", showOrderFormBtn, clearCustomerForm, "order");
+  toggleShowForm("show", showOrderFormBtn, clearOrderForm, "order");
   document.getElementById("view-order-btn").addEventListener("click", ()=>{
     viewOrder();
   });
@@ -62,105 +62,83 @@ changeOrderBtn.addEventListener("click", ()=>{
   changeOrder();
 })
 
-function getProductsCount(){
-  const productCodes = document.querySelectorAll('.order-product-code');
-  const productQtys = document.querySelectorAll('.order-product-qty');
-  let index=0;
-  let count=0;
-  productCodes.forEach(productCode=>{
-    const productQty = +productQtys[index].value // + converts to number
-    if (productCode.value.length>0 && productQty>0) { 
-      count++;
-    }
-    index++;
-  })
-  return count;
+// function getProductsCount(){
+//   const productCodes = document.querySelectorAll('.order-product-code');
+//   const productQtys = document.querySelectorAll('.order-product-qty');
+//   let index=0;
+//   let count=0;
+//   productCodes.forEach(productCode=>{
+//     const productQty = +productQtys[index].value // + converts to number
+//     if (productCode.value.length>0 && productQty>0) { 
+//       count++;
+//     }
+//     index++;
+//   })
+//   return count;
+// }
 
-}
-
-function setOrder(isEditing=false){
+function addOrder(){
   const productCodes = document.querySelectorAll('.order-product-code')
+  const productQtys = document.querySelectorAll('.order-product-qty');
   const customerCode = document.getElementById("order-customer-code");
   const orderDate = document.getElementById("order-date");
   const orderStatus = document.getElementById("order-status");
 
-  const orderID = isEditing ? editingOrderId : "O" + orderIncrement;
+  const productList = [];
 
-  let customerName = "";
-
-  console.log(orderDate.value);
+  const dbCusCode = customerCode.value.substring(1) - 100;
   
-  
-  const productQtys = document.querySelectorAll('.order-product-qty');
-  
-  let index = 0;
-  // let addToOrderList=false;
-  let isValidCustomer = false;
-  if(customerCode.value=="" || orderDate.value=="" || getProductsCount()==0){
-    alert("Please fill all the fields");
-  } 
-  else {
-    customerList.forEach(customer=>{
-      if (customer.id==customerCode.value) {
-        customerName=customer.name;
-        isValidCustomer = true;
-      }
-    })
-    if (!isValidCustomer) {
-      alert("Invalid customer code")
-    } else {
-        const products = [];
-        let orderDiscount = 0;
-        let orderGrossTotal = 0;
-        let orderNetTotal = 0;
-          productCodes.forEach(item => {
-          productList.forEach(product=>{
-            if(item.value==product.id) {
-              const totalPerProduct = +product.price * +productQtys[index].value;
-              orderGrossTotal+=totalPerProduct;
-              orderDiscount+=totalPerProduct * (+product.discount/100);
-              orderNetTotal = orderGrossTotal - orderDiscount;
-              products.push({
-                id: product.id,
-                name: product.name,
-                qty: +productQtys[index].value,
-                price: +product.price,
-                discount: +product.discount
-              });
-            } 
-            
+  fetch("http://localhost:8080/customer/"+dbCusCode)
+    .then((response) => response.json())
+    .then((result) => {
+      let index=0;
+      let productCount=0;
+      // add products to productList if customer exists
+      productCodes.forEach((code)=>{
+        if (code.value) {
+          productList.push({
+            productId: +productCodes[index].value.substring(1)-1000,
+            qty: +productQtys[index].value
           })
-          index++;
-        });
+          productCount+=productQtys[index].value;
+        }
+        index++;
+      })
       
-        let htmlEl=document.getElementById("table-body-order");
+      // validate inputs
+      if(customerCode.value=="" || orderDate.value=="" || productCount==0){
+          alert("Please fill all the fields");
+      } else {
         const order = {
-          id: orderID,
-          customerCode: customerCode.value,
-          customerName: customerName,
-          products: products,
-          orderGrossTotal: orderGrossTotal.toFixed(2),
-          orderDiscount: orderDiscount.toFixed(2),
-          orderNetTotal: orderNetTotal.toFixed(2),
-          date:orderDate.value,
-          status: orderStatus.value
+          "customerId": dbCusCode,
+          "orderDetails": productList,
+          "orderDate": orderDate.value,
+          "status": orderStatus.value    
         }
 
-        return order;
-      } 
-    }
-}
+        const myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
 
-function addOrder(){
-  // Add order to list
-    if (setOrder().products.length>0) {
-      orderList.push(setOrder());
-      orderIncrement++;
-      clearOrderForm();
-    } 
+        const requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: JSON.stringify(order),
+          redirect: "follow"
+        };
 
-    addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
-    closeOrderView();
+        // adds the order to the db
+        fetch("http://localhost:8080/orders/add", requestOptions)
+          .then((response) => response.text())
+          .then(() => {
+            clearOrderForm();
+          })
+          .catch((error) => console.error(error));
+      }
+    })
+    .catch((error) => {
+      console.error(error)
+      console.log("unavailable customer");
+    });
 }
 
 function changeOrder(){
@@ -380,21 +358,34 @@ fetch('../data/orders.json')
   .catch(error => console.error('Error loading the data:', error));
 
 // validate customer when focus is away from the customer code input
-function getCustomerNameOnBlur() {
+function getCustomerNameOnBlur() { 
   const customerCodeInOrder = document.getElementById("order-customer-code");
   customerCodeInOrder.addEventListener("blur", ()=>{
-    const customer = customerList.find(customer=> customer.id == customerCodeInOrder.value);
-    const adjacentHTML = document.getElementById("customer-code-adjacentHTML");
-    if (customer) {
+    document.getElementById("order-customer-name").innerText="";
+    const dbCusCode = customerCodeInOrder.value.substring(1)-100;
+    
+    fetch("http://localhost:8080/customer/"+dbCusCode)
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result);
+      const adjacentHTML = document.getElementById("customer-code-adjacentHTML");
+      if (result) {
+        if (adjacentHTML) {
+          adjacentHTML.remove();
+        }
+        document.getElementById("order-customer-name").innerText=result.name;
+      }
+    })
+    .catch((error) => {
+      console.error(error)
+      console.log("unavailable customer");
+      const adjacentHTML = document.getElementById("customer-code-adjacentHTML");
       if (adjacentHTML) {
         adjacentHTML.remove();
       }
-      document.getElementById("order-customer-name").innerText=customer.name;
-    } else {
-      if (adjacentHTML) {
-        adjacentHTML.remove();
-      }
-      document.getElementById("order-customer-code-container").insertAdjacentHTML("afterend",`<p class="text-danger pl-1" id="customer-code-adjacentHTML"><small> Customer code is not correct</small></p>`)
-    }
+      document.getElementById("order-customer-code-container").insertAdjacentHTML("afterend",`<p class="text-danger pl-1" id="customer-code-adjacentHTML"><small>Customer code: ${customerCodeInOrder.value} is not available</small></p>`)
+      
+    });  
+    
   });
 }
