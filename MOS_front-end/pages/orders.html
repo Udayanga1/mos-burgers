@@ -61,9 +61,8 @@
           <label class="input-group-text">Product Code</label>
           <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code">
           <label class="input-group-text">Qty</label>
-          <input type="number" class="form-control order-product-qty" placeholder="Qty" id="order-product-qty" name="order-product-qty">
+          <input type="number" class="form-control order-product-qty" placeholder="Qty" id="default-product-qty" name="order-product-qty" onblur="checkProductQty(event)">
         </div>
-        
       </div>
       <button class="btn btn-warning text-white py-1 px-2 my-3" id="add-product-to-order" type="button">Add product</button>
       <div class="input-group mb-3">

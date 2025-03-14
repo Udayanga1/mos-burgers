@@ -16,6 +16,15 @@ showOrderFormBtn.addEventListener("click", () => {
     viewOrder();
   });
   getCustomerNameOnBlur();
+  // checkProductQtyAndCode(event);
+  // orderProductCodeQty.innerHTML+=`
+  //   <div class="input-group mb-1">
+  //     <label class="input-group-text">Product Code</label>
+  //     <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code">
+  //     <label class="input-group-text">Qty</label>
+  //     <input type="number" class="form-control order-product-qty" placeholder="Qty" name="order-product-qty" onblur="checkProductQtyAndCode(event)">
+  //   </div>
+  // `;
 });
 closeOrderFormBtn.addEventListener("click", () => toggleShowForm("close", showOrderFormBtn, clearOrderForm, "order"));
 
@@ -40,7 +49,7 @@ addProductToOrderBtn.addEventListener("click", () => {
       <label class="input-group-text">Product Code</label>
       <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code">
       <label class="input-group-text">Qty</label>
-      <input type="number" class="form-control order-product-qty" placeholder="Qty" id="order-product-qty" name="order-product-qty">
+      <input type="number" class="form-control order-product-qty" placeholder="Qty" name="order-product-qty" onblur="checkProductQtyAndCode(event)">
     </div>
   `;
 
@@ -131,6 +140,7 @@ function addOrder(){
           .then((response) => response.text())
           .then(() => {
             clearOrderForm();
+            updateProductQty(productList);
           })
           .catch((error) => console.error(error));
       }
@@ -139,6 +149,81 @@ function addOrder(){
       console.error(error)
       console.log("unavailable customer");
     });
+}
+
+function updateProductQty(productList){
+ productList.forEach((item)=>{
+  fetch("http://localhost:8080/product/"+item.productId)
+  .then((response) => response.json())
+  .then((result) => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      "id": item.productId,
+      "name": result.name,
+      "price": result.price,
+      "discount": result.discount,
+      "category": result.category,
+      "imageUrl": result.imageUrl,
+      "qty": result.qty-item.qty
+    });
+
+    console.log(raw);
+    
+    const requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    fetch("http://localhost:8080/product/update", requestOptions)
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.error(error));
+    console.log(result)
+  })
+  .catch((error) => console.error(error));
+ })
+}
+
+function checkProductQtyAndCode(event){
+  const qtyValue = event.target.value;
+  const productCode = event.target.closest('.input-group').querySelector('.order-product-code').value;
+  
+  const parentContainer = event.target.closest('.input-group').parentElement;
+  const existingWarning = parentContainer.querySelector('.text-danger');
+  if (existingWarning) {
+    existingWarning.remove();
+  }
+
+  const dbProductCode = productCode.substring(1)-1000
+
+  if(dbProductCode>0 && qtyValue>0){
+    console.log(`Product Code: ${productCode}, Qty: ${qtyValue}`);
+
+    fetch("http://localhost:8080/product/" + dbProductCode)
+    .then((response) => response.json())
+    .then((result) => {
+      console.log(result.qty);
+      if (qtyValue>result.qty) {
+        const warningText = document.createElement('p');
+        warningText.classList.add('text-danger');
+        warningText.textContent = `Available Qty is only ${result.qty} for ${productCode}`;
+        event.target.closest('.input-group').parentElement.insertAdjacentElement('beforeend', warningText);
+        event.target.value='';
+      }
+    })
+    .catch((error) => {
+      console.error(error)
+      const warningText = document.createElement('p');
+      warningText.classList.add('text-danger');
+      warningText.textContent = `${productCode} is not available`;
+      event.target.closest('.input-group').parentElement.insertAdjacentElement('beforeend', warningText);
+      event.target.value='';
+    });
+  }
 }
 
 function changeOrder(){
@@ -234,11 +319,11 @@ function clearOrderForm(){
   document.getElementById("order-status").value ="Pending"
   orderProductCodeQty.innerHTML=`
   <div class="input-group mb-1">
-    <label class="input-group-text">Product Code</label>
-    <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code">
-    <label class="input-group-text">Qty</label>
-    <input type="number" class="form-control order-product-qty" placeholder="Qty" id="order-product-qty" name="order-product-qty">
-  </div>
+      <label class="input-group-text">Product Code</label>
+      <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code">
+      <label class="input-group-text">Qty</label>
+      <input type="number" class="form-control order-product-qty" placeholder="Qty" name="order-product-qty" onblur="checkProductQtyAndCode(event)">
+    </div>
 `;
   // clear customer name
   document.getElementById("order-customer-name").innerText="";
@@ -280,7 +365,7 @@ function showEditOrder(id) {
             <label class="input-group-text">Product Code</label>
             <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code" value=${product.id}>
             <label class="input-group-text">Qty</label>
-            <input type="number" class="form-control order-product-qty" placeholder="Qty" id="order-product-qty" name="order-product-qty" value=${product.qty}>
+            <input type="number" class="form-control order-product-qty" placeholder="Qty" name="order-product-qty" onblur="checkProductQtyAndCode(event) value=${product.qty}>
           </div>
         `
       });
