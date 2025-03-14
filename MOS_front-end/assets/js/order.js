@@ -168,6 +168,8 @@ function updateProductQty(productList){
 function checkProductQtyAndCode(event){
   const qtyValue = event.target.value;
   const productCode = event.target.closest('.input-group').querySelector('.order-product-code').value;
+  const orderDate = new Date(document.getElementById("order-date").value);
+  console.log(orderDate);
   
   const parentContainer = event.target.closest('.input-group').parentElement;
   const existingWarning = parentContainer.querySelector('.text-danger');
@@ -183,7 +185,7 @@ function checkProductQtyAndCode(event){
     fetch("http://localhost:8080/product/" + dbProductCode)
     .then((response) => response.json())
     .then((result) => {
-      console.log(result.qty);
+      console.log(result.expiryDate);
       if (qtyValue>result.qty) {
         const warningText = document.createElement('p');
         warningText.classList.add('text-danger');
@@ -191,6 +193,14 @@ function checkProductQtyAndCode(event){
         event.target.closest('.input-group').parentElement.insertAdjacentElement('beforeend', warningText);
         event.target.value='';
       }
+      if (orderDate>=new Date(result.expiryDate)) {
+        const warningText = document.createElement('p');
+        warningText.classList.add('text-danger');
+        warningText.textContent = `${productCode} expire date : ${result.expiryDate}`;
+        event.target.closest('.input-group').parentElement.insertAdjacentElement('beforeend', warningText);
+        event.target.value='';
+      }
+      
     })
     .catch((error) => {
       console.error(error)

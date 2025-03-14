@@ -14,7 +14,7 @@ const navMenuList = [
 ];
 
 const tableColumns = {
-  product: ["id", "name", "price", "discount", "category", "qty"],
+  product: ["id", "name", "price", "discount", "category", "qty", "expDate"],
   customer: ["id", "name", "contact"],
   order: ["id", "customerName", "orderGrossTotal", "orderDiscount", "orderNetTotal"]
 }

@@ -86,7 +86,8 @@ public class OrderServiceImpl implements OrderService {
                         detail.getProduct().getCategory(),
                         detail.getProduct().getImageUrl(),
                         detail.getQuantity(),
-                        detail.getPrice()
+                        detail.getPrice(),
+                        detail.getProduct().getExpiryDate()
                 )).collect(Collectors.toList())
         )).collect(Collectors.toList());
     }
@@ -95,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse getOrderById(Integer orderId) {
         OrderEntity order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId));
-
+        
         return new OrderResponse(
                 order.getId(),
                 order.getCustomer().getId(),
@@ -113,7 +114,8 @@ public class OrderServiceImpl implements OrderService {
                         detail.getProduct().getCategory(),
                         detail.getProduct().getImageUrl(),
                         detail.getQuantity(),
-                        detail.getPrice()
+                        detail.getPrice(),
+                        detail.getProduct().getExpiryDate()
                 )).collect(Collectors.toList())
         );
     }

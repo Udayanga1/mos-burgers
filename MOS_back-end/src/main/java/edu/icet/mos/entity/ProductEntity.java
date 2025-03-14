@@ -23,6 +23,10 @@ public class ProductEntity {
     private Double discount;
     private String category;
     private String imageUrl;
+
+    @Column(name = "expiry_date")
+    @Temporal(TemporalType.DATE)
     private Date expiryDate;
+
     private Integer qty;
 }

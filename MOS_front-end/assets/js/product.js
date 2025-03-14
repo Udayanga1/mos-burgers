@@ -220,11 +220,6 @@ function showProductEditProduct(id){
       const year = date.getFullYear();
 
       document.getElementById("expiry-date").value = `${year}-${month}-${day}`;
-
-
-      // document.getElementById("expiry-date").value=result.expiryDate;
-      
-      // console.log(result)
     })
     .catch((error) => console.error(error));
   
@@ -385,18 +380,21 @@ function showProductsInTable(){
     .then((result) => {
       // console.log(result)
       result.forEach(product=>{
+        console.log(product);
+        
         const row = {
           id: "B" + (product.id+1000),
           name: product.name,
           price: product.price,
           discount: product.discount,
           category: product.category,
-          qty: product.qty 
+          qty: product.qty,
+          expDate: product.expiryDate 
         }
         // console.log(product);
         productList.push(row);
       });
-      addToTable(productList, document.getElementById("table-body"), tableColumns.product, renderProductTableButtons);
+      addToTable(productList, document.getElementById("table-body-products"), tableColumns.product, renderProductTableButtons);
     })
     .catch((error) => console.error(error));
 }
