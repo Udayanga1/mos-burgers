@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,5 +18,6 @@ public class Product {
     Double discount;
     String category;
     String imageUrl;
+    Date expiryDate;
     Integer qty;
 }

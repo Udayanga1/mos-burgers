@@ -11,7 +11,22 @@ let fileName = "";
 let imageUrl = "";
 let fileExtension = "";
 
-showProductFormBtn.addEventListener("click", () => toggleShowForm("show", showProductFormBtn, clearProductForm));
+showProductFormBtn.addEventListener("click", () => {
+  toggleShowForm("show", showProductFormBtn, clearProductForm);
+  
+  function formatDate(date) {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+  //set default expiry date
+  const currentDate = new Date();
+  currentDate.setDate(currentDate.getDate() + 5);
+  document.getElementById("expiry-date").value = formatDate(currentDate);
+});
+
+
 closeProductFormBtn.addEventListener("click", () => toggleShowForm("close", showProductFormBtn, clearProductForm));
 addProductBtn.addEventListener("click", () => {
   addProduct()
@@ -44,6 +59,7 @@ function addProduct(){
   const discount = document.getElementById("product-discount");
   const category = document.getElementById("product-category");
   const qty = document.getElementById("product-qty");
+  const expiryDate = document.getElementById("expiry-date");
   // const imageUrl = document.getElementById("product-image");
 
   const productID = "B" + productIncrement;
@@ -83,7 +99,8 @@ function addProduct(){
         discount: discount.value,
         category: category.value,
         imageUrl: imageUrl,
-        qty: qty.value
+        qty: qty.value,
+        expiryDate: expiryDate.value
       }
       setImageName(lastIndex, fileName);
   
@@ -96,6 +113,7 @@ function addProduct(){
         "discount": product.discount,
         "category": product.category,
         "imageUrl": product.imageUrl,
+        "expiryDate": product.expiryDate,
         "qty": product.qty
       });
   
@@ -194,6 +212,18 @@ function showProductEditProduct(id){
       document.getElementById("product-discount").value=result.discount;
       document.getElementById("product-category").value=result.category;
       document.getElementById("product-qty").value=result.qty;
+      
+      console.log(result.expiryDate);
+      const date = new Date(result.expiryDate);
+      const day = String(date.getDate()).padStart(2, '0'); 
+      const month = String(date.getMonth() + 1).padStart(2, '0');  // Month is 0-indexed (therefore, add 1)
+      const year = date.getFullYear();
+
+      document.getElementById("expiry-date").value = `${year}-${month}-${day}`;
+
+
+      // document.getElementById("expiry-date").value=result.expiryDate;
+      
       // console.log(result)
     })
     .catch((error) => console.error(error));
@@ -207,6 +237,7 @@ function editProduct(id){
   const productDiscount = document.getElementById("product-discount").value;
   const productCategory = document.getElementById("product-category").value;
   const productQty = document.getElementById("product-qty").value;
+  const expiryDate = document.getElementById("expiry-date").value;
 
   if(!imageUrl){
     imageUrl=`/${productCategory}-no-image.jpg`;
@@ -226,6 +257,7 @@ function editProduct(id){
     "discount": productDiscount,
     "category": productCategory,
     "imageUrl": imageUrl,
+    "expiryDate": expiryDate,
     "qty": productQty
   });
 
