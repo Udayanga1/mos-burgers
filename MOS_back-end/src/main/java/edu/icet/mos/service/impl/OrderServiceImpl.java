@@ -96,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse getOrderById(Integer orderId) {
         OrderEntity order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found with ID: " + orderId));
-        
+
         return new OrderResponse(
                 order.getId(),
                 order.getCustomer().getId(),

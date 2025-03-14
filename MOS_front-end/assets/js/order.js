@@ -477,32 +477,63 @@ fetch('../data/orders.json')
 // validate customer when focus is away from the customer code input
 function getCustomerNameOnBlur() { 
   const customerCodeInOrder = document.getElementById("order-customer-code");
-  customerCodeInOrder.addEventListener("blur", ()=>{
-    document.getElementById("order-customer-name").innerText="";
-    const dbCusCode = customerCodeInOrder.value.substring(1)-100;
-    
-    fetch("http://localhost:8080/customer/"+dbCusCode)
-    .then((response) => response.json())
-    .then((result) => {
-      console.log(result);
-      const adjacentHTML = document.getElementById("customer-code-adjacentHTML");
-      if (result) {
+
+  customerCodeInOrder.addEventListener("blur", () => {
+    document.getElementById("order-customer-name").innerText = "";
+    const dbCusCode = customerCodeInOrder.value.substring(1) - 100;
+
+    fetch("http://localhost:8080/customer/" + dbCusCode)
+      .then((response) => response.json())
+      .then((result) => {
+        console.log(result);
+        const adjacentHTML = document.getElementById("customer-code-adjacentHTML");
         if (adjacentHTML) {
           adjacentHTML.remove();
         }
-        document.getElementById("order-customer-name").innerText=result.name;
-      }
-    })
-    .catch((error) => {
-      console.error(error)
-      console.log("unavailable customer");
-      const adjacentHTML = document.getElementById("customer-code-adjacentHTML");
-      if (adjacentHTML) {
-        adjacentHTML.remove();
-      }
-      document.getElementById("order-customer-code-container").insertAdjacentHTML("afterend",`<p class="text-danger pl-1" id="customer-code-adjacentHTML"><small>Customer code: ${customerCodeInOrder.value} is not available</small></p>`)
-      
-    });  
-    
+
+        document.getElementById("order-customer-name").innerText = result.name;
+
+        fetch("http://localhost:8080/customer-preference/" + result.preferenceId)
+          .then((response) => response.json())
+          .then((result) => {
+            // Remove old preference div before inserting new one
+            const oldPreference = document.getElementById("customer-preference");
+            if (oldPreference) {
+              oldPreference.remove();
+            }
+
+            if (result.preference) {
+              document.getElementById("order-customer-code-container").insertAdjacentHTML("afterend",
+                `<div class="input-group mb-1" id="customer-preference">
+                  <input type="text" class="form-control bg-warning" name="order-product-code" disabled value="${result.preference}">
+                </div>`
+              );
+            }
+
+          })
+          .catch((error) => console.error(error));
+
+      })
+      .catch((error) => {
+        console.error(error);
+        console.log("unavailable customer");
+
+        const oldPreference = document.getElementById("customer-preference");
+        if (oldPreference) {
+          oldPreference.remove();
+        }
+
+        const adjacentHTML = document.getElementById("customer-code-adjacentHTML");
+        if (adjacentHTML) {
+          adjacentHTML.remove();
+        }
+
+        document.getElementById("order-customer-code-container").insertAdjacentHTML("afterend",
+          `<p class="text-danger pl-1" id="customer-code-adjacentHTML">
+            <small>Customer code: ${customerCodeInOrder.value} is not available</small>
+          </p>`
+        );
+      });  
   });
 }
+
