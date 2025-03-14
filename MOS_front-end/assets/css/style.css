@@ -36,6 +36,10 @@ form {
   text-align: right;
 }
 
+#table-body-order tr td {
+  vertical-align: middle;
+}
+
 
 .swiper-wrapper img {
   height: 15rem;

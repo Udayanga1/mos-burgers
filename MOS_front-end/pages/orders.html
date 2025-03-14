@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="/assets/css/style.css">
   <title>MOS Burgers | Orders</title>
 </head>
-<body>
+<body onload="showOrdersTable()">
   <nav class="navbar bg-success navbar-expand-lg" data-bs-theme="dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="/index.html">MOS Burgers</a>
@@ -94,6 +94,7 @@
           <th scope="col border">Order Total</th>
           <th scope="col border">Discount</th>
           <th scope="col border">Net Total</th>
+          <th scope="col border"></th>
         </tr>
       </thead>
       <tbody class="table-group-divider" id="table-body-order">

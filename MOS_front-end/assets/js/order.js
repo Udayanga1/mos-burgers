@@ -16,15 +16,6 @@ showOrderFormBtn.addEventListener("click", () => {
     viewOrder();
   });
   getCustomerNameOnBlur();
-  // checkProductQtyAndCode(event);
-  // orderProductCodeQty.innerHTML+=`
-  //   <div class="input-group mb-1">
-  //     <label class="input-group-text">Product Code</label>
-  //     <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code">
-  //     <label class="input-group-text">Qty</label>
-  //     <input type="number" class="form-control order-product-qty" placeholder="Qty" name="order-product-qty" onblur="checkProductQtyAndCode(event)">
-  //   </div>
-  // `;
 });
 closeOrderFormBtn.addEventListener("click", () => toggleShowForm("close", showOrderFormBtn, clearOrderForm, "order"));
 
@@ -70,21 +61,6 @@ addProductToOrderBtn.addEventListener("click", () => {
 changeOrderBtn.addEventListener("click", ()=>{
   changeOrder();
 })
-
-// function getProductsCount(){
-//   const productCodes = document.querySelectorAll('.order-product-code');
-//   const productQtys = document.querySelectorAll('.order-product-qty');
-//   let index=0;
-//   let count=0;
-//   productCodes.forEach(productCode=>{
-//     const productQty = +productQtys[index].value // + converts to number
-//     if (productCode.value.length>0 && productQty>0) { 
-//       count++;
-//     }
-//     index++;
-//   })
-//   return count;
-// }
 
 function addOrder(){
   const productCodes = document.querySelectorAll('.order-product-code')
@@ -141,6 +117,7 @@ function addOrder(){
           .then(() => {
             clearOrderForm();
             updateProductQty(productList);
+            showOrdersTable();
           })
           .catch((error) => console.error(error));
       }
@@ -387,6 +364,51 @@ function showEditOrder(id) {
   if (adjacentHTML) {
     adjacentHTML.remove();
   }
+}
+
+function showOrdersTable(){
+  // console.log("showOrdersTable works");
+  let orderTableRows = '';
+
+  fetch("http://localhost:8080/orders/all")
+    .then((response) => response.json())
+    .then((result) => {
+      result.forEach(item=>{
+        console.log(item);
+        const row = {
+          id: item.orderId,
+          cusName: item.customerName,
+          total: item.totalPrice,
+          discount: calculateDiscount(item.orderDetails)
+        }
+        console.log(row);
+        orderTableRows=`
+        <tr>
+            <td>O${row.id+100}</td>
+            <td>${row.cusName}</td>
+            <td>${row.total}</td>
+            <td>${row.discount}</td>
+            <td>${row.total-row.discount}</td>
+            <td>
+              <button type="button" class="btn btn-secondary" onclick="showEditOrder('${row.id}')">Edit</button>
+            </td>
+          </tr>
+        ` + orderTableRows;
+      })
+
+    })
+    .then(()=>{
+      document.getElementById("table-body-order").innerHTML = orderTableRows;
+    })
+    .catch((error) => console.error(error));
+}
+
+function calculateDiscount(orderDetails){
+  let discount=0;
+  orderDetails.forEach(row=>{
+    discount+=(row.productPrice*row.quantity*row.productDiscount/100)
+  })
+  return discount;
 }
 
 // load orders from orders.json
