@@ -2,7 +2,7 @@ const showOrderFormBtn = document.getElementById("show-order-add-form");
 const addOrderBtn = document.getElementById("add-order-btn");
 const closeOrderFormBtn = document.getElementById("close-order-add-form");
 const addProductViewBtn = document.getElementById("view-order-btn");
-const changeOrderBtn = document.getElementById("edit-order-btn");
+const editOrderBtn = document.getElementById("edit-order-btn");
 const orderProductCodeQty = document.getElementById("order-product-code-qty");
 const addProductToOrderBtn = document.getElementById("add-product-to-order");
 
@@ -58,11 +58,11 @@ addProductToOrderBtn.addEventListener("click", () => {
 
 })
 
-changeOrderBtn.addEventListener("click", ()=>{
-  changeOrder();
+editOrderBtn.addEventListener("click", ()=>{
+  addOrder(true);
 })
 
-function addOrder(){
+function addOrder(isEditing=false){
   const productCodes = document.querySelectorAll('.order-product-code')
   const productQtys = document.querySelectorAll('.order-product-qty');
   const customerCode = document.getElementById("order-customer-code");
@@ -90,29 +90,56 @@ function addOrder(){
         index++;
       })
       
+      // document.getElementById("order-id").value
       // validate inputs
       if(customerCode.value=="" || orderDate.value=="" || productCount==0){
           alert("Please fill all the fields");
       } else {
-        const order = {
-          "customerId": dbCusCode,
-          "orderDetails": productList,
-          "orderDate": orderDate.value,
-          "status": orderStatus.value    
-        }
-
+        let requestOptions = {};
+        let url = "";
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        const orderId = document.getElementById("order-id");
 
-        const requestOptions = {
-          method: "POST",
-          headers: myHeaders,
-          body: JSON.stringify(order),
-          redirect: "follow"
-        };
+        if (!isEditing) {
+          const order = {
+            "customerId": dbCusCode,
+            "orderDetails": productList,
+            "orderDate": orderDate.value,
+            "status": orderStatus.value    
+          };
+
+          requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: JSON.stringify(order),
+            redirect: "follow"
+          };
+
+          url = "http://localhost:8080/orders/add";
+
+        } else {
+          const order = {
+            "customerId": dbCusCode,
+            "orderDetails": productList,
+            "orderDate": orderDate.value,
+            "status": orderStatus.value,
+            "orderId": orderId.value    
+          };
+
+          requestOptions = {
+            method: "PUT",
+            headers: myHeaders,
+            body: JSON.stringify(order),
+            redirect: "follow"
+          };
+
+          url = "http://localhost:8080/orders/update/"+order.orderId;
+
+        }
 
         // adds the order to the db
-        fetch("http://localhost:8080/orders/add", requestOptions)
+        fetch(url, requestOptions)
           .then((response) => response.text())
           .then(() => {
             clearOrderForm();
@@ -143,6 +170,7 @@ function updateProductQty(productList){
       "discount": result.discount,
       "category": result.category,
       "imageUrl": result.imageUrl,
+      "expiryDate": result.expiryDate,
       "qty": result.qty-item.qty
     });
 
@@ -213,31 +241,11 @@ function checkProductQtyAndCode(event){
   }
 }
 
-function changeOrder(){
-  // change order
-    const order = setOrder(true);
-    let index = 0;
-    if (order.products.length>0) {
-      orderList.forEach(item => {
-        if(item.id==order.id){
-          orderList[index]=order;
-        }
-        index++;
-      })
-      // orderIncrement++;
-      clearOrderForm();
-    } 
-
-    addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
-    closeOrderView();
-    toggleShowForm("close", showOrderFormBtn, clearOrderForm, "order");
-}
 
 function renderOrderTableButtons(element) {
   return `     
       <td width="200">
         <button type="button" class="btn btn-secondary" onclick="showEditOrder('${element.id}')">Edit</button>
-        <button type="button" class="btn btn-danger" onclick="deleteForm('${element.id}', 'Order', deleteOrder)">Delete</button>
       </td>
   `;
   
@@ -293,7 +301,7 @@ function viewOrder(isEditing=false){
 
       <p>Do you want to add the order ?</p>
       <div class="d-flex justify-content-end gap-2">
-        ${isEditing ? '<button class="btn btn-warning" id="#" onclick="changeOrder()">Change</button>' : '<button class="btn btn-success" id="#" onclick="addOrder()">Add</button>'}
+        ${isEditing ? '<button class="btn btn-warning" id="#" onclick="editOrder()">Change</button>' : '<button class="btn btn-success" id="#" onclick="addOrder()">Add</button>'}
         <button class="btn btn-secondary" id="close-order-btn" onclick="closeOrderView()">Close</button>
       </div>
     </div>
@@ -343,37 +351,67 @@ function deleteOrder(id){
 
 function showEditOrder(id) {
   let productsArea = "";
-  toggleShowForm("edit", showOrderFormBtn, clearCustomerForm, "order");
-  orderList.forEach(order => {
-    if (order.id==id) {
-      order.products.forEach(product=>{
-        productsArea+=`
-          <div class="input-group mb-1">
-            <label class="input-group-text">Product Code</label>
-            <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code" value=${product.id}>
-            <label class="input-group-text">Qty</label>
-            <input type="number" class="form-control order-product-qty" placeholder="Qty" name="order-product-qty" onblur="checkProductQtyAndCode(event) value=${product.qty}>
-          </div>
-        `
-      });
-      document.getElementById("order-customer-code").value=order.customerCode;
-      document.getElementById("order-date").value = order.date;
-      document.getElementById("order-status").value = order.status;
-      orderProductCodeQty.innerHTML=productsArea;
+  toggleShowForm("edit", showOrderFormBtn, clearOrderForm, "order");
+  fetch("http://localhost:8080/orders/"+id)
+  .then((response) => response.json())
+  .then((result) => {
+    console.log(result)
 
-      editingOrderId=order.id;//this use as the id in setOrder(true);
+    const date = new Date(result.orderDate);
+    const day = String(date.getDate()).padStart(2, '0'); 
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
 
-      document.getElementById("view-order-btn").addEventListener("click", ()=>{
-        viewOrder(true);
-      })
-      // clear previous order customer name
-      document.getElementById("order-customer-name").innerText="";
-    }
+    document.getElementById("order-date").value = `${year}-${month}-${day}`;
+
+    document.getElementById("order-customer-code").value="C" + (result.customerId+100);
+    document.getElementById("order-status").value=result.status;
+    document.getElementById("order-id").value=result.orderId;
+
+    orderProductCodeQty.innerHTML='';
+    result.orderDetails.forEach((item)=>{
+      orderProductCodeQty.innerHTML+=`
+      <div class="input-group mb-1">
+        <label class="input-group-text">Product Code</label>
+        <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code" value=${"B" + (item.productId+1000)}>
+        <label class="input-group-text">Qty</label>
+        <input type="number" class="form-control order-product-qty" placeholder="Qty" name="order-product-qty" value=${item.quantity} onblur="checkProductQtyAndCode(event)">
+      </div>
+    `;
+    })
+
   })
-  const adjacentHTML = document.getElementById("customer-code-adjacentHTML");
-  if (adjacentHTML) {
-    adjacentHTML.remove();
-  }
+  .catch((error) => console.error(error));
+  // orderList.forEach(order => {
+  //   if (order.id==id) {
+  //     order.products.forEach(product=>{
+  //       productsArea+=`
+  //         <div class="input-group mb-1">
+  //           <label class="input-group-text">Product Code</label>
+  //           <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code" value=${product.id}>
+  //           <label class="input-group-text">Qty</label>
+  //           <input type="number" class="form-control order-product-qty" placeholder="Qty" name="order-product-qty" onblur="checkProductQtyAndCode(event) value=${product.qty}>
+  //         </div>
+  //       `
+  //     });
+  //     document.getElementById("order-customer-code").value=order.customerCode;
+  //     document.getElementById("order-date").value = order.date;
+  //     document.getElementById("order-status").value = order.status;
+  //     orderProductCodeQty.innerHTML=productsArea;
+
+  //     editingOrderId=order.id;//this use as the id in setOrder(true);
+
+  //     document.getElementById("view-order-btn").addEventListener("click", ()=>{
+  //       viewOrder(true);
+  //     })
+  //     // clear previous order customer name
+  //     document.getElementById("order-customer-name").innerText="";
+  //   }
+  // })
+  // const adjacentHTML = document.getElementById("customer-code-adjacentHTML");
+  // if (adjacentHTML) {
+  //   adjacentHTML.remove();
+  // }
 }
 
 function showOrdersTable(){

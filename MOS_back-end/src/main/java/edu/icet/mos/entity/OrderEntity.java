@@ -30,7 +30,7 @@ public class OrderEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<OrderDetailEntity> orderDetails = new ArrayList<>();
 
-
+    @Temporal(TemporalType.DATE)
     private Date orderDate;
     private  Double totalPrice;
     private String status;
