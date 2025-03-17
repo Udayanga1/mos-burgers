@@ -19,6 +19,10 @@ const tableColumns = {
   order: ["id", "customerName", "orderGrossTotal", "orderDiscount", "orderNetTotal"]
 }
 
+document.getElementById("cart-product").addEventListener("click", ()=>{
+  viewCart();
+})
+
 function toggleShowForm(operation, showFormBtn, clearForm, item="product") {
   const form = document.getElementById(`add-${item}`);
   const addBtn = document.getElementById(`add-${item}-btn`);
@@ -119,6 +123,7 @@ function showProductsOnLandingPage(){
                       ? `<h6> <span class="badge text-bg-danger">Expired on <br> ${product.expiryDate}</span></h6>`
                       : `<input type="number" class="form-control product-qty" value="1" min="1">
                         <input type="number" class="form-control d-none product-id" value=${product.id}>
+                        <input type="text" class="form-control d-none product-name" value="${product.name}">
                          <button type="button" class="btn btn-outline-warning mt-2 lh-sm p-1 add-to-cart-btn">
                           <small>Add to cart</small>
                          </button>`
@@ -231,6 +236,7 @@ function showProductsOnLandingPage(){
         button.addEventListener("click", (event) => {
           cart.push({
             qty: event.target.closest('.card-body').querySelector('.product-qty').value,
+            name: event.target.closest('.card-body').querySelector('.product-name').value,
             id: event.target.closest('.card-body').querySelector('.product-id').value
           })
           
@@ -241,27 +247,6 @@ function showProductsOnLandingPage(){
         });
       });
     })
-    // .then(()=>{
-    //   setTimeout(() => {
-    //     document.querySelectorAll(".add-to-cart-btn").forEach(button => {
-    //       button.addEventListener("click", (event) => {
-    //         const productDataString = event.target.dataset.product;
-            
-    //         if (!productDataString) {
-    //           console.error("No product data found on the button.");
-    //           return;
-    //         }
-        
-    //         try {
-    //           const productData = JSON.parse(productDataString);
-    //           console.log("Product added to cart:", productData);
-    //         } catch (error) {
-    //           console.error("Error parsing product data:", error);
-    //         }
-    //       });
-    //     });
-    //   }, 500);     
-    // })
     .catch((error) => console.error(error));
 }
 
@@ -295,10 +280,10 @@ function loadSwiper(list, htmlId){
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
           },
-          autoplay: {
-            delay: 2500,
-            disableOnInteraction: false,
-          }
+          // autoplay: {
+          //   delay: 2500,
+          //   disableOnInteraction: false,
+          // }
         });
 }
 
@@ -310,3 +295,120 @@ function loadSwiper(list, htmlId){
 //   });
   
 // }
+
+
+
+// function viewCart(){
+//   let modalContent = `
+//   <div class="position-relative">
+//     <table class="table position-absolute top-0 start-0">
+//       <thead>
+//         <tr>
+//           <th scope="col">ID</th>
+//           <th scope="col">Name</th>
+//           <th scope="col">Qty</th>
+//         </tr>
+//       </thead>
+//       <tbody>
+//   `
+//   if (cart.length>0) {
+//     cart.forEach((item)=>{
+//       console.log(item);
+//       modalContent+=`
+//         <tr>
+//           <th>${item.id}</th>
+//           <th>${item.name}</th>
+//           <th>${item.qty}</th>
+//         </tr>
+//       `
+//     })
+//   }
+
+//   modalContent+=`
+//         </tbody>
+//     </table>
+//     <button type="button" class="btn btn-warning" id="clear-cart-btn">Clear</button>
+//   </div>
+//   <P class="text-white">Working</p>
+//   `
+//   console.log(modalContainer);
+  
+//   modalContainer.innerHTML = modalContainer;
+  
+//   // document.getElementById("clear-cart-btn").addEventListener("click", ()=>{
+//   //   modalContainer.innerHTML='';
+//   // })
+// }
+
+function viewCart(){
+  let modalContent = `
+  <div class="position-absolute top-50 p-2 mt-2 bg-light bg-gradient shadow-lg rounded" style="width: 30rem;">
+    <h5>Shopping Cart</h5>
+    <hr>
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Name</th>
+            <th scope="col">Qty</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+  
+  if (cart.length > 0) {
+    cart.forEach((item) => {
+      modalContent += `
+        <tr>
+          <td>${item.id}</td>
+          <td>${item.name}</td>
+          <td>${item.qty}</td>
+        </tr>
+      `;
+    });
+  } else {
+    modalContent += `
+        <tr>
+          <td colspan="3" class="text-center">Your cart is empty</td>
+        </tr>
+    `;
+  }
+
+  modalContent += `
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-end gap-2">
+      <button class="btn btn-secondary" id="close-cart-btn">Close</button>
+      <button class="btn btn-warning" id="clear-cart-btn">Clear Cart</button>
+      <button class="btn btn-success" id="submit-cart-btn">Place Order</button>
+    </div>
+  </div>
+  `;
+  
+  modalContainer.innerHTML = modalContent;
+  
+  document.getElementById("clear-cart-btn").addEventListener("click", () => {
+    cart.length = 0;
+    document.getElementById("cart-product-count-notification").textContent = "0";
+    
+    // refresh cart after clearing
+    viewCart();
+  });
+  
+  document.getElementById("close-cart-btn").addEventListener("click", () => {
+    modalContainer.innerHTML = "";
+  });
+
+  if (cart.length>0) {
+    document.getElementById("submit-cart-btn").addEventListener("click", ()=>{
+      // Create URL parameters
+      let params = new URLSearchParams();
+  
+      params.append('cartData', JSON.stringify(cart));
+  
+      window.location.href = "pages/orders.html?" + params.toString();
+    })
+  }
+}

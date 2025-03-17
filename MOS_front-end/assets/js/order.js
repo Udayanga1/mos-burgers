@@ -62,6 +62,39 @@ editOrderBtn.addEventListener("click", ()=>{
   addOrder(true);
 })
 
+// catch data coming from cart
+document.addEventListener("DOMContentLoaded", ()=>{
+  const urlParams = new URLSearchParams(window.location.search);
+  const cartDataParam = urlParams.get("cartData");
+
+  let cartData = [];
+
+  try {
+    cartData = JSON.parse(cartDataParam);
+  } catch (e) {
+    console.error("Error parsing cart data:", e);
+  }
+
+  if (cartData && cartData.length > 0){
+    
+    console.log(cartData);
+    toggleShowForm("show", showOrderFormBtn, clearOrderForm, "order");
+  
+    orderProductCodeQty.innerHTML='';
+      cartData.forEach((item)=>{
+        orderProductCodeQty.innerHTML+=`
+        <div class="input-group mb-1">
+          <label class="input-group-text">Product Code</label>
+          <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code" value=${"B" + (+item.id+1000)}>
+          <label class="input-group-text">Qty</label>
+          <input type="number" class="form-control order-product-qty" placeholder="Qty" name="order-product-qty" value=${+item.qty} onblur="checkProductQtyAndCode(event)">
+        </div>
+      `;
+    })
+  }
+  
+})
+
 function addOrder(isEditing=false){
   const productCodes = document.querySelectorAll('.order-product-code')
   const productQtys = document.querySelectorAll('.order-product-qty');
