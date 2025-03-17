@@ -81,10 +81,9 @@ function deleteForm(id, table, deleteItem){
     modalContainer.innerHTML="";
   });
 }
+const cart = [];
 
-function showProductsOnLandingPage(){
-  let productList = "";
-  
+function showProductsOnLandingPage(){  
   let burgerList = "";  
   let submarineList = "";
   let friesList = "";
@@ -108,10 +107,24 @@ function showProductsOnLandingPage(){
           burgerList+=`
             <div class="card swiper-slide bg-success" style="width: 18rem;">
                 <img src=${baseImageUrl + product.imageUrl} class="card-img-top" alt="${product.name}">
-                <div class="card-body">
-                  <h4 class="card-title text-light">${product.name}</h4>
-                  <h6 class="text-warning"> Price : ${product.price}</h6>
-                  <p class="text-warning"> Discount : ${product.discount}%</p>
+                <div class="row g-0">
+                  <div class="card-body col-7">
+                    <h6 class="card-title text-light">${product.name}</h6>
+                    <h6 class="text-warning"> Price : ${product.price}</h6>
+                    <p class="text-warning"> Discount : ${product.discount}%</p>                 
+                  </div>
+                  <div class="card-body col-5 d-grid">
+                  ${
+                    new Date() >= new Date(Date.parse(product.expiryDate))
+                      ? `<h6> <span class="badge text-bg-danger">Expired on <br> ${product.expiryDate}</span></h6>`
+                      : `<input type="number" class="form-control product-qty" value="1" min="1">
+                        <input type="number" class="form-control d-none product-id" value=${product.id}>
+                         <button type="button" class="btn btn-outline-warning mt-2 lh-sm p-1 add-to-cart-btn">
+                          <small>Add to cart</small>
+                         </button>`
+                  }
+                    
+                  </div>
                 </div>
             </div>
           `
@@ -119,10 +132,16 @@ function showProductsOnLandingPage(){
             submarineList+=`
             <div class="card swiper-slide bg-success" style="width: 18rem;">
                 <img src=${baseImageUrl + product.imageUrl} class="card-img-top" alt="${product.name}">
-                <div class="card-body">
-                  <h4 class="card-title text-light">${product.name}</h4>
-                  <h6 class="text-warning"> Price : ${product.price}</h6>
-                  <p class="text-warning"> Discount : ${product.discount}%</p>
+                <div class="row g-0">
+                  <div class="card-body col-7">
+                    <h6 class="card-title text-light">${product.name}</h6>
+                    <h6 class="text-warning"> Price : ${product.price}</h6>
+                    <p class="text-warning"> Discount : ${product.discount}%</p>                 
+                  </div>
+                  <div class="card-body col-5 d-grid">
+                    ${new Date()>=new Date(product.expiryDate) ? '<h6> <span class="badge text-bg-danger">Expired on <br>' + product.expiryDate + '</span></h6>' : '<input type="number" class="form-control" value=1 min="1"> <button type="button" class="btn btn-outline-warning mt-2 lh-sm p-1"><small>Add to cart</small></button>' }
+                    
+                  </div>
                 </div>
             </div>
           `
@@ -131,10 +150,16 @@ function showProductsOnLandingPage(){
           friesList+=`
             <div class="card swiper-slide bg-success" style="width: 18rem;">
                 <img src=${baseImageUrl + product.imageUrl} class="card-img-top" alt="${product.name}">
-                <div class="card-body">
-                  <h4 class="card-title text-light">${product.name}</h4>
-                  <h6 class="text-warning"> Price : ${product.price}</h6>
-                  <p class="text-warning"> Discount : ${product.discount}%</p>
+                <div class="row g-0">
+                  <div class="card-body col-7">
+                    <h6 class="card-title text-light">${product.name}</h6>
+                    <h6 class="text-warning"> Price : ${product.price}</h6>
+                    <p class="text-warning"> Discount : ${product.discount}%</p>                 
+                  </div>
+                  <div class="card-body col-5 d-grid">
+                    ${new Date()>=new Date(product.expiryDate) ? '<h6> <span class="badge text-bg-danger">Expired on <br>' + product.expiryDate + '</span></h6>' : '<input type="number" class="form-control" value=1 min="1"> <button type="button" class="btn btn-outline-warning mt-2 lh-sm p-1"><small>Add to cart</small></button>' }
+                    
+                  </div>
                 </div>
             </div>
           `
@@ -143,10 +168,16 @@ function showProductsOnLandingPage(){
           pastaList+=`
             <div class="card swiper-slide bg-success" style="width: 18rem;">
                 <img src=${baseImageUrl + product.imageUrl} class="card-img-top" alt="${product.name}">
-                <div class="card-body">
-                  <h4 class="card-title text-light">${product.name}</h4>
-                  <h6 class="text-warning"> Price : ${product.price}</h6>
-                  <p class="text-warning"> Discount : ${product.discount}%</p>
+                <div class="row g-0">
+                  <div class="card-body col-7">
+                    <h6 class="card-title text-light">${product.name}</h6>
+                    <h6 class="text-warning"> Price : ${product.price}</h6>
+                    <p class="text-warning"> Discount : ${product.discount}%</p>                 
+                  </div>
+                  <div class="card-body col-5 d-grid">
+                    ${new Date()>=new Date(product.expiryDate) ? `<h6> <span class="badge text-bg-danger">Expired on <br>${product.expiryDate} </span></h6>` : `<input type="number" class="form-control" value=1 min="1"> <button type="button" class="btn btn-outline-warning mt-2 lh-sm p-1"><small>Add to cart</small></button>` }
+                    
+                  </div>
                 </div>
             </div>
           `
@@ -155,10 +186,16 @@ function showProductsOnLandingPage(){
           chickenList+=`
             <div class="card swiper-slide bg-success" style="width: 18rem;">
                 <img src=${baseImageUrl + product.imageUrl} class="card-img-top" alt="${product.name}">
-                <div class="card-body">
-                  <h4 class="card-title text-light">${product.name}</h4>
-                  <h6 class="text-warning"> Price : ${product.price}</h6>
-                  <p class="text-warning"> Discount : ${product.discount}%</p>
+                <div class="row g-0">
+                  <div class="card-body col-7">
+                    <h6 class="card-title text-light">${product.name}</h6>
+                    <h6 class="text-warning"> Price : ${product.price}</h6>
+                    <p class="text-warning"> Discount : ${product.discount}%</p>                 
+                  </div>
+                  <div class="card-body col-5 d-grid">
+                    ${new Date()>=new Date(product.expiryDate) ? '<h6> <span class="badge text-bg-danger">Expired on <br>' + product.expiryDate + '</span></h6>' : '<input type="number" class="form-control" value=1 min="1"> <button type="button" class="btn btn-outline-warning mt-2 lh-sm p-1"><small>Add to cart</small></button>' }
+                    
+                  </div>
                 </div>
             </div>
           `
@@ -167,10 +204,16 @@ function showProductsOnLandingPage(){
           beverageList+=`
             <div class="card swiper-slide bg-success" style="width: 18rem;">
                 <img src=${baseImageUrl + product.imageUrl} class="card-img-top" alt="${product.name}">
-                <div class="card-body">
-                  <h4 class="card-title text-light">${product.name}</h4>
-                  <h6 class="text-warning"> Price : ${product.price}</h6>
-                  <p class="text-warning"> Discount : ${product.discount}%</p>
+                <div class="row g-0">
+                  <div class="card-body col-7">
+                    <h6 class="card-title text-light">${product.name}</h6>
+                    <h6 class="text-warning"> Price : ${product.price}</h6>
+                    <p class="text-warning"> Discount : ${product.discount}%</p>                 
+                  </div>
+                  <div class="card-body col-5 d-grid">
+                    ${new Date()>=new Date(product.expiryDate) ? '<h6> <span class="badge text-bg-danger">Expired on <br>' + product.expiryDate + '</span></h6>' : '<input type="number" class="form-control" value=1 min="1"> <button type="button" class="btn btn-outline-warning mt-2 lh-sm p-1"><small>Add to cart</small></button>' }
+                    
+                  </div>
                 </div>
             </div>
           `
@@ -183,7 +226,42 @@ function showProductsOnLandingPage(){
       loadSwiper(pastaList, "mos-landing-pasta");
       loadSwiper(chickenList, "mos-landing-chicken");
       loadSwiper(beverageList, "mos-landing-beverage");
+      
+      document.querySelectorAll(".add-to-cart-btn").forEach(button => {
+        button.addEventListener("click", (event) => {
+          cart.push({
+            qty: event.target.closest('.card-body').querySelector('.product-qty').value,
+            id: event.target.closest('.card-body').querySelector('.product-id').value
+          })
+          
+          // update cart notification
+          document.getElementById("cart-product-count-notification").textContent = cart.length;
+          console.log(cart);
+          
+        });
+      });
     })
+    // .then(()=>{
+    //   setTimeout(() => {
+    //     document.querySelectorAll(".add-to-cart-btn").forEach(button => {
+    //       button.addEventListener("click", (event) => {
+    //         const productDataString = event.target.dataset.product;
+            
+    //         if (!productDataString) {
+    //           console.error("No product data found on the button.");
+    //           return;
+    //         }
+        
+    //         try {
+    //           const productData = JSON.parse(productDataString);
+    //           console.log("Product added to cart:", productData);
+    //         } catch (error) {
+    //           console.error("Error parsing product data:", error);
+    //         }
+    //       });
+    //     });
+    //   }, 500);     
+    // })
     .catch((error) => console.error(error));
 }
 
@@ -223,3 +301,12 @@ function loadSwiper(list, htmlId){
           }
         });
 }
+
+// function addToCart(product, qty) {
+//   console.log(product);
+//   cart.push({
+//     id: product.id,
+//     qty: qty
+//   });
+  
+// }
