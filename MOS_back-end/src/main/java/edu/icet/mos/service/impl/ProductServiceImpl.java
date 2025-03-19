@@ -1,6 +1,8 @@
 package edu.icet.mos.service.impl;
 
+import edu.icet.mos.dto.CustomerPreference;
 import edu.icet.mos.dto.Product;
+import edu.icet.mos.entity.CustomerPreferenceEntity;
 import edu.icet.mos.entity.ProductEntity;
 import edu.icet.mos.repository.ProductRepository;
 import edu.icet.mos.service.ProductService;
@@ -40,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> searchByName(String name) {
-        List<ProductEntity> byName = repository.findByName(name);
+        List<ProductEntity> byName = repository.findByNameContaining(name);
         List<Product> productList = new ArrayList<>();
 
         byName.forEach(productEntity -> {

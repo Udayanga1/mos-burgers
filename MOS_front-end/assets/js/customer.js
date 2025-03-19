@@ -175,3 +175,10 @@ function deleteCustomer(id){
       .catch((error) => console.error(error));
 }
 
+document.getElementById("search-product-btn").addEventListener("click", (event) => {
+  event.preventDefault();
+  
+  searchProducts();
+});
+
+

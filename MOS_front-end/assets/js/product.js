@@ -2,7 +2,8 @@ const showProductFormBtn = document.getElementById("show-product-add-form");
 const addProductBtn = document.getElementById("add-product-btn");
 const closeProductFormBtn = document.getElementById("close-product-add-form");
 const changeProductBtn = document.getElementById("edit-product-btn");
-const searchProductBtn = document.getElementById("search-product-btn");
+
+
 
 let productIncrement=1001;
 
@@ -38,10 +39,7 @@ changeProductBtn.addEventListener("click", ()=>{
   editProduct(productID);
 });
 
-searchProductBtn.addEventListener("click", (event) => {
-  event.preventDefault();
-  searchProducts();
-});
+
 
 
 
@@ -312,61 +310,6 @@ function deleteProduct(id){
   }, 100);
 }
 
-function searchProducts() {
-  const searchInput = document.getElementById("search-product-input");
-
-  const searchResults = [];
-  let productRows='';
-  let htmlEl="";
-
-  productList.forEach(product=>{
-    if(product.name.toUpperCase().search(searchInput.value.toUpperCase())!=-1){
-      searchResults.push({
-        id: product.id,
-        name: product.name
-      });
-    }
-  });
-  searchResults.forEach(result=>{
-    productRows+=`
-      <tr>
-        <td scope="col">${result.id}</td>
-        <td scope="col">${result.name}</td>
-      </tr>
-    `;
-  });
-  
-  document.getElementById("modal-container").innerHTML= searchResults.length==0 ? `
-  <div class="position-absolute top-50 end-0 p-2 mt-2 bg-light bg-gradient shadow-lg rounded" style="width: 28rem;">
-    <div class="d-flex justify-content-end">
-      <button type="button" class="btn-close my-1" aria-label="Close" align="right" onclick="closeSearchView()"></button>
-    </div>
-    <div>
-      <h5 class="text-danger">No results found</h5>
-    </div>
-  </div>
-  ` : `
-  <div class="position-absolute top-50 end-0 p-2 mt-2 bg-light bg-gradient shadow-lg rounded overflow-auto" style="width: 28rem; height: 38rem;">
-    <div class="d-flex justify-content-between">
-      <h5 class="text-success">Search results</h5>
-      <button type="button" class="btn-close my-1" aria-label="Close" align="right" onclick="closeSearchView()"></button>
-    </div>
-    <div>
-      <table class="table table-striped table-success">
-        <thead>
-          <tr>
-            <th scope="col">Code</th>
-            <th scope="col">Product</th>
-          </tr>
-        </thead>
-        <tbody class="table-warning">
-          ${productRows}
-        </tbody>
-      </table>
-    </div>
-  </div>`;
-  
-}
 
 function closeSearchView() {
   document.getElementById("modal-container").innerHTML="";
@@ -399,5 +342,9 @@ function showProductsInTable(){
     .catch((error) => console.error(error));
 }
 
-
+document.getElementById("search-product-btn").addEventListener("click", (event) => {
+  event.preventDefault();
+  
+  searchProducts();
+});
 

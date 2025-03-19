@@ -280,65 +280,8 @@ function loadSwiper(list, htmlId){
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
           },
-          // autoplay: {
-          //   delay: 2500,
-          //   disableOnInteraction: false,
-          // }
         });
 }
-
-// function addToCart(product, qty) {
-//   console.log(product);
-//   cart.push({
-//     id: product.id,
-//     qty: qty
-//   });
-  
-// }
-
-
-
-// function viewCart(){
-//   let modalContent = `
-//   <div class="position-relative">
-//     <table class="table position-absolute top-0 start-0">
-//       <thead>
-//         <tr>
-//           <th scope="col">ID</th>
-//           <th scope="col">Name</th>
-//           <th scope="col">Qty</th>
-//         </tr>
-//       </thead>
-//       <tbody>
-//   `
-//   if (cart.length>0) {
-//     cart.forEach((item)=>{
-//       console.log(item);
-//       modalContent+=`
-//         <tr>
-//           <th>${item.id}</th>
-//           <th>${item.name}</th>
-//           <th>${item.qty}</th>
-//         </tr>
-//       `
-//     })
-//   }
-
-//   modalContent+=`
-//         </tbody>
-//     </table>
-//     <button type="button" class="btn btn-warning" id="clear-cart-btn">Clear</button>
-//   </div>
-//   <P class="text-white">Working</p>
-//   `
-//   console.log(modalContainer);
-  
-//   modalContainer.innerHTML = modalContainer;
-  
-//   // document.getElementById("clear-cart-btn").addEventListener("click", ()=>{
-//   //   modalContainer.innerHTML='';
-//   // })
-// }
 
 function viewCart(){
   let modalContent = `
@@ -412,3 +355,104 @@ function viewCart(){
     })
   }
 }
+
+document.getElementById("search-product-btn").addEventListener("click", (event) => {
+  event.preventDefault();
+  
+  searchProducts();
+});
+
+function searchProducts() {
+  const searchInput = document.getElementById("search-product-input").value;
+
+  const searchResults = [];
+  let productRows='';
+  let htmlEl="";
+
+  console.log(searchInput);
+
+  document.getElementById("modal-container").innerHTML= `
+  <div class="position-absolute top-50 end-0 p-2 mt-2 bg-light bg-gradient shadow-lg rounded" style="width: 28rem;">
+    <div class="d-flex justify-content-end">
+      <button type="button" class="btn-close my-1" aria-label="Close" align="right" onclick="closeSearchView()"></button>
+    </div>
+    <div>
+      <h5 class="text-danger">No results found</h5>
+    </div>
+  </div>
+  `
+  
+  if(searchInput.charAt(0).toUpperCase()=="B" && !isNaN(searchInput.substring(1)) && searchInput.length>4){
+    // search by Id
+    fetch("http://localhost:8080/product/"+(+searchInput.substring(1)-1000))
+    .then((response) => response.json())
+    .then((result) => {
+      document.getElementById("modal-container").innerHTML= `
+        <div class="position-absolute top-50 end-0 p-2 mt-2 bg-light bg-gradient shadow-lg rounded overflow-auto" style="width: 28rem; height: 38rem;">
+          <div class="d-flex justify-content-between">
+            <h5 class="text-success">Search results</h5>
+            <button type="button" class="btn-close my-1" aria-label="Close" align="right" onclick="closeSearchView()"></button>
+          </div>
+          <div>
+            <table class="table table-striped table-success">
+              <thead>
+                <tr>
+                  <th scope="col">Code</th>
+                  <th scope="col">Product</th>
+                </tr>
+              </thead>
+              <tbody class="table-warning">
+              <td>B${result.id+1000}</td>
+              <td>${result.name}</td>
+            </tbody>
+          </table>
+        </div>
+      </div>`
+    })
+    .catch((error) => console.error(error));
+  } else {
+    // search by name
+    fetch("http://localhost:8080/product/search/"+searchInput)
+    .then((response) => response.json())
+    .then((result) => {
+      let table = `
+      <div class="position-absolute top-50 end-0 p-2 mt-2 bg-light bg-gradient shadow-lg rounded overflow-auto" style="width: 28rem; height: 38rem;">
+        <div class="d-flex justify-content-between">
+          <h5 class="text-success">Search results</h5>
+          <button type="button" class="btn-close my-1" aria-label="Close" align="right" onclick="closeSearchView()"></button>
+        </div>
+        <div>
+          <table class="table table-striped table-success">
+            <thead>
+              <tr>
+                <th scope="col">Code</th>
+                <th scope="col">Product</th>
+              </tr>
+            </thead>
+            <tbody class="table-warning">`
+      result.forEach((product)=>{
+        console.log(product)
+        table+=`
+          <tr>
+            <td>B${product.id+1000}</td>
+            <td>${product.name}</td>
+          </tr>
+        `
+      })
+      table+=`
+        </tbody>
+          </table>
+        </div>
+      </div>`
+      document.getElementById("modal-container").innerHTML=table;
+
+    })
+    .catch((error) => console.error(error));
+  }  
+}
+
+function closeSearchView() {
+  document.getElementById("modal-container").innerHTML="";
+  document.getElementById("search-product-input").value="";  
+}
+

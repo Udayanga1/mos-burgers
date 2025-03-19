@@ -625,3 +625,10 @@ function findMonthOrdersByCustomer(year, month) {
 function closeReportsView() {
   modalContainer.innerHTML="";
 }
+
+document.getElementById("search-product-btn").addEventListener("click", (event) => {
+  event.preventDefault();
+  
+  searchProducts();
+});
+
