@@ -276,10 +276,13 @@ function viewAnnualSalesReport() {
     "January", "February", "March", "April", "May", "June", 
     "July", "August", "September", "October", "November", "December"
   ];
+
+  
   
   const annualOrderValues = [];
   for (let i = 0; i < monthNames.length; i++) {
     const monthOrders = findMonthlyOrdersForYearReport(reportYear,i);
+    // console.log(findMonthlyOrdersForYearReport(reportYear,i));
     annualOrderValues.push(
       {
         pendingOrderValue: monthOrders.totalPendingOrderValue,
@@ -388,9 +391,10 @@ function findMonthlyOrdersForYearReport(year, month){
   let totalPendingOrderValue=0;
   let totalCompletedOrderValue=0;
   let totalCancelledOrderValue=0;
+  
   orderList.forEach(order=>{
-    if(new Date(order.date).getFullYear()==year && 
-      new Date(order.date).getMonth()==month) {
+    if(new Date(order.orderDate).getFullYear()==year && 
+      new Date(order.orderDate).getMonth()==month) {
       if (order.status=="Pending") {
         totalPendingOrderValue+=+order.orderNetTotal;
       } else if (order.status=="Completed") {
