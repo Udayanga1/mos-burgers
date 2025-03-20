@@ -17,10 +17,7 @@ customerReportsBtn.addEventListener("click", ()=>{
   
 })
 
-function monthlySalesReportView() {
-  console.log("monthlySalesReportView()");
-  console.log(orderList);
-  
+function monthlySalesReportView() {  
   modalContainer.innerHTML=`
   <div class="position-absolute top-50 p-2 mt-2 bg-light bg-gradient shadow-lg rounded" style="width: 38rem;">
     <div>
@@ -76,8 +73,6 @@ function viewMonthlySalesReport() {
   const reportMonth = document.getElementById("inputGroupMonth").value;
   const monthOrders = findMonthOrders(reportYear, reportMonth);
   const detailedReportBtn = document.getElementById("report-detailed-view-container");
-
-  console.log(orderList);
   
   const monthNames = [
     "January", "February", "March", "April", "May", "June", 
@@ -282,7 +277,6 @@ function viewAnnualSalesReport() {
   const annualOrderValues = [];
   for (let i = 0; i < monthNames.length; i++) {
     const monthOrders = findMonthlyOrdersForYearReport(reportYear,i);
-    // console.log(findMonthlyOrdersForYearReport(reportYear,i));
     annualOrderValues.push(
       {
         pendingOrderValue: monthOrders.totalPendingOrderValue,
@@ -583,8 +577,8 @@ function findMonthOrdersByCustomer(year, month) {
 
   // Get monthly orders
   orderList.forEach(order => {
-    if (new Date(order.date).getFullYear() == year &&
-      new Date(order.date).getMonth() == month) {
+    if (new Date(order.orderDate).getFullYear() == year &&
+      new Date(order.orderDate).getMonth() == month) {
       if (order.status == "Pending" || order.status == "Completed") {
         monthCompletedAndPendingOrderList.push(order);
         emptyList=false;
@@ -593,7 +587,7 @@ function findMonthOrdersByCustomer(year, month) {
   });
 
   monthCompletedAndPendingOrderList.forEach(order => {
-    const customer = customerListForReport.find(customer => customer.id == order.customerCode);
+    const customer = customerListForReport.find(customer => customer.id == order.customerId);
 
     if (customer) {
       customer.orderValue += +order.orderNetTotal;
@@ -601,7 +595,7 @@ function findMonthOrdersByCustomer(year, month) {
       customer.orders.push(order);
     } else {
       customerListForReport.push({
-        id: order.customerCode,
+        id: order.customerId,
         name: order.customerName,
         orderValue: +order.orderNetTotal,
         noOfOrders: 1,
@@ -645,7 +639,6 @@ document.getElementById("search-product-btn").addEventListener("click", (event) 
 });
 
 function loadOrders() {
-  console.log("loadOrders()");
   fetch("http://localhost:8080/orders/all")
     .then((response) => response.json())
     .then((result) => {
@@ -664,7 +657,6 @@ function loadOrders() {
         orderList.push(item);
       });
 
-      console.log("Updated Order List:", orderList);
     })
     .catch((error) => console.error("Error loading orders:", error));
 }
