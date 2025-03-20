@@ -6,10 +6,6 @@ const editOrderBtn = document.getElementById("edit-order-btn");
 const orderProductCodeQty = document.getElementById("order-product-code-qty");
 const addProductToOrderBtn = document.getElementById("add-product-to-order");
 
-let orderIncrement=101;
-let orderList = [];
-let editingOrderId = "";
-
 showOrderFormBtn.addEventListener("click", () => {
   toggleShowForm("show", showOrderFormBtn, clearOrderForm, "order");
   document.getElementById("view-order-btn").addEventListener("click", ()=>{
@@ -361,26 +357,26 @@ function closeOrderView() {
   modalContainer.innerHTML="";
 }
 
-function deleteOrder(id){
-  orderList = orderList.filter(item => item.id !==id);
-    // let htmlEl = document.getElementById("table-body");
-    addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
-    toggleShowForm("close", showOrderFormBtn, clearOrderForm, "order");
-    setTimeout(() => {
-      modalContainer.innerHTML = `
-        <div class="position-absolute top-50 p-2 mt-2 bg-danger text-white bg-gradient shadow-lg rounded" style="width: 18rem;">
-          <div>
-            <h5>Item ${id} Deleted successfully</h5>
-            <hr>
-          </div>
-        </div>`;
+// function deleteOrder(id){
+//   orderList = orderList.filter(item => item.id !==id);
+//     // let htmlEl = document.getElementById("table-body");
+//     addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
+//     toggleShowForm("close", showOrderFormBtn, clearOrderForm, "order");
+//     setTimeout(() => {
+//       modalContainer.innerHTML = `
+//         <div class="position-absolute top-50 p-2 mt-2 bg-danger text-white bg-gradient shadow-lg rounded" style="width: 18rem;">
+//           <div>
+//             <h5>Item ${id} Deleted successfully</h5>
+//             <hr>
+//           </div>
+//         </div>`;
 
-      // Close the modal after a few milliseconds
-      setTimeout(() => {
-        modalContainer.innerHTML="";
-      }, 2000);  // Close the modal after 2 seconds
-    }, 100);
-}
+//       // Close the modal after a few milliseconds
+//       setTimeout(() => {
+//         modalContainer.innerHTML="";
+//       }, 2000);  // Close the modal after 2 seconds
+//     }, 100);
+// }
 
 function showEditOrder(id) {
   let productsArea = "";
@@ -493,57 +489,57 @@ function calculateDiscount(orderDetails){
 }
 
 // load orders from orders.json
-fetch('../data/orders.json')
-  .then(response => response.json())
-  .then(data => {
-    data.forEach(item=>{
+// fetch('../data/orders.json')
+//   .then(response => response.json())
+//   .then(data => {
+//     data.forEach(item=>{
 
-      // get customer name from customerList
-      let customerName = "";
-      customerList.forEach(customer=>{
-        if (item.customerCode==customer.id) {
-          customerName=customer.name;
-        }
+//       // get customer name from customerList
+//       let customerName = "";
+//       customerList.forEach(customer=>{
+//         if (item.customerCode==customer.id) {
+//           customerName=customer.name;
+//         }
         
-      });
+//       });
       
-      let orderTotal=0;
-      let orderDiscount=0;
+//       let orderTotal=0;
+//       let orderDiscount=0;
       
-      const products = [];
-      item.products.forEach(line => {
+//       const products = [];
+//       item.products.forEach(line => {
         
-        productList.forEach(product=>{
+//         productList.forEach(product=>{
           
-          if(product.id==line.itemCode){
-            products.push({
-              id: line.itemCode,
-              name: product.name,
-              qty: +line.qty,
-              price: +product.price,
-              discount: +product.discount
-            });
-            orderTotal+=+product.price * +line.qty;
-            orderDiscount+=product.price * +line.qty * (+product.discount/100);
-          }
-        })
-      })
-      const order = {
-        id: "O" + orderIncrement++,
-        customerCode: item.customerCode,
-        customerName: customerName,
-        products: products,
-        orderGrossTotal: orderTotal.toFixed(2),
-        orderDiscount: orderDiscount.toFixed(2),
-        orderNetTotal: (orderTotal - orderDiscount).toFixed(2),
-        date:item.date,
-        status: item.status
-      }
-      orderList.push(order);
-    });
-    addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
-  })
-  .catch(error => console.error('Error loading the data:', error));
+//           if(product.id==line.itemCode){
+//             products.push({
+//               id: line.itemCode,
+//               name: product.name,
+//               qty: +line.qty,
+//               price: +product.price,
+//               discount: +product.discount
+//             });
+//             orderTotal+=+product.price * +line.qty;
+//             orderDiscount+=product.price * +line.qty * (+product.discount/100);
+//           }
+//         })
+//       })
+//       const order = {
+//         id: "O" + orderIncrement++,
+//         customerCode: item.customerCode,
+//         customerName: customerName,
+//         products: products,
+//         orderGrossTotal: orderTotal.toFixed(2),
+//         orderDiscount: orderDiscount.toFixed(2),
+//         orderNetTotal: (orderTotal - orderDiscount).toFixed(2),
+//         date:item.date,
+//         status: item.status
+//       }
+//       orderList.push(order);
+//     });
+//     addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
+//   })
+//   .catch(error => console.error('Error loading the data:', error));
 
 // validate customer when focus is away from the customer code input
 function getCustomerNameOnBlur() { 

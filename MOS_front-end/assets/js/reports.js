@@ -2,6 +2,8 @@ const monthlySalesReportsBtn = document.getElementById("monthly-sales-reports-bt
 const annualSalesReportsBtn = document.getElementById("annual-sales-reports-btn");
 const customerReportsBtn = document.getElementById("customer-reports-btn");
 
+const orderList = [];
+
 monthlySalesReportsBtn.addEventListener("click", () => {
   monthlySalesReportView();
 });
@@ -16,6 +18,9 @@ customerReportsBtn.addEventListener("click", ()=>{
 })
 
 function monthlySalesReportView() {
+  console.log("monthlySalesReportView()");
+  console.log(orderList);
+  
   modalContainer.innerHTML=`
   <div class="position-absolute top-50 p-2 mt-2 bg-light bg-gradient shadow-lg rounded" style="width: 38rem;">
     <div>
@@ -63,6 +68,7 @@ function monthlySalesReportView() {
       </div>
     </div>
   </div>`;
+
 }
 
 function viewMonthlySalesReport() {
@@ -71,6 +77,8 @@ function viewMonthlySalesReport() {
   const monthOrders = findMonthOrders(reportYear, reportMonth);
   const detailedReportBtn = document.getElementById("report-detailed-view-container");
 
+  console.log(orderList);
+  
   const monthNames = [
     "January", "February", "March", "April", "May", "June", 
     "July", "August", "September", "October", "November", "December"
@@ -141,8 +149,8 @@ function viewMonthlySalesReport() {
   monthOrders.monthOrdersCompleted.forEach(order=>{
     htmlEl+=`
       <tr class="table-success">
-        <td scope="col">${order.date}</td>
-        <td scope="col">${order.id}</td>
+        <td scope="col">${order.orderDate}</td>
+        <td scope="col">${order.orderId}</td>
         <td scope="col" align ="right">${order.orderNetTotal}</td>
         <td scope="col">${order.status}</td>
       </tr>
@@ -152,8 +160,8 @@ function viewMonthlySalesReport() {
   monthOrders.monthOrdersPending.forEach(order=>{
     htmlEl+=`
       <tr class="table-warning">
-        <td scope="col">${order.date}</td>
-        <td scope="col">${order.id}</td>
+        <td scope="col">${order.orderDate}</td>
+        <td scope="col">${order.orderId}</td>
         <td scope="col" align ="right">${order.orderNetTotal}</td>
         <td scope="col">${order.status}</td>
       </tr>
@@ -163,8 +171,8 @@ function viewMonthlySalesReport() {
   monthOrders.monthOrdersCancelled.forEach(order=>{
     htmlEl+=`
       <tr class="table-secondary">
-        <td scope="col">${order.date}</td>
-        <td scope="col">${order.id}</td>
+        <td scope="col">${order.orderDate}</td>
+        <td scope="col">${order.orderId}</td>
         <td scope="col" align ="right">${order.orderNetTotal}</td>
         <td scope="col">${order.status}</td>
       </tr>
@@ -180,8 +188,8 @@ function viewMonthlySalesReport() {
 function getYearsFromOrders(){
   const years = [];
   orderList.forEach(order=>{
-    if (!years.includes(new Date(order.date).getFullYear())) {
-      years.push(new Date(order.date).getFullYear());
+    if (!years.includes(new Date(order.orderDate).getFullYear())) {
+      years.push(new Date(order.orderDate).getFullYear());
     }
   });
   return years;
@@ -203,8 +211,8 @@ function findMonthOrders(year, month){
   let totalCompletedOrderValue=0;
   let totalCancelledOrderValue=0;
   orderList.forEach(order=>{
-    if(new Date(order.date).getFullYear()==year && 
-      new Date(order.date).getMonth()==month) {
+    if(new Date(order.orderDate).getFullYear()==year && 
+      new Date(order.orderDate).getMonth()==month) {
       if (order.status=="Pending") {
         totalPendingOrderValue+=+order.orderNetTotal;
         monthOrdersPending.push(order);
@@ -631,4 +639,30 @@ document.getElementById("search-product-btn").addEventListener("click", (event) 
   
   searchProducts();
 });
+
+function loadOrders() {
+  console.log("loadOrders()");
+  fetch("http://localhost:8080/orders/all")
+    .then((response) => response.json())
+    .then((result) => {
+      // let orderList = [];
+
+      result.forEach((item) => {
+        let orderDiscount = 0;
+
+        item.orderDetails.forEach((product) => {
+          let productDiscount = product.productDiscount || 0;
+          orderDiscount += (product.productPrice * product.quantity * productDiscount) / 100;
+        });
+
+        // Add net total to the item
+        item.orderNetTotal = item.totalPrice - orderDiscount;
+        orderList.push(item);
+      });
+
+      console.log("Updated Order List:", orderList);
+    })
+    .catch((error) => console.error("Error loading orders:", error));
+}
+
 
