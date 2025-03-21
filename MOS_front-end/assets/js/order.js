@@ -242,14 +242,23 @@ function checkProductQtyAndCode(event){
     fetch("http://localhost:8080/product/" + dbProductCode)
     .then((response) => response.json())
     .then((result) => {
-      console.log(result.expiryDate);
-      if (qtyValue>result.qty) {
+      console.log(result);
+      const remainingQty = result.qty-qtyValue;
+      if (remainingQty<0) {
         const warningText = document.createElement('p');
         warningText.classList.add('text-danger');
         warningText.textContent = `Available Qty is only ${result.qty} for ${productCode}`;
         event.target.closest('.input-group').parentElement.insertAdjacentElement('beforeend', warningText);
         event.target.value='';
+      } else if (remainingQty<4) {
+        const warningText = document.createElement('p');
+        warningText.classList.add('text-danger');
+        warningText.textContent = remainingQty > 0 ? `Only ${result.qty-qtyValue} ${result.name} left once this order placed` : `No more ${result.name} left once this order placed`;
+        event.target.closest('.input-group').parentElement.insertAdjacentElement('beforeend', warningText);
       }
+
+
+
       if (orderDate>=new Date(result.expiryDate)) {
         const warningText = document.createElement('p');
         warningText.classList.add('text-danger');
