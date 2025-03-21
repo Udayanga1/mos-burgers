@@ -253,7 +253,7 @@ function checkProductQtyAndCode(event){
       } else if (remainingQty<4) {
         const warningText = document.createElement('p');
         warningText.classList.add('text-danger');
-        warningText.textContent = remainingQty > 0 ? `Only ${result.qty-qtyValue} ${result.name} left once this order placed` : `No more ${result.name} left once this order placed`;
+        warningText.textContent = remainingQty > 0 ? `Only ${remainingQty} ${result.name} (${productCode}) left once this order placed` : `No more ${result.name} (${productCode}) left once this order placed`;
         event.target.closest('.input-group').parentElement.insertAdjacentElement('beforeend', warningText);
       }
 

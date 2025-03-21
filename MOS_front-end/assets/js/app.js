@@ -234,16 +234,27 @@ function showProductsOnLandingPage(){
       
       document.querySelectorAll(".add-to-cart-btn").forEach(button => {
         button.addEventListener("click", (event) => {
-          cart.push({
-            qty: event.target.closest('.card-body').querySelector('.product-qty').value,
-            name: event.target.closest('.card-body').querySelector('.product-name').value,
-            id: event.target.closest('.card-body').querySelector('.product-id').value
+          const productId = event.target.closest('.card-body').querySelector('.product-id').value;
+          const productQty = event.target.closest('.card-body').querySelector('.product-qty').value;
+
+          fetch("http://localhost:8080/product/"+productId)
+          .then((response) => response.json())
+          .then((result) => {
+            if (productQty<=result.qty) {
+              cart.push({
+                qty: productQty,
+                name: event.target.closest('.card-body').querySelector('.product-name').value,
+                id: productId
+              })
+              
+              // update cart notification
+              document.getElementById("cart-product-count-notification").textContent = cart.length;
+              console.log(cart);
+            } else {
+              alert("available qty is only: " + result.qty);
+            }          
           })
-          
-          // update cart notification
-          document.getElementById("cart-product-count-notification").textContent = cart.length;
-          console.log(cart);
-          
+          .catch((error) => console.error(error));          
         });
       });
     })
