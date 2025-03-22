@@ -614,41 +614,51 @@ function getPayerName(event){
 }
 
 function settleOrder(id){
-  const payDate = document.getElementById("pay-date").value;
-
+  
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
   document.getElementById("add-payment-btn").addEventListener("click", ()=>{
-    let rows = document.getElementById("order-pay-split").querySelectorAll(".input-group");
-    rows.forEach((row)=>{
-      if (row.querySelector('.order-pay-amount').value>0) {
-        const amount = row.querySelector('.order-pay-amount').value;
-        const payerCode = row.querySelector('.order-pay-customer-code').value.substring(1)-100;
-        const type = row.querySelector('.pay-method').value;
-        
-        const raw = JSON.stringify({
-          "customerId": payerCode,
-          "paymentTypeId": type,
-          "amount": amount,
-          "paymentDate": payDate,
-          "orderId": id
-        });
-
-        const requestOptions = {
-          method: "POST",
-          headers: myHeaders,
-          body: raw,
-          redirect: "follow"
-        };
-
-        fetch("http://localhost:8080/payment/add", requestOptions)
-          .then((response) => response.text())
-          .then((result) => console.log(result))
-          .catch((error) => console.error(error));
-      }
-    })
-     
+    const payDate = document.getElementById("pay-date").value;
+    console.log("payDate: " + payDate);
+    
+    if (!payDate) {
+      alert("Please select date")
+    } else {
+      let rows = document.getElementById("order-pay-split").querySelectorAll(".input-group");
+      rows.forEach((row)=>{
+        if (row.querySelector('.order-pay-amount').value>0) {
+          const amount = row.querySelector('.order-pay-amount').value;
+          const payerCode = row.querySelector('.order-pay-customer-code').value.substring(1)-100;
+          const type = row.querySelector('.pay-method').value;
+          
+          const raw = JSON.stringify({
+            "customerId": payerCode,
+            "paymentTypeId": type,
+            "amount": amount,
+            "paymentDate": payDate,
+            "orderId": id
+          });
+  
+          const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow"
+          };
+  
+          fetch("http://localhost:8080/payment/add", requestOptions)
+            .then((response) => response.text())
+            .then((result) => {
+              console.log(result);
+              closePayOrder();
+              showOrdersTable();
+            })
+            .catch((error) => console.error(error));
+        }
+      })
+      
+    }
   })
 }
 
@@ -692,15 +702,32 @@ function showPayableBalance(order, event){
       `
       settleOrder(order.orderId);
     }
+      
+    // limit pay amount to available points if type 3 selected
+    if (event.target.closest(".input-group").querySelector('.pay-method').value==3) {
+      fetch("http://localhost:8080/customer/" + (customerCode.value.substring(1)-100))
+        .then((response) => response.json())
+        .then((result) => {
+          const availablePoints = result.points;
+          if (event.target.value>availablePoints) {
+            alert(`Available Only ${availablePoints} points`);
+            event.target.value = availablePoints;
+          }
+          console.log(result);
+        })
+        .catch((error) => {
+          console.error(error);
+        });  
+    }
+    
   }
   
 }
 
 function getPayTypeName(event){
-
-  console.log(event.target.value);
+  const value = event.target.value;
   
-  const textContent = event.target.value==1 ? "Cash" : event.target.value==2 ? "Card" : event.target.value==3 ? "Loyalty-Points" : "Unknown";
+  const textContent = value==1 ? "Cash" : value==2 ? "Card" : value==3 ? "Loyalty-Points" : "Unknown";
 
   event.target.closest('.input-group').querySelector('.pay-method-name').textContent=textContent;
    

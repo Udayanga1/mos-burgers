@@ -59,6 +59,9 @@ public class OrderServiceImpl implements OrderService {
             return orderDetail;
         }).collect(Collectors.toList());
 
+//        increase customer points by 150
+        customerRepository.increasePointsBy150(order.getCustomerId());
+
         orderEntity.setOrderDetails(orderDetails);
         orderEntity.setTotalPrice(orderDetails.stream().mapToDouble(OrderDetailEntity::getPrice).sum());
 
