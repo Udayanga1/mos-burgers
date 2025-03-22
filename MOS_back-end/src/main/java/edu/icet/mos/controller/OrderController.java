@@ -19,7 +19,7 @@ public class OrderController {
 
     @PostMapping("/add")
     public ResponseEntity<OrderEntity> createOrder(@RequestBody Order order) {
-        System.out.println(order);
+        System.out.println(order.getCustomerId());
         OrderEntity orderEntity = orderService.add(order);
         return ResponseEntity.ok(orderEntity);
     }

@@ -72,8 +72,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
   }
 
   if (cartData && cartData.length > 0){
-    
-    console.log(cartData);
     toggleShowForm("show", showOrderFormBtn, clearOrderForm, "order");
   
     orderProductCodeQty.innerHTML='';
@@ -101,6 +99,7 @@ function addOrder(isEditing=false){
   const productList = [];
 
   const dbCusCode = customerCode.value.substring(1) - 100;
+
   
   fetch("http://localhost:8080/customer/"+dbCusCode)
     .then((response) => response.json())
@@ -202,8 +201,6 @@ function updateProductQty(productList){
       "expiryDate": result.expiryDate,
       "qty": result.qty-item.qty
     });
-
-    console.log(raw);
     
     const requestOptions = {
       method: "PUT",
@@ -216,9 +213,8 @@ function updateProductQty(productList){
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.error(error));
-    console.log(result)
-  })
-  .catch((error) => console.error(error));
+    })
+    .catch((error) => console.error(error));
  })
 }
 
@@ -226,7 +222,6 @@ function checkProductQtyAndCode(event){
   const qtyValue = event.target.value;
   const productCode = event.target.closest('.input-group').querySelector('.order-product-code').value;
   const orderDate = new Date(document.getElementById("order-date").value);
-  console.log(orderDate);
   
   const parentContainer = event.target.closest('.input-group').parentElement;
   const existingWarning = parentContainer.querySelector('.text-danger');
@@ -237,12 +232,10 @@ function checkProductQtyAndCode(event){
   const dbProductCode = productCode.substring(1)-1000
 
   if(dbProductCode>0 && qtyValue>0){
-    console.log(`Product Code: ${productCode}, Qty: ${qtyValue}`);
 
     fetch("http://localhost:8080/product/" + dbProductCode)
     .then((response) => response.json())
     .then((result) => {
-      console.log(result);
       const remainingQty = result.qty-qtyValue;
       if (remainingQty<0) {
         const warningText = document.createElement('p');
@@ -277,16 +270,6 @@ function checkProductQtyAndCode(event){
       event.target.value='';
     });
   }
-}
-
-
-function renderOrderTableButtons(element) {
-  return `     
-      <td width="200">
-        <button type="button" class="btn btn-secondary" onclick="showEditOrder('${element.id}')">Edit</button>
-      </td>
-  `;
-  
 }
 
 function viewOrder(isEditing=false){
@@ -348,7 +331,6 @@ function viewOrder(isEditing=false){
 
 function clearOrderForm(){
   document.getElementById("order-customer-code").value="";
-  document.getElementById("order-date").value="";
   document.getElementById("order-status").value ="Pending"
   orderProductCodeQty.innerHTML=`
   <div class="input-group mb-1">
@@ -360,32 +342,18 @@ function clearOrderForm(){
 `;
   // clear customer name
   document.getElementById("order-customer-name").innerText="";
+
+  const currentDate = new Date();
+  currentDate.setDate(currentDate.getDate());
+  document.getElementById("order-date").value = formatDate(currentDate);
 }
 
 function closeOrderView() {
   modalContainer.innerHTML="";
 }
-
-// function deleteOrder(id){
-//   orderList = orderList.filter(item => item.id !==id);
-//     // let htmlEl = document.getElementById("table-body");
-//     addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
-//     toggleShowForm("close", showOrderFormBtn, clearOrderForm, "order");
-//     setTimeout(() => {
-//       modalContainer.innerHTML = `
-//         <div class="position-absolute top-50 p-2 mt-2 bg-danger text-white bg-gradient shadow-lg rounded" style="width: 18rem;">
-//           <div>
-//             <h5>Item ${id} Deleted successfully</h5>
-//             <hr>
-//           </div>
-//         </div>`;
-
-//       // Close the modal after a few milliseconds
-//       setTimeout(() => {
-//         modalContainer.innerHTML="";
-//       }, 2000);  // Close the modal after 2 seconds
-//     }, 100);
-// }
+function closePayOrder() {
+  modalContainer.innerHTML="";
+}
 
 function showEditOrder(id) {
   let productsArea = "";
@@ -393,7 +361,6 @@ function showEditOrder(id) {
   fetch("http://localhost:8080/orders/"+id)
   .then((response) => response.json())
   .then((result) => {
-    console.log(result)
 
     const date = new Date(result.orderDate);
     const day = String(date.getDate()).padStart(2, '0'); 
@@ -420,54 +387,21 @@ function showEditOrder(id) {
 
   })
   .catch((error) => console.error(error));
-  // orderList.forEach(order => {
-  //   if (order.id==id) {
-  //     order.products.forEach(product=>{
-  //       productsArea+=`
-  //         <div class="input-group mb-1">
-  //           <label class="input-group-text">Product Code</label>
-  //           <input type="text" class="form-control order-product-code" placeholder="Product Code"  name="order-product-code" value=${product.id}>
-  //           <label class="input-group-text">Qty</label>
-  //           <input type="number" class="form-control order-product-qty" placeholder="Qty" name="order-product-qty" onblur="checkProductQtyAndCode(event) value=${product.qty}>
-  //         </div>
-  //       `
-  //     });
-  //     document.getElementById("order-customer-code").value=order.customerCode;
-  //     document.getElementById("order-date").value = order.date;
-  //     document.getElementById("order-status").value = order.status;
-  //     orderProductCodeQty.innerHTML=productsArea;
-
-  //     editingOrderId=order.id;//this use as the id in setOrder(true);
-
-  //     document.getElementById("view-order-btn").addEventListener("click", ()=>{
-  //       viewOrder(true);
-  //     })
-  //     // clear previous order customer name
-  //     document.getElementById("order-customer-name").innerText="";
-  //   }
-  // })
-  // const adjacentHTML = document.getElementById("customer-code-adjacentHTML");
-  // if (adjacentHTML) {
-  //   adjacentHTML.remove();
-  // }
 }
 
 function showOrdersTable(){
-  // console.log("showOrdersTable works");
   let orderTableRows = '';
 
   fetch("http://localhost:8080/orders/all")
     .then((response) => response.json())
     .then((result) => {
       result.forEach(item=>{
-        console.log(item);
         const row = {
           id: item.orderId,
           cusName: item.customerName,
           total: item.totalPrice,
           discount: calculateDiscount(item.orderDetails)
         }
-        console.log(row);
         orderTableRows=`
         <tr>
             <td>O${row.id+100}</td>
@@ -477,6 +411,7 @@ function showOrdersTable(){
             <td>${row.total-row.discount}</td>
             <td>
               <button type="button" class="btn btn-secondary" onclick="showEditOrder('${row.id}')">Edit</button>
+              ${item.status=="Pending" ?  `<button type="button" class="btn btn-success" onclick="showPayOrder('${row.id}')">Pay</button>` : ''}
             </td>
           </tr>
         ` + orderTableRows;
@@ -497,59 +432,6 @@ function calculateDiscount(orderDetails){
   return discount;
 }
 
-// load orders from orders.json
-// fetch('../data/orders.json')
-//   .then(response => response.json())
-//   .then(data => {
-//     data.forEach(item=>{
-
-//       // get customer name from customerList
-//       let customerName = "";
-//       customerList.forEach(customer=>{
-//         if (item.customerCode==customer.id) {
-//           customerName=customer.name;
-//         }
-        
-//       });
-      
-//       let orderTotal=0;
-//       let orderDiscount=0;
-      
-//       const products = [];
-//       item.products.forEach(line => {
-        
-//         productList.forEach(product=>{
-          
-//           if(product.id==line.itemCode){
-//             products.push({
-//               id: line.itemCode,
-//               name: product.name,
-//               qty: +line.qty,
-//               price: +product.price,
-//               discount: +product.discount
-//             });
-//             orderTotal+=+product.price * +line.qty;
-//             orderDiscount+=product.price * +line.qty * (+product.discount/100);
-//           }
-//         })
-//       })
-//       const order = {
-//         id: "O" + orderIncrement++,
-//         customerCode: item.customerCode,
-//         customerName: customerName,
-//         products: products,
-//         orderGrossTotal: orderTotal.toFixed(2),
-//         orderDiscount: orderDiscount.toFixed(2),
-//         orderNetTotal: (orderTotal - orderDiscount).toFixed(2),
-//         date:item.date,
-//         status: item.status
-//       }
-//       orderList.push(order);
-//     });
-//     addToTable(orderList, document.getElementById("table-body-order"), tableColumns.order, renderOrderTableButtons);
-//   })
-//   .catch(error => console.error('Error loading the data:', error));
-
 // validate customer when focus is away from the customer code input
 function getCustomerNameOnBlur() { 
   const customerCodeInOrder = document.getElementById("order-customer-code");
@@ -561,7 +443,6 @@ function getCustomerNameOnBlur() {
     fetch("http://localhost:8080/customer/" + dbCusCode)
       .then((response) => response.json())
       .then((result) => {
-        console.log(result);
         const adjacentHTML = document.getElementById("customer-code-adjacentHTML");
         if (adjacentHTML) {
           adjacentHTML.remove();
@@ -613,3 +494,119 @@ function getCustomerNameOnBlur() {
   });
 }
 
+document.getElementById("search-product-btn").addEventListener("click", (event) => {
+  event.preventDefault();
+  
+  searchProducts();
+});
+
+function showPayOrder(id) {
+
+  //set default expiry date
+  const currentDate = new Date();
+  currentDate.setDate(currentDate.getDate());
+
+  fetch("http://localhost:8080/orders/"+id)
+  .then((response) => response.json())
+  .then((result) => {
+    console.log(result)
+
+    modalContainer.innerHTML=`
+    <div class="position-absolute top-50 p-2 mt-2 bg-light bg-gradient shadow-lg rounded" style="width: 48rem;">
+      <div>
+        <h5 class="text-warning">Pay Order: O${+id+100} </h5>
+        <hr>
+        
+        <form action="" method="post" class="my-3" id="add-payment" style="max-width: 47rem;">
+          <div class="input-group mt-3">
+            <label class="input-group-text">Payment Date</label>
+            <input type="date" class="form-control" id="pay-date" name="pay-date" value="${formatDate(currentDate)}">
+          </div>
+          <div id="order-pay-split" class="mt-3">
+            <div class="input-group mb-1">
+              <label class="input-group-text">Payer Code</label>
+              <input type="text" class="form-control order-pay-customer-code" placeholder="Payer Code" name="customer-code" onblur="getPayerName(event)">
+              <label class="input-group-text text-success payer-name-label"></label>
+              <label class="input-group-text">Type</label>
+              <select class="form-select" id="pay-method">
+                <option selected value="1">Cash</option>
+                <option value="2">Card</option>
+                <option value="3">Loyalty Points</option>
+              </select>
+              <label class="input-group-text">Amount</label>
+              <input type="number" class="form-control order-pay-amount" placeholder="0.00LKR"  name="amount">
+            </div>
+          </div>
+          <button class="btn btn-warning text-white py-1 px-2 my-3" id="add-payer-to-order-btn" type="button">Add payer</button>
+                  
+          <div class="">
+            <button type="button" class="btn btn-warning mr-2" id="add-payment-btn">Settle Order</button>           
+            <button type="button" class="btn btn-secondary m-2" id="close-payment-form" onclick="closePayOrder()">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>`;
+    addPayerToPayOrder()
+
+  })
+  .catch((error) => console.error(error));
+}
+
+function addPayerToPayOrder(){
+  document.getElementById("add-payer-to-order-btn").addEventListener("click", ()=>{
+    document.getElementById("order-pay-split").insertAdjacentHTML("beforeend", `
+      <div class="input-group mb-1">
+        <label class="input-group-text">Payer Code</label>
+        <input type="text" class="form-control order-pay-customer-code" placeholder="Payer Code" name="customer-code" onblur="getPayerName(event)">
+        <label class="input-group-text text-success payer-name-label"></label>
+        <label class="input-group-text">Type</label>
+        <select class="form-select pay-method">
+          <option selected value="1">Cash</option>
+          <option value="2">Card</option>
+          <option value="3">Loyalty Points</option>
+        </select>
+        <label class="input-group-text">Amount</label>
+        <input type="number" class="form-control order-pay-amount" placeholder="0.00LKR" name="amount">
+      </div>
+    `);
+  });
+}
+
+function getPayerName(event){
+  // console.log("getJPayerName");  
+  const payerCode = event.target.value;
+  console.log(payerCode);
+  // document.querySelector(".payer-name-label").innerText = "";
+
+  const payerNameLabel = event.target.closest(".input-group").querySelector(".payer-name-label");
+  
+    const dbCusCode = payerCode.substring(1) - 100;
+    if (isNaN(dbCusCode)) {
+      payerNameLabel.innerHTML="<p class='text-danger mb-0'>Invalid Customer</p>";
+      payerNameLabel.style.width = "100px";
+    } else {
+      fetch("http://localhost:8080/customer/" + dbCusCode)
+        .then((response) => response.json())
+        .then((result) => {
+          console.log(result);
+          payerNameLabel.innerText="";
+          payerNameLabel.innerText=result.name;
+          payerNameLabel.style.width = "100px";      
+  
+        })
+        .catch((error) => {
+          console.error(error);
+          payerNameLabel.innerText="";
+          payerNameLabel.innerHTML="<p class='text-danger mb-0'>Invalid Customer</p>";
+          payerNameLabel.style.width = "100px";
+        });  
+      
+    }
+}
+
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
