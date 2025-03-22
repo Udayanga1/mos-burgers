@@ -9,7 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class CustomerPreference {
+public class PaymentType {
     private Integer id;
-    private String preference;
+    private String name;
 }

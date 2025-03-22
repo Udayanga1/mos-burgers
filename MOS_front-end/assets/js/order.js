@@ -502,14 +502,21 @@ document.getElementById("search-product-btn").addEventListener("click", (event) 
 
 function showPayOrder(id) {
 
-  //set default expiry date
-  const currentDate = new Date();
-  currentDate.setDate(currentDate.getDate());
-
   fetch("http://localhost:8080/orders/"+id)
   .then((response) => response.json())
   .then((result) => {
     console.log(result)
+    let orderDiscount = 0;
+    result.orderDetails.forEach((product) => {
+      let productDiscount = product.productDiscount || 0;
+      orderDiscount += (product.productPrice * product.quantity * productDiscount) / 100;
+    });
+
+    // Add net total to the result
+    result.orderNetTotal = result.totalPrice - orderDiscount;
+
+    console.log("net total payable: " + result.orderNetTotal);
+    
 
     modalContainer.innerHTML=`
     <div class="position-absolute top-50 p-2 mt-2 bg-light bg-gradient shadow-lg rounded" style="width: 48rem;">
@@ -520,7 +527,8 @@ function showPayOrder(id) {
         <form action="" method="post" class="my-3" id="add-payment" style="max-width: 47rem;">
           <div class="input-group mt-3">
             <label class="input-group-text">Payment Date</label>
-            <input type="date" class="form-control" id="pay-date" name="pay-date" value="${formatDate(currentDate)}">
+            <input type="date" class="form-control" id="pay-date" name="pay-date" value="new Date()">
+            <label class="input-group-text text-success w-50">Total Payable: Rs.${result.orderNetTotal.toLocaleString('en-US')}</label>
           </div>
           <div id="order-pay-split" class="mt-3">
             <div class="input-group mb-1">
@@ -528,16 +536,18 @@ function showPayOrder(id) {
               <input type="text" class="form-control order-pay-customer-code" placeholder="Payer Code" name="customer-code" onblur="getPayerName(event)">
               <label class="input-group-text text-success payer-name-label"></label>
               <label class="input-group-text">Type</label>
-              <select class="form-select" id="pay-method">
-                <option selected value="1">Cash</option>
-                <option value="2">Card</option>
-                <option value="3">Loyalty Points</option>
-              </select>
+              <input type="number" class="form-control pay-method" name="pay-type" onchange="getPayTypeName(event)" value=1>
+              <label class="input-group-text pay-method-name ps-1" style="width: 100px;">Cash</label>
               <label class="input-group-text">Amount</label>
-              <input type="number" class="form-control order-pay-amount" placeholder="0.00LKR"  name="amount">
+              <input type="number" class="form-control order-pay-amount" placeholder="0.00LKR"  name="amount" onblur='showPayableBalance(${JSON.stringify(result)}, event)'>
             </div>
           </div>
-          <button class="btn btn-warning text-white py-1 px-2 my-3" id="add-payer-to-order-btn" type="button">Add payer</button>
+          <div class="d-flex justify-content-between">
+            <button class="btn btn-warning text-white py-1 px-2 my-3" id="add-payer-to-order-btn" type="button">Add payer</button>
+            <div id="balance-order-payable-btn-container">
+              
+            </div>
+          </div>
                   
           <div class="">
             <button type="button" class="btn btn-warning mr-2" id="add-payment-btn">Settle Order</button>           
@@ -546,13 +556,14 @@ function showPayOrder(id) {
         </form>
       </div>
     </div>`;
-    addPayerToPayOrder()
-
+    addPayerToPayOrder(result);
+    getPayTypeCode();
+    
   })
   .catch((error) => console.error(error));
 }
 
-function addPayerToPayOrder(){
+function addPayerToPayOrder(result){
   document.getElementById("add-payer-to-order-btn").addEventListener("click", ()=>{
     document.getElementById("order-pay-split").insertAdjacentHTML("beforeend", `
       <div class="input-group mb-1">
@@ -560,13 +571,10 @@ function addPayerToPayOrder(){
         <input type="text" class="form-control order-pay-customer-code" placeholder="Payer Code" name="customer-code" onblur="getPayerName(event)">
         <label class="input-group-text text-success payer-name-label"></label>
         <label class="input-group-text">Type</label>
-        <select class="form-select pay-method">
-          <option selected value="1">Cash</option>
-          <option value="2">Card</option>
-          <option value="3">Loyalty Points</option>
-        </select>
+        <input type="number" class="form-control pay-method" name="pay-type" onchange="getPayTypeName(event)" value=1>
+        <label class="input-group-text pay-method-name ps-1" style="width: 100px;">Cash</label>
         <label class="input-group-text">Amount</label>
-        <input type="number" class="form-control order-pay-amount" placeholder="0.00LKR" name="amount">
+        <input type="number" class="form-control order-pay-amount" placeholder="0.00LKR"  name="amount" onblur='showPayableBalance(${JSON.stringify(result)}, event)'>
       </div>
     `);
   });
@@ -589,8 +597,9 @@ function getPayerName(event){
         .then((response) => response.json())
         .then((result) => {
           console.log(result);
-          payerNameLabel.innerText="";
-          payerNameLabel.innerText=result.name;
+          payerNameLabel.innerHTML="";
+          // payerNameLabel.innerHTML=result.name;
+          payerNameLabel.innerHTML=`<p class='text-success mb-0'>${result.name}</p>`;
           payerNameLabel.style.width = "100px";      
   
         })
@@ -602,6 +611,101 @@ function getPayerName(event){
         });  
       
     }
+}
+
+function settleOrder(id){
+  const payDate = document.getElementById("pay-date").value;
+
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  document.getElementById("add-payment-btn").addEventListener("click", ()=>{
+    let rows = document.getElementById("order-pay-split").querySelectorAll(".input-group");
+    rows.forEach((row)=>{
+      if (row.querySelector('.order-pay-amount').value>0) {
+        const amount = row.querySelector('.order-pay-amount').value;
+        const payerCode = row.querySelector('.order-pay-customer-code').value.substring(1)-100;
+        const type = row.querySelector('.pay-method').value;
+        
+        const raw = JSON.stringify({
+          "customerId": payerCode,
+          "paymentTypeId": type,
+          "amount": amount,
+          "paymentDate": payDate,
+          "orderId": id
+        });
+
+        const requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow"
+        };
+
+        fetch("http://localhost:8080/payment/add", requestOptions)
+          .then((response) => response.text())
+          .then((result) => console.log(result))
+          .catch((error) => console.error(error));
+      }
+    })
+     
+  })
+}
+
+function showPayableBalance(order, event){
+  let amount = 0;
+  document.querySelectorAll(".order-pay-amount").forEach((amountInput)=>{
+    amount+=+amountInput.value;
+  })
+  
+  const customerCode = event.target.closest(".input-group").querySelector('.order-pay-customer-code');
+
+  const customerName = event.target.closest(".input-group").querySelector('.payer-name-label').getElementsByTagName("p")[0];
+
+  console.log(event.target.closest(".input-group").querySelector('.payer-name-label').hasChildNodes());
+  
+
+  console.log(customerCode.value.length);
+  // console.log(customerName.innerText);
+  
+  if (customerCode.value.length==0 || customerName.innerText=="Invalid Customer") {
+    alert("Please input valid payer code");
+    event.target.value="";
+  } else {
+    console.log("else working");
+       
+    // document.getElementById("balance-order-payable-btn-container").innerHTML=
+    if (amount <  order.orderNetTotal) {
+      document.getElementById("balance-order-payable-btn-container").innerHTML=
+      `
+      <button class="btn btn-warning text-white py-1 px-2 my-3"  type="button">Balance Payable: ${order.orderNetTotal - amount}</button>
+    `  
+    } else if (amount >  order.orderNetTotal){
+      document.getElementById("balance-order-payable-btn-container").innerHTML=
+      `
+        <button class="btn btn-danger text-white py-1 px-2 my-3"  type="button">Amount Exceeds Balance Payable By : ${amount - order.orderNetTotal}</button>
+      `
+    } else {
+      document.getElementById("balance-order-payable-btn-container").innerHTML=
+      `
+        <button class="btn btn-success text-white py-1 px-2 my-3"  type="button">Amount Matches Balance Payable
+      `
+      settleOrder(order.orderId);
+    }
+  }
+  
+}
+
+function getPayTypeName(event){
+
+  console.log(event.target.value);
+  
+  const textContent = event.target.value==1 ? "Cash" : event.target.value==2 ? "Card" : event.target.value==3 ? "Loyalty-Points" : "Unknown";
+
+  event.target.closest('.input-group').querySelector('.pay-method-name').textContent=textContent;
+   
+//  pay-method-name
+  
 }
 
 function formatDate(date) {

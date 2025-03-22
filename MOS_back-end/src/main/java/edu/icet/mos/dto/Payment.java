@@ -5,11 +5,17 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class CustomerPreference {
+public class Payment {
     private Integer id;
-    private String preference;
+    private Integer customerId;
+    private Integer paymentTypeId;
+    private Double amount;
+    private Date paymentDate;
+    private Integer orderId;
 }

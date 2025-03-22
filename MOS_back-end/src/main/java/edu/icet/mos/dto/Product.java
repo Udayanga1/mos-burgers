@@ -12,12 +12,12 @@ import java.util.Date;
 @NoArgsConstructor
 @ToString
 public class Product {
-    Integer id;
-    String name;
-    Double price;
-    Double discount;
-    String category;
-    String imageUrl;
-    Date expiryDate;
-    Integer qty;
+    private Integer id;
+    private String name;
+    private Double price;
+    private Double discount;
+    private String category;
+    private String imageUrl;
+    private Date expiryDate;
+    private Integer qty;
 }
