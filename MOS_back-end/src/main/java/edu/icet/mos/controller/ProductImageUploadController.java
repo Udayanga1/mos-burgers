@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/product")
+@RequestMapping("/product-image")
 @RequiredArgsConstructor
 public class ProductImageUploadController {
     final ProductImageUploadService service;

@@ -7,6 +7,15 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
+
+  web:
+    resources:
+      static-locations: file:../MOS_front-end
+
+  mvc:
+    view:
+      suffix: .html
 
   spring:
     servlet:
