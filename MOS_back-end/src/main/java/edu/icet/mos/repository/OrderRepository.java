@@ -12,6 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 public interface OrderRepository extends JpaRepository<OrderEntity, Integer> {
     @Modifying
     @Transactional
-    @Query(value = "UPDATE orders SET status = :status WHERE id = :customerId", nativeQuery = true)
-    void updateStatus(@Param("status") String status, @Param("customerId") Integer customerId);
+    @Query(value = "UPDATE orders SET status = :status WHERE id = :orderId", nativeQuery = true)
+    void updateStatus(@Param("status") String status, @Param("orderId") Integer orderId);
 }

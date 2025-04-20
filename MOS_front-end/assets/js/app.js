@@ -99,7 +99,9 @@ function showProductsOnLandingPage(){
     method: "GET",
   };
 
-  const baseImageUrl = "http://localhost:8080/product/download";
+  uploadProducts();
+
+  const baseImageUrl = "http://localhost:8080/product-image/download";
 
   fetch("http://localhost:8080/product/all", requestOptions)
     .then((response) => response.json())
@@ -467,3 +469,81 @@ function closeSearchView() {
   document.getElementById("search-product-input").value="";  
 }
 
+
+function uploadProducts() {
+
+  fetch("http://localhost:8080/product/all")
+  .then((response)=>response.text())
+  .then((result)=>{
+    // console.log(JSON.parse(result).length);
+    if(JSON.parse(result).length==0){
+  
+       //set default expiry date
+      const currentDate = new Date();
+      currentDate.setDate(currentDate.getDate() + 5);
+    
+      const expiryDate = formatDate(currentDate);
+      
+      let indexForImage = 0;
+      
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      
+      fetch("../data/products.json")
+      .then((response)=> response.json())
+      .then(result => {
+        result.forEach(product => {
+    
+          indexForImage++;
+          
+          const raw = JSON.stringify({
+            "name": product.itemName,
+            "price": product.priceLKR,
+            "discount": product.discount,
+            "category": product.category,
+            "imageUrl": "/" + indexForImage + ".jpg",
+            "expiryDate": expiryDate,
+            "qty": product.qty
+          });
+      
+          const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow"
+          };
+    
+          console.log(raw);
+          
+    
+          fetch("http://localhost:8080/product/add", requestOptions)
+            .then((response) => response.text())
+            .then((text) => console.log(text))
+            .catch((error) => console.error(error));
+    
+        })
+        .catch((error) => console.error(error));
+      })
+  
+    }
+  })
+  .catch((error) => console.error(error));
+  
+ 
+
+}
+
+function formatDate(date) {
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+
+
+
+
+
+  
+      

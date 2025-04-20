@@ -25,6 +25,6 @@ public class PaymentServiceImpl implements PaymentService {
         if (payment.getPaymentTypeId()==3) {
             customerRepository.decreasePoints(payment.getAmount(), payment.getCustomerId());
         }
-        orderRepository.updateStatus("Completed", payment.getCustomerId());
+        orderRepository.updateStatus("Completed", payment.getOrderId());
     }
 }

@@ -62,15 +62,11 @@ function addProduct(){
 
   const productID = "B" + productIncrement;
   
-  // console.log(fileName);
-
-  console.log("filename: " + (fileName ?  "true" : "false"));
   
   if(name.value=="" || price.value=="" || discount.value=="" || qty.value==""){
     alert("Please fill all the fields");
   } else {
     productIncrement++;
-    // let htmlEl=document.getElementById("table-body");
 
     fetch("http://localhost:8080/product/all")
     .then((response) => response.json())
@@ -85,10 +81,7 @@ function addProduct(){
       
       if (fileName) {
         imageUrl=`/${++lastIndex}.${fileExtension}`
-      }
-  
-      console.log("image Url: " + imageUrl);
-      
+      } 
       
       const product = {
         id: productID,
@@ -150,7 +143,7 @@ function uploadImage(fileInput){
     redirect: "follow"
   };
 
-  fetch("http://localhost:8080/product/upload", requestOptions)
+  fetch("http://localhost:8080/product-image/upload", requestOptions)
     .then((response) => response.json())
     .then((result) => console.log(result))
     .catch((error) => console.error(error));
@@ -171,7 +164,7 @@ function setImageName(text, fileInput){
     redirect: "follow"
   };
 
-  fetch("http://localhost:8080/product/get-product-code", requestOptions)
+  fetch("http://localhost:8080/product-image/get-product-code", requestOptions)
     .then((response) => response.text())
     .then((result) => {
       console.log("Server Response" , result);

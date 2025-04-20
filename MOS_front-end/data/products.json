@@ -1,331 +1,331 @@
 [
   {
-    "itemCode": "B1001",
     "itemName": "Classic Burger (Large)",
     "priceLKR": 750.00,
     "discount": "0",
-    "category": "Burgers"
+    "category": "Burgers",
+    "qty": 50
   },
   {
-    "itemCode": "B1002",
     "itemName": "Classic Burger (Regular)",
     "priceLKR": 1500.00,
     "discount": "15",
-    "category": "Burgers"
+    "category": "Burgers",
+    "qty": 50
   },
   {
-    "itemCode": "B1003",
     "itemName": "Turkey Burger",
     "priceLKR": 1600.00,
     "discount": "0",
-    "category": "Burgers"
+    "category": "Burgers",
+    "qty": 50
   },
   {
-    "itemCode": "B1004",
     "itemName": "Chicken Burger (Large)",
     "priceLKR": 1400.00,
     "discount": "0",
-    "category": "Burgers"
+    "category": "Burgers",
+    "qty": 50
   },
   {
-    "itemCode": "B1005",
     "itemName": "Chicken Burger (Regular)",
     "priceLKR": 800.00,
     "discount": "20",
-    "category": "Burgers"
+    "category": "Burgers",
+    "qty": 50
   },
   {
-    "itemCode": "B1006",
     "itemName": "Cheese Burger (Large)",
     "priceLKR": 1000.00,
     "discount": "0",
-    "category": "Burgers"
+    "category": "Burgers",
+    "qty": 50
   },
   {
-    "itemCode": "B1007",
     "itemName": "Cheese Burger (Regular)",
     "priceLKR": 600.00,
     "discount": "0",
-    "category": "Burgers"
+    "category": "Burgers",
+    "qty": 50
   },
   {
-    "itemCode": "B1008",
     "itemName": "Bacon Burger",
     "priceLKR": 650.00,
     "discount": "15",
-    "category": "Burgers"
+    "category": "Burgers",
+    "qty": 50
   },
   {
-    "itemCode": "B1009",
     "itemName": "Shawarma Burger",
     "priceLKR": 800.00,
     "discount": "0",
-    "category": "Burgers"
+    "category": "Burgers",
+    "qty": 50
   },
   {
-    "itemCode": "B1010",
     "itemName": "Olive Burger",
     "priceLKR": 1800.00,
     "discount": "0",
-    "category": "Burgers"
+    "category": "Burgers",
+    "qty": 50
   },
   {
-    "itemCode": "B1025",
     "itemName": "BBQ Bacon Cheeseburger",
     "priceLKR": 1750.00,
     "discount": "10",
-    "category": "Burgers"
+    "category": "Burgers",
+    "qty": 50
   },
   {
-    "itemCode": "B1012",
     "itemName": "Double-Cheese Burger",
     "priceLKR": 1250.00,
     "discount": "20",
-    "category": "Burgers"
+    "category": "Burgers",
+    "qty": 50
   },
   {
-    "itemCode": "B1013",
     "itemName": "Crispy Chicken Burger (Regular)",
     "priceLKR": 1200.00,
     "discount": "0",
-    "category": "Burgers"
+    "category": "Burgers",
+    "qty": 50
   },
   {
-    "itemCode": "B1014",
     "itemName": "Crispy Chicken Burger (Large)",
     "priceLKR": 1600.00,
     "discount": "10",
-    "category": "Burgers"
+    "category": "Burgers",
+    "qty": 50
   },
   {
-    "itemCode": "B1015",
     "itemName": "Paneer Burger",
     "priceLKR": 900.00,
     "discount": "0",
-    "category": "Burgers"
+    "category": "Burgers",
+    "qty": 50
   },
   {
-    "itemCode": "B1016",
     "itemName": "Crispy Chicken Submarine (Large)",
     "priceLKR": 2000.00,
     "discount": "0",
-    "category": "Submarines"
+    "category": "Submarines",
+    "qty": 50
   },
   {
-    "itemCode": "B1017",
     "itemName": "Crispy Chicken Submarine (Regular)",
     "priceLKR": 1500.00,
     "discount": "0",
-    "category": "Submarines"
+    "category": "Submarines",
+    "qty": 50
   },
   {
-    "itemCode": "B1018",
     "itemName": "Chicken Submarine (Large)",
     "priceLKR": 1800.00,
     "discount": "3",
-    "category": "Submarines"
+    "category": "Submarines",
+    "qty": 50
   },
   {
-    "itemCode": "B1019",
     "itemName": "Chicken Submarine (Regular)",
     "priceLKR": 1400.00,
     "discount": "0",
-    "category": "Submarines"
+    "category": "Submarines",
+    "qty": 50
   },
   {
-    "itemCode": "B1020",
     "itemName": "Grinder Submarine",
     "priceLKR": 2300.00,
     "discount": "0",
-    "category": "Submarines"
+    "category": "Submarines",
+    "qty": 50
   },
   {
-    "itemCode": "B1021",
     "itemName": "Cheese Submarine",
     "priceLKR": 2200.00,
     "discount": "0",
-    "category": "Submarines"
+    "category": "Submarines",
+    "qty": 50
   },
   {
-    "itemCode": "B1022",
     "itemName": "Double Cheese n Chicken Submarine",
     "priceLKR": 1900.00,
     "discount": "16",
-    "category": "Submarines"
+    "category": "Submarines",
+    "qty": 50
   },
   {
-    "itemCode": "B1023",
     "itemName": "Special Horgie Submarine",
     "priceLKR": 2800.00,
     "discount": "0",
-    "category": "Submarines"
+    "category": "Submarines",
+    "qty": 50
   },
   {
-    "itemCode": "B1024",
     "itemName": "MOS Special Submarine",
     "priceLKR": 3000.00,
     "discount": "0",
-    "category": "Submarines"
+    "category": "Submarines",
+    "qty": 50
   },
   {
-    "itemCode": "B1025",
     "itemName": "Steak Fries (Large)",
     "priceLKR": 1200.00,
     "discount": "0",
-    "category": "Fries"
+    "category": "Fries",
+    "qty": 50
   },
   {
-    "itemCode": "B1026",
     "itemName": "Steak Fries (Medium)",
     "priceLKR": 600.00,
     "discount": "0",
-    "category": "Fries"
+    "category": "Fries",
+    "qty": 50
   },
   {
-    "itemCode": "B1027",
     "itemName": "French Fries (Large)",
     "priceLKR": 800.00,
     "discount": "0",
-    "category": "Fries"
+    "category": "Fries",
+    "qty": 50
   },
   {
-    "itemCode": "B1028",
     "itemName": "French Fries (Medium)",
     "priceLKR": 650.00,
     "discount": "0",
-    "category": "Fries"
+    "category": "Fries",
+    "qty": 50
   },
   {
-    "itemCode": "B1029",
     "itemName": "French Fries (Small)",
     "priceLKR": 450.00,
     "discount": "0",
-    "category": "Fries"
+    "category": "Fries",
+    "qty": 50
   },
   {
-    "itemCode": "B1030",
     "itemName": "Sweet Potato Fries (Large)",
     "priceLKR": 600.00,
     "discount": "0",
-    "category": "Fries"
+    "category": "Fries",
+    "qty": 50
   },
   {
-    "itemCode": "B1031",
     "itemName": "Chicken n Cheese Pasta",
     "priceLKR": 1600.00,
     "discount": "15",
-    "category": "Pasta"
+    "category": "Pasta",
+    "qty": 50
   },
   {
-    "itemCode": "B1032",
     "itemName": "Chicken Penne Pasta",
     "priceLKR": 1700.00,
     "discount": "0",
-    "category": "Pasta"
+    "category": "Pasta",
+    "qty": 50
   },
   {
-    "itemCode": "B1033",
     "itemName": "Ground Turkey Pasta Bake",
     "priceLKR": 2900.00,
     "discount": "10",
-    "category": "Pasta"
+    "category": "Pasta",
+    "qty": 50
   },
   {
-    "itemCode": "B1034",
     "itemName": "Creamy Shrimp Pasta",
     "priceLKR": 2000.00,
     "discount": "0",
-    "category": "Pasta"
+    "category": "Pasta",
+    "qty": 50
   },
   {
-    "itemCode": "B1035",
     "itemName": "Lemon Butter Pasta",
     "priceLKR": 1950.00,
     "discount": "0",
-    "category": "Pasta"
+    "category": "Pasta",
+    "qty": 50
   },
   {
-    "itemCode": "B1036",
     "itemName": "Tagliatelle Pasta",
     "priceLKR": 2400.00,
     "discount": "1",
-    "category": "Pasta"
+    "category": "Pasta",
+    "qty": 50
   },
   {
-    "itemCode": "B1037",
     "itemName": "Baked Ravioli",
     "priceLKR": 2000.00,
     "discount": "1",
-    "category": "Pasta"
+    "category": "Pasta",
+    "qty": 50
   },
   {
-    "itemCode": "B1038",
     "itemName": "Fried Chicken (Small)",
     "priceLKR": 1200.00,
     "discount": "0",
-    "category": "Chicken"
+    "category": "Chicken",
+    "qty": 50
   },
   {
-    "itemCode": "B1039",
     "itemName": "Fried Chicken (Regular)",
     "priceLKR": 2300.00,
     "discount": "10",
-    "category": "Chicken"
+    "category": "Chicken",
+    "qty": 50
   },
   {
-    "itemCode": "B1040",
     "itemName": "Fried Chicken (Large)",
     "priceLKR": 3100.00,
     "discount": "5",
-    "category": "Chicken"
+    "category": "Chicken",
+    "qty": 50
   },
   {
-    "itemCode": "B1041",
     "itemName": "Hot Wings (Large)",
     "priceLKR": 2400.00,
     "discount": "0",
-    "category": "Chicken"
+    "category": "Chicken",
+    "qty": 50
   },
   {
-    "itemCode": "B1042",
     "itemName": "Devilled Chicken (Large)",
     "priceLKR": 900.00,
     "discount": "0",
-    "category": "Chicken"
+    "category": "Chicken",
+    "qty": 50
   },
   {
-    "itemCode": "B1043",
     "itemName": "BBQ Chicken (Regular)",
     "priceLKR": 2100.00,
     "discount": "0",
-    "category": "Chicken"
+    "category": "Chicken",
+    "qty": 50
   },
   {
-    "itemCode": "B1044",
     "itemName": "Pepsi (330ml)",
     "priceLKR": 990.00,
     "discount": "5",
-    "category": "Beverages"
+    "category": "Beverages",
+    "qty": 50
   },
   {
-    "itemCode": "B1045",
     "itemName": "Coca-Cola (330ml)",
     "priceLKR": 1230.00,
     "discount": "0",
-    "category": "Beverages"
+    "category": "Beverages",
+    "qty": 50
   },
   {
-    "itemCode": "B1046",
     "itemName": "Sprite (330ml)",
     "priceLKR": 1500.00,
     "discount": "3",
-    "category": "Beverages"
+    "category": "Beverages",
+    "qty": 50
   },
   {
-    "itemCode": "B1047",
     "itemName": "Mirinda (330ml)",
     "priceLKR": 850.00,
     "discount": "7",
-    "category": "Beverages"
+    "category": "Beverages",
+    "qty": 50
   }
 ]
