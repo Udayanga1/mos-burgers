@@ -19,6 +19,9 @@ const tableColumns = {
   order: ["id", "customerName", "orderGrossTotal", "orderDiscount", "orderNetTotal"]
 }
 
+const myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+
 document.getElementById("cart-product").addEventListener("click", ()=>{
   viewCart();
 })
@@ -99,7 +102,9 @@ function showProductsOnLandingPage(){
     method: "GET",
   };
 
-  uploadProducts();
+  uploadProductsIfNotExists();
+  addCustomerPreferencesIfNotExists();
+  addCustomersIfNotExists();
 
   const baseImageUrl = "http://localhost:8080/product-image/download";
 
@@ -108,7 +113,6 @@ function showProductsOnLandingPage(){
     .then((result) => {
       // console.log(result)
       result.forEach(product=>{
-        console.log(product);
         if (product.category=="Burgers") {
           burgerList+=`
             <div class="card swiper-slide bg-success" style="width: 18rem;">
@@ -470,7 +474,7 @@ function closeSearchView() {
 }
 
 
-function uploadProducts() {
+function uploadProductsIfNotExists() {
 
   fetch("http://localhost:8080/product/all")
   .then((response)=>response.text())
@@ -486,8 +490,6 @@ function uploadProducts() {
       
       let indexForImage = 0;
       
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
       
       fetch("../data/products.json")
       .then((response)=> response.json())
@@ -532,6 +534,85 @@ function uploadProducts() {
  
 
 }
+
+function addCustomerPreferencesIfNotExists(){
+  fetch("http://localhost:8080/customer-preference/all")
+  .then(response=>response.json())
+  .then((result)=>{
+    if(result.length==0){
+      const customerPreferences = [
+        "Customer: Allergy to nuts",
+        "Customer: Prefers gluten-free options",
+        "Customer: Vegan - no animal products",
+        "Customer: Low-sodium diet",
+        "Customer: Likes extra spicy food",
+        "Customer: Lactose intolerant - no dairy",
+        "Customer: Prefers contactless delivery",
+        "Customer: Requests eco-friendly packaging",
+        "Customer: Avoids artificial sweeteners",
+        "Customer: Requires detailed nutritional info"
+      ];
+    
+      customerPreferences.forEach(preference=>{
+        console.log(preference);
+        const requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: JSON.stringify({"preference": preference})
+        };
+
+        fetch("http://localhost:8080/customer-preference/add", requestOptions)
+        .then((response) => response.text())
+        .then((text) => console.log(text))
+        .catch((error) => console.error(error));
+      })       
+    }
+  })
+  .catch(error=>console.log(error));
+}
+
+
+function addCustomersIfNotExists(){
+  fetch("http://localhost:8080/customer/all")
+  .then(response=>response.json())
+  .then(result=>{
+    if (result.length==0) {
+      fetch("../data/customers.json")
+      .then(response=>response.json())
+      .then(result=>{
+        result.forEach(customer=>{
+          
+          console.log(customer);
+          const raw = JSON.stringify({
+            "name": customer.name,
+            "preferenceId": Math.floor(Math.random() * 10) + 1,
+            "contactNo": customer.contact,
+            "points": 0
+          });
+
+          const requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: raw,
+            redirect: "follow"
+          };
+      
+          fetch("http://localhost:8080/customer/add", requestOptions)
+            .then((response) => response.text())
+            .then((text) => console.log(text)
+            )
+            .catch((error) => console.error(error));
+        })
+        
+      })
+      .catch(error=>console.log(error)
+      );
+            
+    }
+  })
+}
+
+
 
 function formatDate(date) {
   const year = date.getFullYear();
