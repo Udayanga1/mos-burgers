@@ -105,6 +105,7 @@ function showProductsOnLandingPage(){
   uploadProductsIfNotExists();
   addCustomerPreferencesIfNotExists();
   addCustomersIfNotExists();
+  addOrdersIfNotExists();
 
   const baseImageUrl = "http://localhost:8080/product-image/download";
 
@@ -612,7 +613,53 @@ function addCustomersIfNotExists(){
   })
 }
 
+function addOrdersIfNotExists(){
+  fetch("http://localhost:8080/orders/all")
+  .then(response=>response.json())
+  .then(result=>{
+    if (result.length==0) {
+      console.log("add order");
+      fetch("../data/orders.json")
+      .then(response=>response.json())
+      .then(result=>{
+        result.forEach(order=>{
+          const productList = [];
+          order.products.forEach(product=>{
+            productList.push({
+              productId: product.itemCode.substring(1)-1000,
+              qty: product.qty
+            });
+          })
 
+          const orderAdding = {
+            "customerId": order.customerCode.substring(1)-100,
+            "orderDetails": productList,
+            "orderDate": order.date,
+            "status": order.status    
+          };
+
+          requestOptions = {
+            method: "POST",
+            headers: myHeaders,
+            body: JSON.stringify(orderAdding),
+            redirect: "follow"
+          };
+
+          fetch("http://localhost:8080/orders/add", requestOptions)
+          .then(response=>response.text())
+          .then(text=>console.log(text))
+          .catch(error=>console.log(error))
+
+          // console.log(order);
+          // console.log(orderAdding);
+        })       
+      })
+      .catch(error=>console.log(error))
+    }
+  })
+
+  .catch(error=>console.log(error))
+}
 
 function formatDate(date) {
   const year = date.getFullYear();
